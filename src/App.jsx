@@ -73,12 +73,6 @@ function App() {
         );
     }, [ingredients]);
 
-    // const totals = {
-    //     weight: 0,
-    //     calories: 0,
-    //     protein: 0,
-    // };
-
     const handleSaveEntryClick = (saveEntryFormData) => {
         const ingredientID = saveEntryFormData.get("ingredient");
         const ingredient = ingredients.find((i) => {
@@ -343,17 +337,6 @@ function App() {
                 </button>
             </section>
             <TotalsPanel entries={entries}/>
-            {/* <section>
-                <h2>Totals</h2>
-                {entries.forEach((entry) => {
-                    totals.calories = totals.calories + entry.calories;
-                    totals.protein = totals.protein + entry.protein;
-                    totals.weight = totals.weight + entry.weight;
-                })}
-                <p>Calories: {totals.calories.toFixed(0)}</p>
-                <p>Protein: {totals.protein.toFixed(1)}g</p>
-                <p>Food Eaten: {totals.weight.toFixed(0)}g</p>
-            </section> */}
         </div>
     );
 }
