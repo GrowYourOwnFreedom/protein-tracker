@@ -1,4 +1,5 @@
 import "./App.css";
+import TotalsPanel from "./TotalsPanel";
 import { useState, useEffect } from "react";
 
 function App() {
@@ -47,9 +48,8 @@ function App() {
         useState("");
 
     const [entries, setEntries] = useState(() => {
-        const savedEntries = JSON.parse(
-            localStorage.getItem("proteinTrackerEntries")
-        ) ?? []
+        const savedEntries =
+            JSON.parse(localStorage.getItem("proteinTrackerEntries")) ?? [];
         return savedEntries;
     });
 
@@ -73,11 +73,11 @@ function App() {
         );
     }, [ingredients]);
 
-    const totals = {
-        weight: 0,
-        calories: 0,
-        protein: 0,
-    };
+    // const totals = {
+    //     weight: 0,
+    //     calories: 0,
+    //     protein: 0,
+    // };
 
     const handleSaveEntryClick = (saveEntryFormData) => {
         const ingredientID = saveEntryFormData.get("ingredient");
@@ -188,21 +188,22 @@ function App() {
         setAddIngredientName("");
         setAddIngredientCalories("");
         setAddIngredientProtein("");
-
     };
 
     const handleDeleteIngredientClick = () => {
-        const deletedIngredient = ingredients.find((ingredient)=>{
-            return ingredient.id === selectedIngredient
-        })
-        const updatedIngredients = ingredients.filter((ingredient) => {
-            return ingredient.id !== selectedIngredient
+        const deletedIngredient = ingredients.find((ingredient) => {
+            return ingredient.id === selectedIngredient;
         });
-        if(confirm(`Are you sure you want to permanently delete the ingredient ${deletedIngredient.name} from your list?`)) {
-            setIngredients(updatedIngredients)
+        const updatedIngredients = ingredients.filter((ingredient) => {
+            return ingredient.id !== selectedIngredient;
+        });
+        if (
+            confirm(
+                `Are you sure you want to permanently delete the ingredient ${deletedIngredient.name} from your list?`,
+            )
+        ) {
+            setIngredients(updatedIngredients);
         }
-        
-        
     };
 
     return (
@@ -308,7 +309,13 @@ function App() {
                     <button className="save-button" type="submit">
                         save entry
                     </button>
-                <button type="button" onClick={handleDeleteIngredientClick} className="delete-button">delete ingredient</button>
+                    <button
+                        type="button"
+                        onClick={handleDeleteIngredientClick}
+                        className="delete-button"
+                    >
+                        delete ingredient
+                    </button>
                 </form>
             </section>
             <section>
@@ -335,7 +342,8 @@ function App() {
                     delete all entries
                 </button>
             </section>
-            <section>
+            <TotalsPanel entries={entries}/>
+            {/* <section>
                 <h2>Totals</h2>
                 {entries.forEach((entry) => {
                     totals.calories = totals.calories + entry.calories;
@@ -345,7 +353,7 @@ function App() {
                 <p>Calories: {totals.calories.toFixed(0)}</p>
                 <p>Protein: {totals.protein.toFixed(1)}g</p>
                 <p>Food Eaten: {totals.weight.toFixed(0)}g</p>
-            </section>
+            </section> */}
         </div>
     );
 }
