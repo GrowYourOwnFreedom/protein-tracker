@@ -56,27 +56,27 @@ function App() {
         updateIngredients(ingredients);
     }, [ingredients]);
 
-    const addEntry = (newEntry) => {
-        const newEntries = [...entries, newEntry];
-        setEntries(newEntries);
-    };
-
-    const deleteIngredient = (updatedIngredients) => {
-        setIngredients(updatedIngredients);
-    };
-
-    const deleteEntry = (updatedEntries) => {
-      setEntries(updatedEntries);
-    };
-
-    const deleteAllEntries = () => {
-        setEntries([]);
-    };
-
-    const addIngredient = (newIngredient) => {
+    function addIngredient(newIngredient) {
         const newIngredients = [...ingredients, newIngredient];
         setIngredients(newIngredients);
-    };
+    }
+
+    function deleteIngredient(updatedIngredients) {
+        setIngredients(updatedIngredients);
+    }
+
+    function addEntry(newEntry) {
+        const newEntries = [...entries, newEntry];
+        setEntries(newEntries);
+    }
+
+    function deleteEntry(updatedEntries) {
+        setEntries(updatedEntries);
+    }
+
+    function deleteAllEntries() {
+        setEntries([]);
+    }
 
     return (
         <div className="app">

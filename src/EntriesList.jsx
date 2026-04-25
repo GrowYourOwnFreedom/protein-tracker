@@ -22,12 +22,12 @@ function EntriesList({entries, deleteEntry, deleteAllEntries}) {
                         {entry.calories.toFixed(0)} calories -{" "}
                         {entry.protein.toFixed(1)}g protein{" "}
                         <button
-                            className="delete-button"
+                            className="delete-entry-button"
                             onClick={() => {
                                 handleDeleteEntryClick(index);
                             }}
                         >
-                            delete entry
+                            x
                         </button>
                     </p>
                 ))}
