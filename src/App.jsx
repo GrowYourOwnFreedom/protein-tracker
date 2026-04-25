@@ -5,8 +5,7 @@ import { useState, useEffect } from "react";
 import AddEntryForm from "./AddEntryForm";
 import AddIngredientForm from "./AddIngredientForm";
 
-function App() {
-    const ingredientsArray = [
+const baseIngredients = [
         {
             id: "1",
             name: "Rolled oats, dry",
@@ -39,6 +38,8 @@ function App() {
         },
     ];
 
+function App() {
+
     const [entries, setEntries] = useState(fetchLocalEntries);
     const [ingredients, setIngredients] = useState(fetchLocalIngredients);
 
@@ -58,7 +59,7 @@ function App() {
     function fetchLocalIngredients() {
         const savedIngredients =
             JSON.parse(localStorage.getItem("proteinTrackerIngredients")) ??
-            ingredientsArray;
+            baseIngredients;
         return savedIngredients;
     }
 
