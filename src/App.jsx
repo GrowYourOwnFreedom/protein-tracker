@@ -1,6 +1,8 @@
 import "./App.css";
 import TotalsPanel from "./TotalsPanel";
+import EntriesList from "./EntriesList";
 import { useState, useEffect } from "react";
+import AddEntryForm from "./AddEntryForm";
 
 function App() {
     const ingredientsArray = [
@@ -36,9 +38,9 @@ function App() {
         },
     ];
 
-    const [selectedIngredient, setSelectedIngredient] = useState("");
-    const [ingredientWeight, setIngredientWeight] = useState("");
-    const [weightInputError, setWeightInputError] = useState("");
+    // const [selectedIngredient, setSelectedIngredient] = useState("");
+    // const [ingredientWeight, setIngredientWeight] = useState("");
+    // const [weightInputError, setWeightInputError] = useState("");
     const [addIngredientName, setAddIngredientName] = useState("");
     const [addIngredientCalories, setAddIngredientCalories] = useState("");
     const [addIngredientProtein, setAddIngredientProtein] = useState("");
@@ -73,38 +75,14 @@ function App() {
         );
     }, [ingredients]);
 
-    const handleSaveEntryClick = (saveEntryFormData) => {
-        const ingredientID = saveEntryFormData.get("ingredient");
-        const ingredient = ingredients.find((i) => {
-            return i.id === ingredientID;
-        });
-        const weight = Number(saveEntryFormData.get("weight"));
-
-        if (saveEntryFormData.get("weight") === "") {
-            setWeightInputError("Please enter a weight");
-            return;
-        } else if (weight <= 0) {
-            setWeightInputError("Weight must be above 0g");
-            return;
-        } else if (Number.isNaN(weight)) {
-            setWeightInputError("Please enter a valid number");
-            return;
-        } else {
-            setWeightInputError("");
-        }
-
-        const protein = (weight / 100) * ingredient.proteinPer100g;
-        const calories = (weight / 100) * ingredient.caloriesPer100g;
-        const newEntry = {
-            name: ingredient.name,
-            weight,
-            calories,
-            protein,
-        };
-        const newEntries = [...entries, newEntry];
+    const addEntry = (newEntry) => {
+          const newEntries = [...entries, newEntry];
         setEntries(newEntries);
-        setIngredientWeight("");
-    };
+    }
+
+    const deleteIngredient = (updatedIngredients) => {
+        setIngredients(updatedIngredients);
+    }
 
     const handleDeleteEntryClick = (index) => {
         const updatedEntries = [...entries].filter((entry, i) => {
@@ -184,21 +162,6 @@ function App() {
         setAddIngredientProtein("");
     };
 
-    const handleDeleteIngredientClick = () => {
-        const deletedIngredient = ingredients.find((ingredient) => {
-            return ingredient.id === selectedIngredient;
-        });
-        const updatedIngredients = ingredients.filter((ingredient) => {
-            return ingredient.id !== selectedIngredient;
-        });
-        if (
-            confirm(
-                `Are you sure you want to permanently delete the ingredient ${deletedIngredient.name} from your list?`,
-            )
-        ) {
-            setIngredients(updatedIngredients);
-        }
-    };
 
     return (
         <div className="app">
@@ -252,91 +215,13 @@ function App() {
                     </button>
                 </form>
             </section>
-            <section>
-                <h2>Add Entry</h2>
-                <form action={handleSaveEntryClick}>
-                    <label>
-                        Select an ingredient:
-                        <select
-                            name="ingredient"
-                            required
-                            onChange={(e) =>
-                                setSelectedIngredient(e.target.value)
-                            }
-                            value={selectedIngredient}
-                        >
-                            {ingredients.map((ingredient) => {
-                                const proteinPerCalorie =
-                                    (ingredient.proteinPer100g /
-                                        ingredient.caloriesPer100g) *
-                                    100;
-                                return (
-                                    <option
-                                        key={ingredient.id}
-                                        value={ingredient.id}
-                                    >
-                                        {ingredient.name}{" "}
-                                        {proteinPerCalorie.toFixed(2)}g
-                                        protein/100cal
-                                    </option>
-                                );
-                            })}
-                        </select>
-                    </label>
-                    <label>
-                        Enter the weight in grams:
-                        <div className="ingredient-weight-input-container">
-                            <input
-                                name="weight"
-                                value={ingredientWeight}
-                                onChange={(e) =>
-                                    setIngredientWeight(e.target.value)
-                                }
-                            ></input>{" "}
-                            g
-                        </div>
-                        {weightInputError && (
-                            <p className="error">{weightInputError}</p>
-                        )}
-                    </label>
-
-                    <button className="save-button" type="submit">
-                        save entry
-                    </button>
-                    <button
-                        type="button"
-                        onClick={handleDeleteIngredientClick}
-                        className="delete-button"
-                    >
-                        delete ingredient
-                    </button>
-                </form>
-            </section>
-            <section>
-                <h2>Todays Entries</h2>
-                {entries.map((entry, index) => (
-                    <p key={index}>
-                        {entry.name} - {entry.weight}g -{" "}
-                        {entry.calories.toFixed(0)} calories -{" "}
-                        {entry.protein.toFixed(1)}g protein{" "}
-                        <button
-                            className="delete-button"
-                            onClick={() => {
-                                handleDeleteEntryClick(index);
-                            }}
-                        >
-                            delete entry
-                        </button>
-                    </p>
-                ))}
-                <button
-                    className="delete-button"
-                    onClick={handleDeleteAllEntriesClick}
-                >
-                    delete all entries
-                </button>
-            </section>
-            <TotalsPanel entries={entries}/>
+            <AddEntryForm ingredients={ingredients} addEntry={addEntry} deleteIngredient={deleteIngredient}/>
+            <EntriesList
+                entries={entries}
+                handleDeleteEntryClick={handleDeleteEntryClick}
+                handleDeleteAllEntriesClick={handleDeleteAllEntriesClick}
+            />
+            <TotalsPanel entries={entries} />
         </div>
     );
 }
