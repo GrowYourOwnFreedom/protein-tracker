@@ -86,6 +86,7 @@ function AddEntryForm({
                         })}
                     </select>
                 </label>
+
                 <label>
                     Enter the weight in grams:
                     <div className="ingredient-weight-input-container">
@@ -95,7 +96,7 @@ function AddEntryForm({
                             onChange={(e) =>
                                 setIngredientWeight(e.target.value)
                             }
-                        ></input>{" "}
+                            ></input>{" "}
                         g
                     </div>
                     {weightInputError && (

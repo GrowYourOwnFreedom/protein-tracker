@@ -83,6 +83,8 @@ function AddIngredientForm({addIngredient}) {
                         onChange={(e) => setAddIngredientName(e.target.value)}
                     ></input>
                 </label>
+                <div className="add-ingredient-inputs-container">
+
                 <label>
                     Calories per 100g:
                     <input
@@ -92,7 +94,7 @@ function AddIngredientForm({addIngredient}) {
                         onChange={(e) =>
                             setAddIngredientCalories(e.target.value)
                         }
-                    ></input>
+                        ></input>
                     {addIngredientCaloriesError && (
                         <p className="error">{addIngredientCaloriesError}</p>
                     )}
@@ -106,11 +108,12 @@ function AddIngredientForm({addIngredient}) {
                         onChange={(e) =>
                             setAddIngredientProtein(e.target.value)
                         }
-                    ></input>
+                        ></input>
                     {addIngredientProteinError && (
                         <p className="error">{addIngredientProteinError}</p>
                     )}
                 </label>
+                    </div>
                 <button className="save-button" type="submit">
                     Save Ingredient
                 </button>

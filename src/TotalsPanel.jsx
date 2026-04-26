@@ -11,7 +11,7 @@ function TotalsPanel({ entries }) {
     const [proteinTarget, setProteinTarget] = useState(fetchProteinTarget);
 
     useEffect(() => {
-        updateCaloreLimit(calorieLimit)
+        updateCaloreLimit(calorieLimit);
     }, [calorieLimit]);
     useEffect(() => {
         updateProteinTarget(proteinTarget);
@@ -26,22 +26,22 @@ function TotalsPanel({ entries }) {
     return (
         <section>
             <h2>Totals</h2>
-            <label>
-                calorie limit:
-                <input
-                    value={calorieLimit}
-                    onChange={(e) => setCalorieLimit(e.target.value)}
-                />
-            </label>
-            <label>
-                protein target:
-                <input
-                    value={proteinTarget}
-                    onChange={(e) => 
-                        setProteinTarget(e.target.value)
-                    }
-                />
-            </label>
+            <div className="limit-target">
+                <label>
+                    calorie limit:
+                    <input
+                        value={calorieLimit}
+                        onChange={(e) => setCalorieLimit(e.target.value)}
+                    />
+                </label>
+                <label>
+                    protein target:
+                    <input
+                        value={proteinTarget}
+                        onChange={(e) => setProteinTarget(e.target.value)}
+                    />
+                </label>
+            </div>
             {entries.forEach((entry) => {
                 totals.calories = totals.calories + entry.calories;
                 totals.protein = totals.protein + entry.protein;

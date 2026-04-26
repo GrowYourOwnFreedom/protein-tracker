@@ -93,4 +93,14 @@ button:hover {
 .error {
     color: darkred;
 }
+.add-ingredient-inputs-container{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+.limit-target{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
 
+}
