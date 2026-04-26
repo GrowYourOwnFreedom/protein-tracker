@@ -45,8 +45,8 @@ const baseIngredients = [
 ];
 
 function App() {
-    const [entries, setEntries] = useState(() => fetchEntries(baseIngredients));
-    const [ingredients, setIngredients] = useState(fetchIngredients);
+    const [entries, setEntries] = useState(fetchEntries);
+    const [ingredients, setIngredients] = useState(()=>fetchIngredients(baseIngredients));
 
     useEffect(() => {
         updateEntries(entries);
