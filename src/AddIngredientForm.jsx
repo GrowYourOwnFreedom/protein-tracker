@@ -34,8 +34,8 @@ function AddIngredientForm({addIngredient}) {
             console.log(proteinError);
 
             setAddIngredientProteinError(proteinError);
-        } else if (newIngredientProtein <= 0) {
-            proteinError = "Protein must be a positive number";
+        } else if (newIngredientProtein < 0) {
+            proteinError = "Protein must not be a negative number";
             console.log(proteinError);
 
             setAddIngredientProteinError(proteinError);
