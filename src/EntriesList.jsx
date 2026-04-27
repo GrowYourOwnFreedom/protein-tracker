@@ -14,7 +14,7 @@ function EntriesList({entries, deleteEntry, deleteAllEntries}) {
             }
         }
     };
-    
+
     return (
         <section>
                 <h2>Todays Entries</h2>

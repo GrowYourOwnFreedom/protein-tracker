@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getProteinEfficiency } from "./nutritonUtils";
+import { getProteinEfficiency, sortIngredientsByProteinEfficiency } from "./nutritonUtils";
 
 function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
 
@@ -55,6 +55,7 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
             deleteIngredient(updatedIngredients);
         }
     };
+    const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
 
     return (
         <section>
@@ -68,7 +69,7 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
                         onChange={(e) => setSelectedIngredient(e.target.value)}
                         value={selectedIngredient}
                     >
-                        {ingredients.map((ingredient) => {
+                        {sortedIngredients.map((ingredient) => {
                             return (
                                 <option
                                     key={ingredient.id}

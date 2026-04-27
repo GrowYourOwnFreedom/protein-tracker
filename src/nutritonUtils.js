@@ -4,4 +4,18 @@ function getProteinEfficiency(calories, protein) {
     }
     return (protein / calories) * 100;
 }
- export {getProteinEfficiency}
+
+function sortIngredientsByProteinEfficiency(ingredients) {
+    return ingredients.sort((a, b) => {
+        const efficiencyA = getProteinEfficiency(
+            a.caloriesPer100g,
+            a.proteinPer100g,
+        );
+        const efficiencyB = getProteinEfficiency(
+            b.caloriesPer100g,
+            b.proteinPer100g,
+        );
+        return efficiencyB - efficiencyA;
+    });
+}
+export { getProteinEfficiency, sortIngredientsByProteinEfficiency };
