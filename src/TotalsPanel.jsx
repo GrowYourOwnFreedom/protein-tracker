@@ -1,12 +1,25 @@
-function TotalsPanel({ entries,calorieLimit,setCalorieLimit,proteinTarget,setProteinTarget }) {
-   
+import TargetCard from "./TargetCard";
+
+function TotalsPanel({
+    entries,
+    calorieLimit,
+    setCalorieLimit,
+    proteinTarget,
+    setProteinTarget,
+}) {
     const totals = {
         weight: 0,
         calories: 0,
         protein: 0,
-        
     };
-    
+    entries.forEach((entry) => {
+        totals.calories = totals.calories + entry.calories;
+        totals.protein = totals.protein + entry.protein;
+        totals.weight = totals.weight + entry.weight;
+    });
+
+    const { weight, calories, protein } = totals;
+
     return (
         <section>
             <h2>Totals</h2>
@@ -26,14 +39,19 @@ function TotalsPanel({ entries,calorieLimit,setCalorieLimit,proteinTarget,setPro
                     />
                 </label>
             </div>
-            {entries.forEach((entry) => {
-                totals.calories = totals.calories + entry.calories;
-                totals.protein = totals.protein + entry.protein;
-                totals.weight = totals.weight + entry.weight;
-            })}
-            <p>Calories: {totals.calories.toFixed(0)}/{calorieLimit}kcal</p>
-            <p>Protein: {totals.protein.toFixed(1)}/{proteinTarget}g</p>
-            <p>Food Eaten: {totals.weight.toFixed(0)}g</p>
+            <TargetCard
+                title={"Calories"}
+                current={calories.toFixed(0)}
+                target={calorieLimit}
+                unit={"kcal"}
+            />
+            <TargetCard
+                title={"Protein"}
+                current={protein.toFixed(1)}
+                target={proteinTarget}
+                unit={"g"}
+            />
+            <p>Food Eaten: {weight.toFixed(0)}g</p>
         </section>
     );
 }
