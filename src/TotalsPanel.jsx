@@ -39,18 +39,22 @@ function TotalsPanel({
                     />
                 </label>
             </div>
-            <TargetCard
-                title={"Calories"}
-                current={calories.toFixed(0)}
-                target={calorieLimit}
-                unit={"kcal"}
-            />
-            <TargetCard
-                title={"Protein"}
-                current={protein.toFixed(1)}
-                target={proteinTarget}
-                unit={"g"}
-            />
+            <div className="target-card-container">
+                <TargetCard
+                    title={"Calories"}
+                    current={calories.toFixed(0)}
+                    target={calorieLimit}
+                    unit={"kcal"}
+                    type={"limit"}
+                />
+                <TargetCard
+                    title={"Protein"}
+                    current={protein.toFixed(1)}
+                    target={proteinTarget}
+                    unit={"g"}
+                    type={"goal"}
+                />
+            </div>
             <p>Food Eaten: {weight.toFixed(0)}g</p>
         </section>
     );

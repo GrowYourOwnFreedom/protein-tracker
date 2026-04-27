@@ -93,14 +93,24 @@ button:hover {
 .error {
     color: darkred;
 }
-.add-ingredient-inputs-container{
+.add-ingredient-inputs-container {
     display: flex;
     gap: 1rem;
     justify-content: center;
 }
-.limit-target{
+.limit-target {
     display: flex;
     gap: 1rem;
     justify-content: center;
-
+}
+.target-card-container {
+    display: flex;
+    gap: 4rem;
+    justify-content: center;
+}
+.target-warning {
+    color: darkred;
+}
+.target-success {
+    color: darkgreen;
 }
