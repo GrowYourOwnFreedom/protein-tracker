@@ -1,10 +1,5 @@
-
-
-
 function TotalsPanel({ entries,calorieLimit,setCalorieLimit,proteinTarget,setProteinTarget }) {
    
-
-
     const totals = {
         weight: 0,
         calories: 0,
@@ -12,7 +7,6 @@ function TotalsPanel({ entries,calorieLimit,setCalorieLimit,proteinTarget,setPro
         
     };
     
-
     return (
         <section>
             <h2>Totals</h2>

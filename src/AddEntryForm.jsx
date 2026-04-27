@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { getProteinEfficiency } from "./nutritonUtils";
+
 function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
+
     const [selectedIngredient, setSelectedIngredient] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
 
-    const handleSaveEntryClick = (saveEntryFormData) => {
+    function handleSaveEntryClick(saveEntryFormData)  {
         const ingredientID = saveEntryFormData.get("ingredient");
         const ingredient = ingredients.find((i) => {
             return i.id === ingredientID;
@@ -37,7 +39,8 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
 
         setIngredientWeight("");
     };
-    const handleDeleteIngredientClick = () => {
+
+    function handleDeleteIngredientClick() {
         const deletedIngredient = ingredients.find((ingredient) => {
             return ingredient.id === selectedIngredient;
         });

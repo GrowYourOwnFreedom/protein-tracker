@@ -49,6 +49,7 @@ const baseIngredients = [
 ];
 
 function App() {
+    
     const [entries, setEntries] = useState(fetchEntries);
     const [ingredients, setIngredients] = useState(() =>
         fetchIngredients(baseIngredients),
@@ -67,7 +68,7 @@ function App() {
      useEffect(() => {
         updateCaloreLimit(calorieLimit);
     }, [calorieLimit]);
-    
+
     useEffect(() => {
         updateProteinTarget(proteinTarget);
     }, [proteinTarget]);

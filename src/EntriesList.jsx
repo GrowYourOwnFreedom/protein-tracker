@@ -1,18 +1,20 @@
 function EntriesList({entries, deleteEntry, deleteAllEntries}) {
-     const handleDeleteEntryClick = (index) => {
+
+     function handleDeleteEntryClick(index) {
         const updatedEntries = [...entries].filter((entry, i) => {
             return i !== index;
         });
         deleteEntry(updatedEntries);
     };
 
-    const handleDeleteAllEntriesClick = () => {
+    function handleDeleteAllEntriesClick() {
         if (entries.length > 0) {
             if (confirm("Are you sure you want to delete all the entries?")) {
                 deleteAllEntries();
             }
         }
     };
+    
     return (
         <section>
                 <h2>Todays Entries</h2>

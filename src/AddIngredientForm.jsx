@@ -1,5 +1,7 @@
 import { useState } from "react";
+
 function AddIngredientForm({addIngredient}) {
+    
     const [addIngredientName, setAddIngredientName] = useState("");
     const [addIngredientCalories, setAddIngredientCalories] = useState("");
     const [addIngredientProtein, setAddIngredientProtein] = useState("");
@@ -8,7 +10,7 @@ function AddIngredientForm({addIngredient}) {
     const [addIngredientProteinError, setAddIngredientProteinError] =
         useState("");
 
-    const handleSaveIngredientClick = (addIngredientFormData) => {
+    function handleSaveIngredientClick(addIngredientFormData) {
         const newIngredientCalories = Number(
             addIngredientFormData.get("ingredient-calories"),
         );
