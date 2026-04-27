@@ -1,9 +1,6 @@
 import { useState } from "react";
-function AddEntryForm({
-    ingredients,
-    addEntry,
-    deleteIngredient
-}) {
+import { getProteinEfficiency } from "./nutritonUtils";
+function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
     const [selectedIngredient, setSelectedIngredient] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
@@ -36,8 +33,8 @@ function AddEntryForm({
             calories,
             protein,
         };
-        addEntry(newEntry)
-      
+        addEntry(newEntry);
+
         setIngredientWeight("");
     };
     const handleDeleteIngredientClick = () => {
@@ -52,7 +49,7 @@ function AddEntryForm({
                 `Are you sure you want to permanently delete the ingredient ${deletedIngredient.name} from your list?`,
             )
         ) {
-            deleteIngredient(updatedIngredients)
+            deleteIngredient(updatedIngredients);
         }
     };
 
@@ -69,18 +66,17 @@ function AddEntryForm({
                         value={selectedIngredient}
                     >
                         {ingredients.map((ingredient) => {
-                            const proteinPerCalorie =
-                                (ingredient.proteinPer100g /
-                                    ingredient.caloriesPer100g) *
-                                100;
                             return (
                                 <option
                                     key={ingredient.id}
                                     value={ingredient.id}
                                 >
                                     {ingredient.name}{" "}
-                                    {proteinPerCalorie.toFixed(2)}g
-                                    protein/100cal
+                                    {getProteinEfficiency(
+                                        ingredient.caloriesPer100g,
+                                        ingredient.proteinPer100g,
+                                    ).toFixed(2)}
+                                    g protein/100kcal
                                 </option>
                             );
                         })}
@@ -96,7 +92,7 @@ function AddEntryForm({
                             onChange={(e) =>
                                 setIngredientWeight(e.target.value)
                             }
-                            ></input>{" "}
+                        ></input>{" "}
                         g
                     </div>
                     {weightInputError && (
@@ -119,4 +115,4 @@ function AddEntryForm({
     );
 }
 
-export default AddEntryForm
+export default AddEntryForm;

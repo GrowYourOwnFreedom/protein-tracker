@@ -1,27 +1,17 @@
-import { useEffect, useState } from "react";
-import {
-    fetchCalorieLimit,
-    fetchProteinTarget,
-    updateCaloreLimit,
-    updateProteinTarget,
-} from "./storageUtils";
 
-function TotalsPanel({ entries }) {
-    const [calorieLimit, setCalorieLimit] = useState(fetchCalorieLimit);
-    const [proteinTarget, setProteinTarget] = useState(fetchProteinTarget);
 
-    useEffect(() => {
-        updateCaloreLimit(calorieLimit);
-    }, [calorieLimit]);
-    useEffect(() => {
-        updateProteinTarget(proteinTarget);
-    }, [proteinTarget]);
+
+function TotalsPanel({ entries,calorieLimit,setCalorieLimit,proteinTarget,setProteinTarget }) {
+   
+
 
     const totals = {
         weight: 0,
         calories: 0,
         protein: 0,
+        
     };
+    
 
     return (
         <section>
@@ -47,8 +37,8 @@ function TotalsPanel({ entries }) {
                 totals.protein = totals.protein + entry.protein;
                 totals.weight = totals.weight + entry.weight;
             })}
-            <p>Calories: {totals.calories.toFixed(0)}</p>
-            <p>Protein: {totals.protein.toFixed(1)}g</p>
+            <p>Calories: {totals.calories.toFixed(0)}/{calorieLimit}kcal</p>
+            <p>Protein: {totals.protein.toFixed(1)}/{proteinTarget}g</p>
             <p>Food Eaten: {totals.weight.toFixed(0)}g</p>
         </section>
     );

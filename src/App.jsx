@@ -5,10 +5,14 @@ import { useState, useEffect } from "react";
 import AddEntryForm from "./AddEntryForm";
 import AddIngredientForm from "./AddIngredientForm";
 import {
+    fetchCalorieLimit,
     fetchEntries,
     fetchIngredients,
+    fetchProteinTarget,
+    updateCaloreLimit,
     updateEntries,
     updateIngredients,
+    updateProteinTarget,
 } from "./storageUtils";
 
 const baseIngredients = [
@@ -46,7 +50,11 @@ const baseIngredients = [
 
 function App() {
     const [entries, setEntries] = useState(fetchEntries);
-    const [ingredients, setIngredients] = useState(()=>fetchIngredients(baseIngredients));
+    const [ingredients, setIngredients] = useState(() =>
+        fetchIngredients(baseIngredients),
+    );
+    const [calorieLimit, setCalorieLimit] = useState(fetchCalorieLimit);
+    const [proteinTarget, setProteinTarget] = useState(fetchProteinTarget);
 
     useEffect(() => {
         updateEntries(entries);
@@ -55,6 +63,14 @@ function App() {
     useEffect(() => {
         updateIngredients(ingredients);
     }, [ingredients]);
+
+     useEffect(() => {
+        updateCaloreLimit(calorieLimit);
+    }, [calorieLimit]);
+    
+    useEffect(() => {
+        updateProteinTarget(proteinTarget);
+    }, [proteinTarget]);
 
     function addIngredient(newIngredient) {
         const newIngredients = [...ingredients, newIngredient];
@@ -92,7 +108,13 @@ function App() {
                 deleteEntry={deleteEntry}
                 deleteAllEntries={deleteAllEntries}
             />
-            <TotalsPanel entries={entries} />
+            <TotalsPanel
+                entries={entries}
+                calorieLimit={calorieLimit}
+                setCalorieLimit={setCalorieLimit}
+                proteinTarget={proteinTarget}
+                setProteinTarget={setProteinTarget}
+            />
         </div>
     );
 }
