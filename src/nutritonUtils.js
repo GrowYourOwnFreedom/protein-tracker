@@ -1,5 +1,5 @@
 function getProteinEfficiency(calories, protein) {
-    if (!calories || !protein) {
+    if (!calories || !protein || calories<=0 || protein <=0) {
         return 0;
     }
     return (protein / calories) * 100;
