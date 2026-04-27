@@ -16,7 +16,7 @@ function TargetCard({ title, current, target, unit, type }) {
         (remaining <= 0 && type === "goal")
     )
         return (
-            <section>
+            <section className="target-card">
                 <h3 className="target-success">{title}</h3>
                 <p>
                     {current} / {target} {unit}
@@ -26,7 +26,7 @@ function TargetCard({ title, current, target, unit, type }) {
         );
 
     return (
-        <section>
+        <section className="target-card">
             <h3 className="target-warning">{title}</h3>
             <p>
                 {current} / {target} {unit}

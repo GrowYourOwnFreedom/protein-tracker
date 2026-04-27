@@ -114,3 +114,8 @@ button:hover {
 .target-success {
     color: darkgreen;
 }
+.target-card {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+}
