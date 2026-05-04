@@ -24,18 +24,18 @@ function EntriesList({
         <section>
             <h2>Todays Entries</h2>
             {entries.map((entry, index) => {
-                const percentOfCalorieLimit = Math.round(
-                    (entry.calories / calorieLimit) * 100 || 0,
-                );
-                const percentOfProteinTarget = Math.round(
-                    (entry.protein / proteinTarget) * 100 || 0,
-                );
+                const percentOfCalorieLimit = 
+                    (entry.calories / calorieLimit) * 100 || 0
+                ;
+                const percentOfProteinTarget = 
+                    (entry.protein / proteinTarget) * 100 || 0
+                ;
                 return (
                     <p key={index}>
                         {entry.name} - {entry.weight}g - Energy:{" "}
-                        {entry.calories.toFixed(0)}kcal({percentOfCalorieLimit}
+                        {entry.calories.toFixed(0)}kcal({percentOfCalorieLimit.toFixed(1)}
                         %) - Protein: {entry.protein.toFixed(1)}g (
-                        {percentOfProteinTarget}%){" "}
+                        {percentOfProteinTarget.toFixed(1)}%){" "}
                         <button
                             className="delete-entry-button"
                             onClick={() => {
