@@ -41,6 +41,10 @@ Data saved in localStorage:
 
 ## Bugs / weird behaviour
 
+## Log
+### 4.5.26
+gave succes/warning colours to efficiency summary
+and dynamically assigned classNames
 
 ## Next session restart note
 

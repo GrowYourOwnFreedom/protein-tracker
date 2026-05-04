@@ -54,14 +54,14 @@ function TotalsPanel({
                     target={proteinTarget}
                     unit={"g"}
                     type={"goal"}
-                />
-            </div>
+                    />
                 <SummaryCard
                 currentCaloriesTotal={calories}
                 currentProteinTotal={protein}
                 calorieLimit={calorieLimit}
                 proteinTarget={proteinTarget}
                 />
+                </div>
             <p>Food Eaten: {weight.toFixed(0)}g</p>
         </section>
     );

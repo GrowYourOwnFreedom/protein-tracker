@@ -3,14 +3,18 @@ import { getProteinEfficiency } from "./nutritonUtils"
 
 function SummaryCard({currentCaloriesTotal,currentProteinTotal,proteinTarget,calorieLimit}) {
     const currentProteinEfficiency = getProteinEfficiency(currentCaloriesTotal,currentProteinTotal)
-    const remainingProtein = proteinTarget - currentProteinTotal
-    const remainingCalories = calorieLimit - currentCaloriesTotal
-    const remainingEfficiencyNeeded = getProteinEfficiency(remainingCalories,remainingProtein)
+    const proteinEfficiencyTarget = getProteinEfficiency(calorieLimit,proteinTarget)
+    const proteinNeeded = proteinTarget - currentProteinTotal
+    const caloriesLeft = calorieLimit - currentCaloriesTotal
+    const remainingProteinEfficiencyNeeded = getProteinEfficiency(caloriesLeft,proteinNeeded)
+    const currentEfficiencySuccess = currentProteinEfficiency >= proteinEfficiencyTarget
+    const cardClass = currentEfficiencySuccess? "target-success" : "target-warning"
     return(
         <section>
-            <h3>Summary</h3>
-            <p>current  average protein eficciency: {formatNumber(currentProteinEfficiency)} g/100kcal</p>
-            <p>remaining average efficiency needed for target:{formatNumber(remainingEfficiencyNeeded)} g/100kcal</p>
+            <h3 className={cardClass}>Efficiency</h3>
+            <p>target:{proteinEfficiencyTarget} g/100kcal</p>
+            <p className={cardClass}>current: {formatNumber(currentProteinEfficiency)} g/100kcal</p>
+            <p className={cardClass}>remaining: {formatNumber(remainingProteinEfficiencyNeeded)} g/100kcal</p>
         </section>
     )
 }
