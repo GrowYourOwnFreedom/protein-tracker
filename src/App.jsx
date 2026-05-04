@@ -108,6 +108,8 @@ function App() {
                 entries={entries}
                 deleteEntry={deleteEntry}
                 deleteAllEntries={deleteAllEntries}
+                calorieLimit={calorieLimit}
+                proteinTarget={proteinTarget}
             />
             <TotalsPanel
                 entries={entries}

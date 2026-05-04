@@ -1,11 +1,16 @@
-function EntriesList({entries, deleteEntry, deleteAllEntries}) {
-
-     function handleDeleteEntryClick(index) {
+function EntriesList({
+    entries,
+    deleteEntry,
+    deleteAllEntries,
+    calorieLimit,
+    proteinTarget,
+}) {
+    function handleDeleteEntryClick(index) {
         const updatedEntries = [...entries].filter((entry, i) => {
             return i !== index;
         });
         deleteEntry(updatedEntries);
-    };
+    }
 
     function handleDeleteAllEntriesClick() {
         if (entries.length > 0) {
@@ -13,16 +18,24 @@ function EntriesList({entries, deleteEntry, deleteAllEntries}) {
                 deleteAllEntries();
             }
         }
-    };
+    }
 
     return (
         <section>
-                <h2>Todays Entries</h2>
-                {entries.map((entry, index) => (
+            <h2>Todays Entries</h2>
+            {entries.map((entry, index) => {
+                const percentOfCalorieLimit = Math.round(
+                    (entry.calories / calorieLimit) * 100 || 0,
+                );
+                const percentOfProteinTarget = Math.round(
+                    (entry.protein / proteinTarget) * 100 || 0,
+                );
+                return (
                     <p key={index}>
-                        {entry.name} - {entry.weight}g -{" "}
-                        {entry.calories.toFixed(0)} calories -{" "}
-                        {entry.protein.toFixed(1)}g protein{" "}
+                        {entry.name} - {entry.weight}g - Energy:{" "}
+                        {entry.calories.toFixed(0)}kcal({percentOfCalorieLimit}
+                        %) - Protein: {entry.protein.toFixed(1)}g (
+                        {percentOfProteinTarget}%){" "}
                         <button
                             className="delete-entry-button"
                             onClick={() => {
@@ -32,15 +45,15 @@ function EntriesList({entries, deleteEntry, deleteAllEntries}) {
                             x
                         </button>
                     </p>
-                ))}
-                <button
-                    className="delete-button"
-                    onClick={handleDeleteAllEntriesClick}
-                >
-                    delete all entries
-                </button>
-            </section>
-    )
-
+                );
+            })}
+            <button
+                className="delete-button"
+                onClick={handleDeleteAllEntriesClick}
+            >
+                delete all entries
+            </button>
+        </section>
+    );
 }
-export default EntriesList
+export default EntriesList;
