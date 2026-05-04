@@ -15,14 +15,15 @@ function TargetCard({ title, current, target, unit, type }) {
     const displayPercentage = Math.round(percentage)
 
     return (
-        <section className="card">
+        <section className={`card ${targetCardClass}`}>
             <div className="card-main">
-                <p className={"card-label",targetCardClass}>{title}</p>
+                <p className={"card-label"}>{title}</p>
                 <p className="card-value">
-                    {current} / {target} {unit}
+                    {current}{unit}
                 </p>
             </div>
             <div className="card-side">
+                <p className={"card-detail"}>{current} / {target} {unit}</p>
                 <div className="progress-row">
                     <div className="progress-track">
                         <div
@@ -34,7 +35,7 @@ function TargetCard({ title, current, target, unit, type }) {
                         {displayPercentage}%
                     </span>
                 </div>
-                <p className={"card-status",targetCardClass}>{statusText}</p>
+                <p className={"card-status"}>{statusText}</p>
             </div>
         </section>
     );

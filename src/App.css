@@ -109,10 +109,16 @@ button:hover {
     gap: 0.5rem;
 }
 .target-warning {
-    color: darkred;
+ color: darkred;
+}
+.target-warning-background {
+    background-color: darkred;
 }
 .target-success {
     color: darkgreen;
+}
+.target-success-background {
+    background-color: darkgreen;
 }
 .target-card {
   padding: 1rem;
@@ -127,7 +133,6 @@ button:hover {
 
   padding: 1rem;
   border-radius: 1rem;
-  background: white;
   border: 1px solid #ddd;
 }
 
