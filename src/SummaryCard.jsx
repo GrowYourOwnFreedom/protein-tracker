@@ -10,7 +10,7 @@ function SummaryCard({currentCaloriesTotal,currentProteinTotal,proteinTarget,cal
     const currentEfficiencySuccess = currentProteinEfficiency >= proteinEfficiencyTarget
     const cardClass = currentEfficiencySuccess? "target-success" : "target-warning"
     return(
-        <section>
+        <section className="target-card">
             <h3 className={cardClass}>Efficiency</h3>
             <p>target:{proteinEfficiencyTarget} g/100kcal</p>
             <p className={cardClass}>current: {formatNumber(currentProteinEfficiency)} g/100kcal</p>
