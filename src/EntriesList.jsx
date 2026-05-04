@@ -1,3 +1,5 @@
+import EntryCard from "./EntryCard";
+
 function EntriesList({
     entries,
     deleteEntry,
@@ -24,27 +26,15 @@ function EntriesList({
         <section>
             <h2>Todays Entries</h2>
             {entries.map((entry, index) => {
-                const percentOfCalorieLimit = 
-                    (entry.calories / calorieLimit) * 100 || 0
-                ;
-                const percentOfProteinTarget = 
-                    (entry.protein / proteinTarget) * 100 || 0
-                ;
                 return (
-                    <p key={index}>
-                        {entry.name} - {entry.weight}g - Energy:{" "}
-                        {entry.calories.toFixed(0)}kcal({percentOfCalorieLimit.toFixed(1)}
-                        %) - Protein: {entry.protein.toFixed(1)}g (
-                        {percentOfProteinTarget.toFixed(1)}%){" "}
-                        <button
-                            className="delete-entry-button"
-                            onClick={() => {
-                                handleDeleteEntryClick(index);
-                            }}
-                        >
-                            x
-                        </button>
-                    </p>
+                    <EntryCard
+                        key={index}
+                        index={index}
+                        proteinTarget={proteinTarget}
+                        entry={entry}
+                        calorieLimit={calorieLimit}
+                        handleDeleteEntryClick={handleDeleteEntryClick}
+                    />
                 );
             })}
             <button
