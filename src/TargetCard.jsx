@@ -10,33 +10,33 @@ function TargetCard({ title, current, target, unit, type }) {
     const goalSuccess = remaining <= 0 && type === "goal";
     const targetCardClass =
         limitSuccess || goalSuccess ? "target-success" : "target-warning";
-    const percentage = current/target * 100
-    const barPercentage = Math.min(percentage,100)
-    const displayPercentage = Math.round(percentage)
+    const percentage = (current / target) * 100;
+    const barPercentage = Math.min(percentage, 100);
+    const displayPercentage = Math.round(percentage);
 
     return (
         <section className={`card ${targetCardClass}`}>
-            <div className="card-main">
+            <div className="card-header">
                 <p className={"card-label"}>{title}</p>
                 <p className="card-value">
-                    {current}{unit}
+                    {current}
+                    {unit}
                 </p>
             </div>
-            <div className="card-side">
-                <p className={"card-detail"}>{current} / {target} {unit}</p>
-                <div className="progress-row">
-                    <div className="progress-track">
-                        <div
+            <p className={"card-detail"}>
+                {current} / {target} {unit}
+            </p>
+
+            <div className="progress-row">
+                <div className="progress-track">
+                    <div
                         className="progress-fill"
                         style={{ width: `${barPercentage}%` }}
-                        />
-                    </div>
-                    <span className="progress-percent">
-                        {displayPercentage}%
-                    </span>
+                    />
                 </div>
-                <p className={"card-status"}>{statusText}</p>
+                <span className="progress-percent">{displayPercentage}%</span>
             </div>
+            <p className={"card-status"}>{statusText}</p>
         </section>
     );
 }

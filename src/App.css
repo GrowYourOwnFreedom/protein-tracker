@@ -109,7 +109,7 @@ button:hover {
     gap: 0.5rem;
 }
 .target-warning {
- color: darkred;
+    color: darkred;
 }
 .target-warning-background {
     background-color: darkred;
@@ -121,75 +121,64 @@ button:hover {
     background-color: darkgreen;
 }
 .target-card {
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
 }
 .card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-
-  padding: 1rem;
-  border-radius: 1rem;
-  border: 1px solid #ddd;
-}
-
-.card-main {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
     border: 1px solid #ddd;
-
 }
-
-.card-side {
-  text-align: right;
-    border: 1px solid #ddd;
-
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .card-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  opacity: 0.7;
+    font-size: 1.2rem;
+    font-weight: 600;
+    opacity: 0.7;
 }
 
 .card-value {
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .card-detail,
 .card-status {
-  font-size: 0.9rem;
-  opacity: 0.75;
+    font-size: 0.9rem;
+    opacity: 0.75;
 }
 .progress-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .progress-track {
-  flex: 1;
-  height: 0.5rem;
-  background: #e5e5e5;
-  border-radius: 999px;
-  overflow: hidden;
+    flex: 1;
+    height: 0.5rem;
+    background: #e5e5e5;
+    border-radius: 999px;
+    overflow: hidden;
 }
 
 .progress-fill {
-  height: 100%;
-  border-radius: inherit;
-  background: #222;
+    height: 100%;
+    border-radius: inherit;
+    background: #222;
 }
 
 .progress-percent {
-  min-width: 3rem;
-  text-align: right;
-  font-size: 0.85rem;
-  font-weight: 600;
+    min-width: 3rem;
+    text-align: right;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
