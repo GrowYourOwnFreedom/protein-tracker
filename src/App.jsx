@@ -49,7 +49,6 @@ const baseIngredients = [
 ];
 
 function App() {
-    
     const [entries, setEntries] = useState(fetchEntries);
     const [ingredients, setIngredients] = useState(() =>
         fetchIngredients(baseIngredients),
@@ -65,7 +64,7 @@ function App() {
         updateIngredients(ingredients);
     }, [ingredients]);
 
-     useEffect(() => {
+    useEffect(() => {
         updateCaloreLimit(calorieLimit);
     }, [calorieLimit]);
 
@@ -98,6 +97,9 @@ function App() {
     return (
         <div className="app">
             <h1>Protein And Calorie Tracker</h1>
+            <h1 className="text-3xl font-bold underline">
+                Tailwind is working
+            </h1>
             <AddIngredientForm addIngredient={addIngredient} />
             <AddEntryForm
                 ingredients={ingredients}
