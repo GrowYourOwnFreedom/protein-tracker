@@ -1,4 +1,13 @@
 import { formatNumber } from "./numberUtils";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+    CardAction,
+} from "@/components/ui/card";
 
 function TargetCard({ title, current, target, unit, type }) {
     const remaining = formatNumber(target - current);
@@ -15,29 +24,60 @@ function TargetCard({ title, current, target, unit, type }) {
     const displayPercentage = Math.round(percentage);
 
     return (
-        <section className={`card ${targetCardClass}`}>
-            <div className="card-header">
-                <p className={"card-label"}>{title}</p>
-                <p className="card-value">
-                    {current}
-                    {unit}
-                </p>
-            </div>
-            <p className={"card-detail"}>
-                {current} / {target} {unit}
-            </p>
+        // <section className={`card ${targetCardClass}`}>
+        //     <div className="card-header">
+        //         <p className={"card-label"}>{title}</p>
+        //         <p className="card-value">
+        //             {current}
+        //             {unit}
+        //         </p>
+        //     </div>
+        //     <p className={"card-detail"}>
+        //         {current} / {target} {unit}
+        //     </p>
 
-            <div className="progress-row">
-                <div className="progress-track">
-                    <div
-                        className="progress-fill"
-                        style={{ width: `${barPercentage}%` }}
-                    />
+        //     <div className="progress-row">
+        //         <div className="progress-track">
+        //             <div
+        //                 className="progress-fill"
+        //                 style={{ width: `${barPercentage}%` }}
+        //             />
+        //         </div>
+        //         <span className="progress-percent">{displayPercentage}%</span>
+        //     </div>
+        //     <p className={"card-status"}>{statusText}</p>
+        // </section>
+        <Card>
+            <CardHeader>
+                <CardTitle>
+                    {" "}
+                    <p>{title}</p>
+                    <p>
+                        {current}
+                        {unit}
+                    </p>
+                </CardTitle>
+                <CardDescription>Card Description</CardDescription>
+                <CardAction>Card Action</CardAction>
+            </CardHeader>
+            <CardContent>
+                <p>
+                    {current} / {target} {unit}
+                </p>
+                <div className="progress-row">
+                    <div className="progress-track">
+                        <div
+                            className="progress-fill"
+                            style={{ width: `${barPercentage}%` }}
+                        />
+                    </div>
+                    <span>{displayPercentage}%</span>
                 </div>
-                <span className="progress-percent">{displayPercentage}%</span>
-            </div>
-            <p className={"card-status"}>{statusText}</p>
-        </section>
+            </CardContent>
+            <CardFooter>
+                <p>{statusText}</p>
+            </CardFooter>
+        </Card>
     );
 }
 

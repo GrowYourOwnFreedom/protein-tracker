@@ -97,9 +97,7 @@ function App() {
 
     return (
         <div className="app">
-            <h1>Protein And Calorie Tracker</h1>
-            <ExampleButton/>
-            
+            <h1>Protein And Calorie Tracker</h1>            
             <AddIngredientForm addIngredient={addIngredient} />
             <AddEntryForm
                 ingredients={ingredients}
