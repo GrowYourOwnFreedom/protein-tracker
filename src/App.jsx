@@ -4,6 +4,7 @@ import EntriesList from "./EntriesList";
 import { useState, useEffect } from "react";
 import AddEntryForm from "./AddEntryForm";
 import AddIngredientForm from "./AddIngredientForm";
+import ExampleButton from "./ExampleButton";
 import {
     fetchCalorieLimit,
     fetchEntries,
@@ -97,9 +98,8 @@ function App() {
     return (
         <div className="app">
             <h1>Protein And Calorie Tracker</h1>
-            <h1 className="text-3xl font-bold underline">
-                Tailwind is working
-            </h1>
+            <ExampleButton/>
+            
             <AddIngredientForm addIngredient={addIngredient} />
             <AddEntryForm
                 ingredients={ingredients}
