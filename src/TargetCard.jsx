@@ -1,3 +1,4 @@
+import { Progress } from "./components/ui/progress";
 import { formatNumber } from "./numberUtils";
 import {
     Card,
@@ -42,12 +43,8 @@ function TargetCard({ title, current, target, unit, type }) {
                         {current} / {target} {unit}
                     </p>
                     <div className="flex items-center gap-3 w-1/2 ml-auto">
-                        <div className="progress-track">
-                            <div
-                                className="progress-fill"
-                                style={{ width: `${barPercentage}%` }}
-                            />
-                        </div>
+                       
+                    <Progress value={barPercentage}/>
                     <span>{displayPercentage}%</span>
                     </div>
                 </div>
