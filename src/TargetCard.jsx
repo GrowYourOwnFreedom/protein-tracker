@@ -15,16 +15,12 @@ function TargetCard({ title, current, target, unit, type }) {
     if (remaining < 0) {
         statusText = `${Math.abs(remaining)} ${unit} over ${type}`;
     }
-    const limitSuccess = remaining > 0 && type === "limit";
-    const goalSuccess = remaining <= 0 && type === "goal";
-    const targetCardClass =
-        limitSuccess || goalSuccess ? "target-success" : "target-warning";
     const percentage = (current / target) * 100;
     const barPercentage = Math.min(percentage, 100);
     const displayPercentage = Math.round(percentage);
 
     return (
-        <Card className="w-full max-w-sm rounded-lg gap-6">
+        <Card className="w-full max-w-md rounded-lg gap-6">
             <CardHeader>
                 <div className="flex items-center">
                     <CardTitle>
