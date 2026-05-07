@@ -97,7 +97,14 @@ function App() {
 
     return (
         <div className="app">
-            <h1>Protein And Calorie Tracker</h1>            
+            <h1>Protein And Calorie Tracker</h1> 
+             <TotalsPanel
+                entries={entries}
+                calorieLimit={calorieLimit}
+                setCalorieLimit={setCalorieLimit}
+                proteinTarget={proteinTarget}
+                setProteinTarget={setProteinTarget}
+            />           
             <AddIngredientForm addIngredient={addIngredient} />
             <AddEntryForm
                 ingredients={ingredients}
@@ -110,13 +117,6 @@ function App() {
                 deleteAllEntries={deleteAllEntries}
                 calorieLimit={calorieLimit}
                 proteinTarget={proteinTarget}
-            />
-            <TotalsPanel
-                entries={entries}
-                calorieLimit={calorieLimit}
-                setCalorieLimit={setCalorieLimit}
-                proteinTarget={proteinTarget}
-                setProteinTarget={setProteinTarget}
             />
         </div>
     );
