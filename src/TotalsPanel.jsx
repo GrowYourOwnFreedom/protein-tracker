@@ -22,7 +22,7 @@ function TotalsPanel({
     const { weight, calories, protein } = totals;
 
     return (
-        <section>
+        <section className="flex flex-col gap-6">
             <h2>Totals</h2>
             <div className="limit-target">
                 <label>
@@ -40,7 +40,7 @@ function TotalsPanel({
                     />
                 </label>
             </div>
-            <div className="target-card-container">
+            <div className="flex flex-col gap-3">
                 <TargetCard
                     title={"Calories"}
                     current={calories.toFixed(0)}

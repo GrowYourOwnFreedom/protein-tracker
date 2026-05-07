@@ -24,59 +24,43 @@ function TargetCard({ title, current, target, unit, type }) {
     const displayPercentage = Math.round(percentage);
 
     return (
-        // <section className={`card ${targetCardClass}`}>
-        //     <div className="card-header">
-        //         <p className={"card-label"}>{title}</p>
-        //         <p className="card-value">
-        //             {current}
-        //             {unit}
-        //         </p>
-        //     </div>
-        //     <p className={"card-detail"}>
-        //         {current} / {target} {unit}
-        //     </p>
-
-        //     <div className="progress-row">
-        //         <div className="progress-track">
-        //             <div
-        //                 className="progress-fill"
-        //                 style={{ width: `${barPercentage}%` }}
-        //             />
-        //         </div>
-        //         <span className="progress-percent">{displayPercentage}%</span>
-        //     </div>
-        //     <p className={"card-status"}>{statusText}</p>
-        // </section>
-        <Card>
+        <Card className="w-full max-w-sm rounded-lg gap-6">
             <CardHeader>
-                <CardTitle>
-                    {" "}
-                    <p>{title}</p>
-                    <p>
+                <div className="flex items-center">
+                    <CardTitle>
+                        {" "}
+                        <p>{title} consumed:</p>
+                    </CardTitle>
+                    <p className="ml-auto inline-block text-xl">
                         {current}
                         {unit}
                     </p>
-                </CardTitle>
-                <CardDescription>Card Description</CardDescription>
-                <CardAction>Card Action</CardAction>
+                </div>
+                <CardDescription>
+                    {title} {type} summary
+                </CardDescription>
             </CardHeader>
-            <CardContent>
-                <p>
-                    {current} / {target} {unit}
-                </p>
-                <div className="progress-row">
-                    <div className="progress-track">
-                        <div
-                            className="progress-fill"
-                            style={{ width: `${barPercentage}%` }}
-                        />
-                    </div>
+            <CardContent className="gap-6">
+                <div className="flex items-center gap-6">
+                    <p>
+                        {current} / {target} {unit}
+                    </p>
+                    <div className="flex items-center gap-3 w-1/2 ml-auto">
+                        <div className="progress-track">
+                            <div
+                                className="progress-fill"
+                                style={{ width: `${barPercentage}%` }}
+                            />
+                        </div>
                     <span>{displayPercentage}%</span>
+                    </div>
+                </div>
+                <div className="flex pt-3">
+                    <p className="ml-auto mr-auto text-muted-foreground">
+                        {statusText}
+                    </p>
                 </div>
             </CardContent>
-            <CardFooter>
-                <p>{statusText}</p>
-            </CardFooter>
         </Card>
     );
 }
