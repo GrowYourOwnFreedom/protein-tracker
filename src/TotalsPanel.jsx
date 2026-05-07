@@ -40,7 +40,7 @@ function TotalsPanel({
                     />
                 </label>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-6">
                 <TargetCard
                     title={"Calories"}
                     current={calories.toFixed(0)}
