@@ -1,4 +1,5 @@
 import { Progress } from "./components/ui/progress";
+import { cn } from "./lib/utils";
 import { formatNumber } from "./numberUtils";
 import {
     Card,
@@ -20,8 +21,46 @@ function TargetCard({ title, current, target, unit, type }) {
     const barPercentage = Math.min(percentage, 100);
     const displayPercentage = Math.round(percentage);
 
+    function getTargetStatus(target, currTotal) {
+        if (currTotal < target * 0.8) {
+            return "low";
+        }
+        if (currTotal < target) {
+            return "near";
+        }
+        return "reached";
+    }
+    const status = getTargetStatus(target, current);
+
+    function targetSuccessStatus(type, status) {
+        if (type === "goal") {
+            if (status === "low") return "fail";
+            if (status === "near") return "okay";
+            return "success";
+        }
+        if (type === "limit") {
+            if (status === "reached") return "fail";
+            if (status === "near") return "okay";
+            return "success";
+        }
+    }
+    const successStatus = targetSuccessStatus(type, status);
+
+    const statusClasses = {
+        fail: " ring-red-500",
+
+        okay: " ring-yellow-500",
+
+        success: " ring-green-500",
+    };
+
     return (
-        <Card className="w-full max-w-md rounded-lg gap-6">
+        <Card
+            className={cn(
+                "w-full max-w-md rounded-lg gap-6",
+                statusClasses[successStatus],
+            )}
+        >
             <CardHeader>
                 <div className="flex items-center">
                     <CardTitle>
@@ -43,14 +82,13 @@ function TargetCard({ title, current, target, unit, type }) {
                         {current} / {target} {unit}
                     </p>
                     <div className="flex items-center gap-3 w-1/2 ml-auto">
-                       
-                    <Progress value={barPercentage}/>
-                    <span>{displayPercentage}%</span>
+                        <Progress value={barPercentage} />
+                        <span>{displayPercentage}%</span>
                     </div>
                 </div>
                 <div className="flex pt-3">
                     <p className="ml-auto mr-auto text-muted-foreground">
-                        {statusText}
+                        {status} - {statusText}
                     </p>
                 </div>
             </CardContent>
