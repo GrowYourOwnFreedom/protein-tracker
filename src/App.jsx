@@ -97,7 +97,7 @@ function App() {
 
     return (
         <div className="app">
-            <h1>Protein And Calorie Tracker</h1> 
+            <h1 className="text-4xl pb-6">Protein And Calorie Tracker</h1> 
              <TotalsPanel
                 entries={entries}
                 calorieLimit={calorieLimit}

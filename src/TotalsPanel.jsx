@@ -22,9 +22,9 @@ function TotalsPanel({
     const { weight, calories, protein } = totals;
 
     return (
-        <section className="flex flex-col gap-6">
-            <h2>Totals</h2>
-            <div className="limit-target">
+        <section className="flex flex-col ">
+            <h2 className="text-3xl p-6">Totals</h2>
+            <div className="flex p-6 gap-6">
                 <label>
                     calorie limit:
                     <input

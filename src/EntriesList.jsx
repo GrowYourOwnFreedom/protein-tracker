@@ -23,26 +23,28 @@ function EntriesList({
     }
 
     return (
-        <section>
-            <h2>Todays Entries</h2>
-            {entries.map((entry, index) => {
-                return (
-                    <EntryCard
-                        key={index}
-                        index={index}
-                        proteinTarget={proteinTarget}
-                        entry={entry}
-                        calorieLimit={calorieLimit}
-                        handleDeleteEntryClick={handleDeleteEntryClick}
-                    />
-                );
-            })}
-            <button
-                className="delete-button"
-                onClick={handleDeleteAllEntriesClick}
-            >
-                delete all entries
-            </button>
+        <section className="">
+            <h2 className="p-6 text-3xl">Todays Entries</h2>
+            <div className=" flex flex-col items-center gap-3">
+                {entries.map((entry, index) => {
+                    return (
+                        <EntryCard
+                            key={index}
+                            index={index}
+                            proteinTarget={proteinTarget}
+                            entry={entry}
+                            calorieLimit={calorieLimit}
+                            handleDeleteEntryClick={handleDeleteEntryClick}
+                        />
+                    );
+                })}
+                <button
+                    className="delete-button"
+                    onClick={handleDeleteAllEntriesClick}
+                >
+                    delete all entries
+                </button>
+            </div>
         </section>
     );
 }

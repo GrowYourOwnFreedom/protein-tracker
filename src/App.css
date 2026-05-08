@@ -2,7 +2,6 @@
     max-width: 700px;
     margin: 0 auto;
     padding: 2rem 1rem;
-    background-color: chartreuse;
 }
 
 h1,
@@ -98,33 +97,7 @@ button:hover {
     gap: 1rem;
     justify-content: center;
 }
-.limit-target {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-}
-.target-card-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-.target-warning {
-    color: darkred;
-}
-.target-warning-background {
-    background-color: darkred;
-}
-.target-success {
-    color: darkgreen;
-}
-.target-success-background {
-    background-color: darkgreen;
-}
-.target-card {
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-}
+
 .card {
     display: flex;
     flex-direction: column;
