@@ -57,7 +57,7 @@ function TargetCard({ title, current, target, unit, type }) {
     return (
         <Card
             className={cn(
-                "w-full max-w-md rounded-lg gap-6",
+                "w-full max-w-md rounded-lg gap-6 shadow-xl",
                 statusClasses[successStatus],
             )}
         >

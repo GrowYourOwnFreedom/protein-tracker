@@ -1,3 +1,4 @@
+import { cn } from "./lib/utils";
 import SummaryCard from "./SummaryCard";
 import TargetCard from "./TargetCard";
 
@@ -7,6 +8,7 @@ function TotalsPanel({
     setCalorieLimit,
     proteinTarget,
     setProteinTarget,
+    className
 }) {
     const totals = {
         weight: 0,
@@ -22,7 +24,7 @@ function TotalsPanel({
     const { weight, calories, protein } = totals;
 
     return (
-        <section className="flex flex-col ">
+        <section className={cn("flex flex-col ",className)}>
             <h2 className="text-3xl p-6">Totals</h2>
             <div className="flex p-6 gap-6">
                 <label>

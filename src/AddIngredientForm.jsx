@@ -74,7 +74,7 @@ function AddIngredientForm({addIngredient}) {
 
     return (
         <section>
-            <h2>Add Ingredients</h2>
+            <h2 className="text-3xl p-6">Add Ingredients</h2>
             <form action={handleSaveIngredientClick}>
                 <label>
                     Ingredient name:

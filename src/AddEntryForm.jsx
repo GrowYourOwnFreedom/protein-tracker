@@ -59,9 +59,9 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
 
     return (
         <section>
-            <h2>Add Entry</h2>
+            <h2 className="text-3xl p-6">Add Entry</h2>
             <form action={handleSaveEntryClick}>
-                <label>
+                <label className="py-4">
                     Select an ingredient:
                     <select
                         name="ingredient"
@@ -87,7 +87,7 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
                     </select>
                 </label>
 
-                <label>
+                <label className="py-4">
                     Enter the weight in grams:
                     <div className="ingredient-weight-input-container">
                         <input

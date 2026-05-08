@@ -1,4 +1,5 @@
 import EntryCard from "./EntryCard";
+import { cn } from "./lib/utils";
 
 function EntriesList({
     entries,
@@ -6,6 +7,7 @@ function EntriesList({
     deleteAllEntries,
     calorieLimit,
     proteinTarget,
+    className
 }) {
     function handleDeleteEntryClick(index) {
         const updatedEntries = [...entries].filter((entry, i) => {
@@ -23,9 +25,17 @@ function EntriesList({
     }
 
     return (
-        <section className="">
-            <h2 className="p-6 text-3xl">Todays Entries</h2>
+        <section className={cn(" lg:h-screen flex flex-col items-center gap-6",className)}>
             <div className=" flex flex-col items-center gap-3">
+                <h2 className="p-6 text-3xl">Todays Entries</h2>
+                <button
+                    className="delete-button"
+                    onClick={handleDeleteAllEntriesClick}
+                >
+                    delete all entries
+                </button>
+            </div>
+            <div className="  w-full flex flex-col gap-3 p-5 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
                 {entries.map((entry, index) => {
                     return (
                         <EntryCard
@@ -38,12 +48,6 @@ function EntriesList({
                         />
                     );
                 })}
-                <button
-                    className="delete-button"
-                    onClick={handleDeleteAllEntriesClick}
-                >
-                    delete all entries
-                </button>
             </div>
         </section>
     );

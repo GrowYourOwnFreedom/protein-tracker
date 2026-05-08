@@ -96,28 +96,38 @@ function App() {
     }
 
     return (
-        <div className="app">
-            <h1 className="text-4xl pb-6">Protein And Calorie Tracker</h1> 
-             <TotalsPanel
-                entries={entries}
-                calorieLimit={calorieLimit}
-                setCalorieLimit={setCalorieLimit}
-                proteinTarget={proteinTarget}
-                setProteinTarget={setProteinTarget}
-            />           
-            <AddIngredientForm addIngredient={addIngredient} />
-            <AddEntryForm
-                ingredients={ingredients}
-                addEntry={addEntry}
-                deleteIngredient={deleteIngredient}
-            />
-            <EntriesList
-                entries={entries}
-                deleteEntry={deleteEntry}
-                deleteAllEntries={deleteAllEntries}
-                calorieLimit={calorieLimit}
-                proteinTarget={proteinTarget}
-            />
+        <div className="max-w-2xl m-auto p-6 lg:max-w-none">
+            <div className="lg:flex">
+                <h1 className="text-4xl pb-6 m-auto lg:text-5xl">
+                    Protein And Calorie Tracker
+                </h1>
+            </div>
+            <div className="lg:flex">
+                <TotalsPanel
+                    entries={entries}
+                    calorieLimit={calorieLimit}
+                    setCalorieLimit={setCalorieLimit}
+                    proteinTarget={proteinTarget}
+                    setProteinTarget={setProteinTarget}
+                    className="lg:flex-1"
+                />
+                <div className="lg:flex-1">
+                    <AddIngredientForm addIngredient={addIngredient} />
+                    <AddEntryForm
+                        ingredients={ingredients}
+                        addEntry={addEntry}
+                        deleteIngredient={deleteIngredient}
+                    />
+                </div>
+                <EntriesList
+                    className="lg:flex-1"
+                    entries={entries}
+                    deleteEntry={deleteEntry}
+                    deleteAllEntries={deleteAllEntries}
+                    calorieLimit={calorieLimit}
+                    proteinTarget={proteinTarget}
+                />
+            </div>
         </div>
     );
 }
