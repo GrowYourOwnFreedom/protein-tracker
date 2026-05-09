@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import SummaryCard from "@/components/totals/SummaryCard";
 import TargetCard from "@/components/totals/TargetCard";
+import Panel from "@/components/app/Panel";
 
 function TotalsPanel({
     entries,
@@ -24,15 +25,8 @@ function TotalsPanel({
     const { weight, calories, protein } = totals;
 
     return (
-        <section
-            className={cn(
-                "flex flex-col min-h-0  ring-2 ring-foreground/10",
-                className,
-            )}
-        >
-            <h2 className="text-3xl text-center p-6 shrink-0">Totals</h2>
+        <Panel title="Totals" className={cn("min-h-0", className)}>
             <p>Food Eaten: {weight.toFixed(0)}g</p>
-
             <div className="flex p-6 gap-6 shrink-0">
                 <label>
                     calorie limit:
@@ -73,7 +67,7 @@ function TotalsPanel({
                     proteinTarget={proteinTarget}
                 />
             </div>
-        </section>
+        </Panel>
     );
 }
 
