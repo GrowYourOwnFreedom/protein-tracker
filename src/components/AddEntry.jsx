@@ -3,6 +3,7 @@ import {
     getProteinEfficiency,
     sortIngredientsByProteinEfficiency,
 } from "@/lib/proteinEfficiencyHelpers";
+import Panel from "@/components/app/Panel";
 
 function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
     const [selectedIngredient, setSelectedIngredient] = useState("");
@@ -60,65 +61,66 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
 
     return (
-        <section className="ring-2 ring-foreground/10">
-            <h2 className="text-3xl text-center p-6">Add Entry</h2>
-            <form action={handleSaveEntryClick}>
-                <label className="py-4">
-                    Select an ingredient:
-                    <select
-                        name="ingredient"
-                        required
-                        onChange={(e) => setSelectedIngredient(e.target.value)}
-                        value={selectedIngredient}
-                    >
-                        {sortedIngredients.map((ingredient) => {
-                            return (
-                                <option
-                                    key={ingredient.id}
-                                    value={ingredient.id}
-                                >
-                                    {ingredient.name}{" "}
-                                    {getProteinEfficiency(
-                                        ingredient.caloriesPer100g,
-                                        ingredient.proteinPer100g,
-                                    ).toFixed(2)}
-                                    g protein/100kcal
-                                </option>
-                            );
-                        })}
-                    </select>
-                </label>
-
-                <label className="py-4">
-                    Enter the weight in grams:
-                    <div className="ingredient-weight-input-container">
-                        <input
-                            className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
-                            name="weight"
-                            value={ingredientWeight}
+        <Panel title="Add Entry">
+                <form action={handleSaveEntryClick}>
+                    <label className="py-4">
+                        Select an ingredient:
+                        <select
+                            name="ingredient"
+                            required
                             onChange={(e) =>
-                                setIngredientWeight(e.target.value)
+                                setSelectedIngredient(e.target.value)
                             }
-                        ></input>{" "}
-                        g
-                    </div>
-                    {weightInputError && (
-                        <p className="error">{weightInputError}</p>
-                    )}
-                </label>
+                            value={selectedIngredient}
+                        >
+                            {sortedIngredients.map((ingredient) => {
+                                return (
+                                    <option
+                                        key={ingredient.id}
+                                        value={ingredient.id}
+                                    >
+                                        {ingredient.name}{" "}
+                                        {getProteinEfficiency(
+                                            ingredient.caloriesPer100g,
+                                            ingredient.proteinPer100g,
+                                        ).toFixed(2)}
+                                        g protein/100kcal
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </label>
 
-                <button className="save-button" type="submit">
-                    save entry
-                </button>
-                <button
-                    type="button"
-                    onClick={handleDeleteIngredientClick}
-                    className="delete-button"
-                >
-                    delete ingredient
-                </button>
-            </form>
-        </section>
+                    <label className="py-4">
+                        Enter the weight in grams:
+                        <div className="ingredient-weight-input-container">
+                            <input
+                                className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
+                                name="weight"
+                                value={ingredientWeight}
+                                onChange={(e) =>
+                                    setIngredientWeight(e.target.value)
+                                }
+                            ></input>{" "}
+                            g
+                        </div>
+                        {weightInputError && (
+                            <p className="error">{weightInputError}</p>
+                        )}
+                    </label>
+
+                    <button className="save-button" type="submit">
+                        save entry
+                    </button>
+                    <button
+                        type="button"
+                        onClick={handleDeleteIngredientClick}
+                        className="delete-button"
+                    >
+                        delete ingredient
+                    </button>
+                </form>
+        </Panel>
     );
 }
 
