@@ -1,7 +1,6 @@
 import { useState } from "react";
 
-function AddIngredientForm({addIngredient}) {
-    
+function AddIngredientForm({ addIngredient }) {
     const [addIngredientName, setAddIngredientName] = useState("");
     const [addIngredientCalories, setAddIngredientCalories] = useState("");
     const [addIngredientProtein, setAddIngredientProtein] = useState("");
@@ -66,19 +65,20 @@ function AddIngredientForm({addIngredient}) {
         newIngredient.caloriesPer100g = newIngredientCalories;
         newIngredient.proteinPer100g = newIngredientProtein;
 
-        addIngredient(newIngredient)
+        addIngredient(newIngredient);
         setAddIngredientName("");
         setAddIngredientCalories("");
         setAddIngredientProtein("");
-    };
+    }
 
     return (
-        <section className="border  border-amber-500">
+        <section className="ring-2 ring-foreground/10">
             <h2 className="text-3xl text-center p-6">Add Ingredients</h2>
             <form action={handleSaveIngredientClick}>
                 <label>
                     Ingredient name:
                     <input
+                        className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                         name="ingredient-name"
                         required
                         value={addIngredientName}
@@ -86,36 +86,39 @@ function AddIngredientForm({addIngredient}) {
                     ></input>
                 </label>
                 <div className="add-ingredient-inputs-container">
-
-                <label>
-                    Calories per 100g:
-                    <input
-                        name="ingredient-calories"
-                        required
-                        value={addIngredientCalories}
-                        onChange={(e) =>
-                            setAddIngredientCalories(e.target.value)
-                        }
+                    <label>
+                        Calories per 100g:
+                        <input
+                            className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
+                            name="ingredient-calories"
+                            required
+                            value={addIngredientCalories}
+                            onChange={(e) =>
+                                setAddIngredientCalories(e.target.value)
+                            }
                         ></input>
-                    {addIngredientCaloriesError && (
-                        <p className="error">{addIngredientCaloriesError}</p>
-                    )}
-                </label>
-                <label>
-                    Protein per 100g:
-                    <input
-                        name="ingredient-protein"
-                        required
-                        value={addIngredientProtein}
-                        onChange={(e) =>
-                            setAddIngredientProtein(e.target.value)
-                        }
+                        {addIngredientCaloriesError && (
+                            <p className="error">
+                                {addIngredientCaloriesError}
+                            </p>
+                        )}
+                    </label>
+                    <label>
+                        Protein per 100g:
+                        <input
+                            className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
+                            name="ingredient-protein"
+                            required
+                            value={addIngredientProtein}
+                            onChange={(e) =>
+                                setAddIngredientProtein(e.target.value)
+                            }
                         ></input>
-                    {addIngredientProteinError && (
-                        <p className="error">{addIngredientProteinError}</p>
-                    )}
-                </label>
-                    </div>
+                        {addIngredientProteinError && (
+                            <p className="error">{addIngredientProteinError}</p>
+                        )}
+                    </label>
+                </div>
                 <button className="save-button" type="submit">
                     Save Ingredient
                 </button>

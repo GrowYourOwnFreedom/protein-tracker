@@ -60,7 +60,7 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
 
     return (
-        <section className="border  border-amber-500">
+        <section className="ring-2 ring-foreground/10">
             <h2 className="text-3xl text-center p-6">Add Entry</h2>
             <form action={handleSaveEntryClick}>
                 <label className="py-4">
@@ -93,6 +93,7 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
                     Enter the weight in grams:
                     <div className="ingredient-weight-input-container">
                         <input
+                            className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                             name="weight"
                             value={ingredientWeight}
                             onChange={(e) =>

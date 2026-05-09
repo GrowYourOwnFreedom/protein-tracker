@@ -27,7 +27,7 @@ function EntriesList({
     return (
         <section
             className={cn(
-                " min-h-0 flex flex-col  gap-6 border  border-amber-500",
+                " min-h-0 flex flex-col  gap-6 ring-2 ring-foreground/10",
                 className,
             )}
         >
@@ -40,7 +40,7 @@ function EntriesList({
                     delete all entries
                 </button>
             </div>
-            <div className=" items-center flex-1 w-full flex flex-col gap-3 p-5 min-h-0 lg:overflow-y-auto border">
+            <div className=" items-center flex-1 w-full flex flex-col gap-3 p-5 min-h-0 lg:overflow-y-auto shadow-inner/25 rounded-2xl">
                 {entries.map((entry, index) => {
                     return (
                         <EntryCard

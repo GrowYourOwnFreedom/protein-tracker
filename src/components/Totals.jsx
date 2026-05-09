@@ -26,7 +26,7 @@ function TotalsPanel({
     return (
         <section
             className={cn(
-                "flex flex-col border-4 min-h-0  border-mauve-400",
+                "flex flex-col min-h-0  ring-2 ring-foreground/10",
                 className,
             )}
         >
@@ -37,6 +37,7 @@ function TotalsPanel({
                 <label>
                     calorie limit:
                     <input
+                        className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                         value={calorieLimit}
                         onChange={(e) => setCalorieLimit(e.target.value)}
                     />
@@ -44,12 +45,13 @@ function TotalsPanel({
                 <label>
                     protein target:
                     <input
+                        className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                         value={proteinTarget}
                         onChange={(e) => setProteinTarget(e.target.value)}
                     />
                 </label>
             </div>
-            <div className="flex flex-1 flex-col gap-3 p-5 items-center lg:overflow-y-auto">
+            <div className="flex flex-1 flex-col gap-3 p-5 items-center lg:overflow-y-auto shadow-inner/25 rounded-2xl">
                 <TargetCard
                     title={"Calories"}
                     current={calories.toFixed(0)}

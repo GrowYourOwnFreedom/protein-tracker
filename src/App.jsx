@@ -1,6 +1,6 @@
 import "./App.css";
 import TotalsPanel from "@/components/Totals";
-import EntriesList from "@/components/EntriesList";
+import EntriesList from "@/components/Entries";
 import { useState, useEffect } from "react";
 import AddEntryForm from "@/components/AddEntry";
 import AddIngredientForm from "@/components/AddIngredient";
@@ -100,7 +100,7 @@ function App() {
                     Protein And Calorie Tracker
                 </h1>
             </header>
-            <main className="grid grid-cols-1 gap-4  p-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr] ">
+            <main className="grid grid-cols-1 gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr]">
                 <TotalsPanel
                     className=""
                     entries={entries}
