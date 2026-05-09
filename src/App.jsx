@@ -1,9 +1,9 @@
 import "./App.css";
 import TotalsPanel from "@/components/Totals";
-import EntriesList from "@/components/Entries";
+import TodaysEntries from "@/components/Entries";
 import { useState, useEffect } from "react";
-import AddEntryForm from "@/components/AddEntry";
-import AddIngredientForm from "@/components/AddIngredient";
+import AddEntry from "@/components/AddEntry";
+import AddIngredient from "@/components/AddIngredient";
 import {
     fetchCalorieLimit,
     fetchEntries,
@@ -110,14 +110,14 @@ function App() {
                     setProteinTarget={setProteinTarget}
                 />
                 <div className="">
-                    <AddEntryForm
+                    <AddEntry
                         ingredients={ingredients}
                         addEntry={addEntry}
                         deleteIngredient={deleteIngredient}
                     />
-                    <AddIngredientForm addIngredient={addIngredient} />
+                    <AddIngredient addIngredient={addIngredient} />
                 </div>
-                <EntriesList
+                <TodaysEntries
                     className=""
                     entries={entries}
                     deleteEntry={deleteEntry}

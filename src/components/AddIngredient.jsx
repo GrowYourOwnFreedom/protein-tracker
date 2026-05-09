@@ -1,7 +1,7 @@
 import Panel from "@/components/app/Panel";
 import { useState } from "react";
 
-function AddIngredientForm({ addIngredient }) {
+function AddIngredient({ addIngredient, className }) {
     const [addIngredientName, setAddIngredientName] = useState("");
     const [addIngredientCalories, setAddIngredientCalories] = useState("");
     const [addIngredientProtein, setAddIngredientProtein] = useState("");
@@ -73,7 +73,7 @@ function AddIngredientForm({ addIngredient }) {
     }
 
     return (
-        <Panel title="Add Ingredient">
+        <Panel title="Add Ingredient" className={className}>
                 <form action={handleSaveIngredientClick}>
                     <label>
                         Ingredient name:
@@ -130,4 +130,4 @@ function AddIngredientForm({ addIngredient }) {
         </Panel>
     );
 }
-export default AddIngredientForm;
+export default AddIngredient;

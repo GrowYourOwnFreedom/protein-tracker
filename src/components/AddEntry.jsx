@@ -5,7 +5,7 @@ import {
 } from "@/lib/proteinEfficiencyHelpers";
 import Panel from "@/components/app/Panel";
 
-function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
+function AddEntry({ ingredients, addEntry, deleteIngredient, className}) {
     const [selectedIngredient, setSelectedIngredient] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
@@ -61,7 +61,7 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
 
     return (
-        <Panel title="Add Entry">
+        <Panel title="Add Entry" className={className}>
                 <form action={handleSaveEntryClick}>
                     <label className="py-4">
                         Select an ingredient:
@@ -124,4 +124,4 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
     );
 }
 
-export default AddEntryForm;
+export default AddEntry;
