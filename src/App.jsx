@@ -1,5 +1,5 @@
 import "./App.css";
-import TotalsPanel from "@/components/Totals"
+import TotalsPanel from "@/components/Totals";
 import EntriesList from "@/components/EntriesList";
 import { useState, useEffect } from "react";
 import AddEntryForm from "@/components/AddEntry";
@@ -56,10 +56,7 @@ function App() {
     const [proteinTarget, setProteinTarget] = useState(fetchProteinTarget);
 
     useEffect(() => {
-        
-        console.log("use effect",entries, );
         updateEntries(entries);
-        
     }, [entries]);
 
     useEffect(() => {

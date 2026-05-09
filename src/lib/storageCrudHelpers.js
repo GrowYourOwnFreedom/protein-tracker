@@ -1,4 +1,3 @@
-
 function fetchLocalIngredients(baseIngredients) {
     const savedIngredients =
         JSON.parse(localStorage.getItem("proteinTrackerIngredients")) ??
@@ -9,8 +8,6 @@ function fetchLocalIngredients(baseIngredients) {
 function fetchLocalEntries() {
     const savedEntries =
         JSON.parse(localStorage.getItem("proteinTrackerEntries")) ?? [];
-        console.log(savedEntries);
-        
     return savedEntries;
 }
 
@@ -28,28 +25,24 @@ function updateLocalIngredients(ingredients) {
 }
 
 function updateLocalCalorieLimit(calories) {
-    localStorage.setItem(
-        "proteinTrackerCalorieLimit",
-        calories,
-    );
+    localStorage.setItem("proteinTrackerCalorieLimit", calories);
 }
 
 function fetchLocalCalorieLimit() {
-    const calories = localStorage.getItem("proteinTrackerCalorieLimit") ?? ""
-    
+    const calories = localStorage.getItem("proteinTrackerCalorieLimit") ?? "";
+
     return calories;
 }
 
 function updateLocalProteinTarget(proteinTarget) {
-
-    localStorage.setItem("proteinTrackerProteinTarget",proteinTarget)
+    localStorage.setItem("proteinTrackerProteinTarget", proteinTarget);
 }
 
 function fetchLocalProteinTarget() {
-    const savedProteinTarget = localStorage.getItem("proteinTrackerProteinTarget") ?? ""
+    const savedProteinTarget =
+        localStorage.getItem("proteinTrackerProteinTarget") ?? "";
 
-    return savedProteinTarget
-
+    return savedProteinTarget;
 }
 
 export {
@@ -60,5 +53,5 @@ export {
     fetchLocalCalorieLimit as fetchCalorieLimit,
     updateLocalCalorieLimit as updateCaloreLimit,
     updateLocalProteinTarget as updateProteinTarget,
-    fetchLocalProteinTarget as fetchProteinTarget
+    fetchLocalProteinTarget as fetchProteinTarget,
 };
