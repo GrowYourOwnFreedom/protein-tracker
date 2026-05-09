@@ -1,5 +1,13 @@
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+    FieldSeparator,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
 function AddIngredient({ addIngredient, className }) {
@@ -75,10 +83,14 @@ function AddIngredient({ addIngredient, className }) {
 
     return (
         <Panel title="Add Ingredient" className={className}>
-                <form action={handleSaveIngredientClick}>
-                    <label>
-                        Ingredient name:
-                        <input
+            <form action={handleSaveIngredientClick}>
+                <FieldGroup>
+                    <Field>
+                        <FieldLabel htmlFor="ingredient-name">
+                            Ingredient Name:
+                        </FieldLabel>
+                        <Input
+                            id="ingredient-name"
                             className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                             name="ingredient-name"
                             required
@@ -86,12 +98,16 @@ function AddIngredient({ addIngredient, className }) {
                             onChange={(e) =>
                                 setAddIngredientName(e.target.value)
                             }
-                        ></input>
-                    </label>
-                    <div className="flex items-center gap-4">
-                        <label>
-                            Calories per 100g:
-                            <input
+                        />
+                    </Field>
+                    <FieldSeparator />
+                    <div className="grid grid-cols-2 gap-4">
+                        <Field>
+                            <FieldLabel htmlFor="calories-per-100g">
+                                Calories per 100g:
+                            </FieldLabel>
+                            <Input
+                                id="calories-per-100g"
                                 className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                                 name="ingredient-calories"
                                 required
@@ -99,16 +115,19 @@ function AddIngredient({ addIngredient, className }) {
                                 onChange={(e) =>
                                     setAddIngredientCalories(e.target.value)
                                 }
-                            ></input>
+                            />
                             {addIngredientCaloriesError && (
-                                <p className="error">
+                                <FieldError>
                                     {addIngredientCaloriesError}
-                                </p>
+                                </FieldError>
                             )}
-                        </label>
-                        <label>
-                            Protein per 100g:
-                            <input
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="protein-per-100g">
+                                Protein per 100g:
+                            </FieldLabel>
+                            <Input
+                                id="protein-per-100g"
                                 className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                                 name="ingredient-protein"
                                 required
@@ -116,16 +135,17 @@ function AddIngredient({ addIngredient, className }) {
                                 onChange={(e) =>
                                     setAddIngredientProtein(e.target.value)
                                 }
-                            ></input>
+                            />
                             {addIngredientProteinError && (
-                                <p className="error">
+                                <FieldError>
                                     {addIngredientProteinError}
-                                </p>
+                                </FieldError>
                             )}
-                        </label>
+                        </Field>
                     </div>
-                    <Button type="submit">Save Ingredient</Button>
-                </form>
+                </FieldGroup>
+                <Button type="submit">Save Ingredient</Button>
+            </form>
         </Panel>
     );
 }
