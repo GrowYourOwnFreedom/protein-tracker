@@ -99,7 +99,6 @@ function AddIngredient({ addIngredient, className }) {
                             }
                         />
                     </Field>
-                    <FieldSeparator />
                     <div className="grid grid-cols-2 gap-4">
                         <Field>
                             <FieldLabel htmlFor="calories-per-100g">
@@ -140,10 +139,10 @@ function AddIngredient({ addIngredient, className }) {
                             )}
                         </Field>
                     </div>
-                                        <FieldSeparator />
-
-                <Button className="w-full" type="submit">Save Ingredient</Button>
-                
+                    <FieldSeparator />
+                    <Button className="w-full" type="submit">
+                        Save Ingredient
+                    </Button>
                 </FieldGroup>
             </form>
         </Panel>

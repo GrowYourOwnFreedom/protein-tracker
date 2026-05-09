@@ -5,7 +5,13 @@ import {
 } from "@/lib/proteinEfficiencyHelpers";
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+    Field,
+    FieldError,
+    FieldGroup,
+    FieldLabel,
+    FieldSeparator,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
     Select,
@@ -84,7 +90,7 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
                             onValueChange={setSelectedIngredientId}
                         >
                             <SelectTrigger className="bg-muted/40 shadow-inner/10">
-                                <SelectValue placeholder="PLease Choose An Ingredient"/>
+                                <SelectValue placeholder="PLease Choose An Ingredient" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
@@ -109,18 +115,22 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
                     </Field>
                     <Field>
                         <FieldLabel>Enter The Weight (g):</FieldLabel>
-                        <Input  name="weight"
-                                value={ingredientWeight}
-                                onChange={(e) =>
-                                    setIngredientWeight(e.target.value)
-                                }/>
-                                
-                                {weightInputError && (
+                        <Input
+                            name="weight"
+                            value={ingredientWeight}
+                            onChange={(e) =>
+                                setIngredientWeight(e.target.value)
+                            }
+                        />
+
+                        {weightInputError && (
                             <FieldError>{weightInputError}</FieldError>
                         )}
                     </Field>
+                    <FieldSeparator />
                     <Button type="submit"> Save Entry</Button>
                     <Button
+                        className="w-fit mx-auto"
                         type="button"
                         variant="destructive"
                         onClick={handleDeleteIngredientClick}
