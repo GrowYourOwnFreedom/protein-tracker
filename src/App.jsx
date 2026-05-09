@@ -1,10 +1,9 @@
 import "./App.css";
-import TotalsPanel from "./TotalsPanel";
-import EntriesList from "./EntriesList";
+import TotalsPanel from "@/components/Totals"
+import EntriesList from "@/components/EntriesList";
 import { useState, useEffect } from "react";
-import AddEntryForm from "./AddEntryForm";
-import AddIngredientForm from "./AddIngredientForm";
-import ExampleButton from "./ExampleButton";
+import AddEntryForm from "@/components/AddEntry";
+import AddIngredientForm from "@/components/AddIngredient";
 import {
     fetchCalorieLimit,
     fetchEntries,
@@ -14,8 +13,7 @@ import {
     updateEntries,
     updateIngredients,
     updateProteinTarget,
-} from "./storageUtils";
-
+} from "@/lib/storageCrudHelpers";
 const baseIngredients = [
     {
         id: "1",
@@ -58,7 +56,10 @@ function App() {
     const [proteinTarget, setProteinTarget] = useState(fetchProteinTarget);
 
     useEffect(() => {
+        
+        console.log("use effect",entries, );
         updateEntries(entries);
+        
     }, [entries]);
 
     useEffect(() => {

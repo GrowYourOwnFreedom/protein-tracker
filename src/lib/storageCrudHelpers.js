@@ -1,3 +1,4 @@
+
 function fetchLocalIngredients(baseIngredients) {
     const savedIngredients =
         JSON.parse(localStorage.getItem("proteinTrackerIngredients")) ??
@@ -8,6 +9,8 @@ function fetchLocalIngredients(baseIngredients) {
 function fetchLocalEntries() {
     const savedEntries =
         JSON.parse(localStorage.getItem("proteinTrackerEntries")) ?? [];
+        console.log(savedEntries);
+        
     return savedEntries;
 }
 

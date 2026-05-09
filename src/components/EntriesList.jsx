@@ -1,5 +1,5 @@
-import EntryCard from "./EntryCard";
-import { cn } from "./lib/utils";
+import EntryCard from "./entries/EntryCard";
+import { cn } from "@/lib/utils";
 
 function EntriesList({
     entries,
@@ -7,7 +7,7 @@ function EntriesList({
     deleteAllEntries,
     calorieLimit,
     proteinTarget,
-    className
+    className,
 }) {
     function handleDeleteEntryClick(index) {
         const updatedEntries = [...entries].filter((entry, i) => {
@@ -25,7 +25,12 @@ function EntriesList({
     }
 
     return (
-        <section className={cn(" min-h-0 flex flex-col  gap-6 border  border-amber-500",className)}>
+        <section
+            className={cn(
+                " min-h-0 flex flex-col  gap-6 border  border-amber-500",
+                className,
+            )}
+        >
             <div className=" shrink-0 flex flex-col items-center gap-3">
                 <h2 className="p-6 text-3xl">Todays Entries</h2>
                 <button

@@ -1,5 +1,5 @@
-import { formatNumber } from "./numberUtils"
-import { getProteinEfficiency } from "./nutritonUtils"
+import { formatNumber } from "@/lib/formatNumber"
+import { getProteinEfficiency } from "@/lib/proteinEfficiencyHelpers"
 
 function SummaryCard({currentCaloriesTotal,currentProteinTotal,proteinTarget,calorieLimit}) {
     const currentProteinEfficiency = getProteinEfficiency(currentCaloriesTotal,currentProteinTotal)

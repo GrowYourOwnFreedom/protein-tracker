@@ -1,6 +1,6 @@
-import { cn } from "./lib/utils";
-import SummaryCard from "./SummaryCard";
-import TargetCard from "./TargetCard";
+import { cn } from "@/lib/utils";
+import SummaryCard from "@/components/totals/SummaryCard";
+import TargetCard from "@/components/totals/TargetCard";
 
 function TotalsPanel({
     entries,
@@ -49,7 +49,7 @@ function TotalsPanel({
                     />
                 </label>
             </div>
-            <div className="flex flex-1 flex-col gap-3 p-5 items-center border lg:overflow-y-auto">
+            <div className="flex flex-1 flex-col gap-3 p-5 items-center lg:overflow-y-auto">
                 <TargetCard
                     title={"Calories"}
                     current={calories.toFixed(0)}

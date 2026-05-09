@@ -1,6 +1,5 @@
-import { Progress } from "./components/ui/progress";
-import { cn } from "./lib/utils";
-import { formatNumber } from "./numberUtils";
+import { Progress } from "@/components/ui/progress";
+import { formatNumber } from "@/lib/formatNumber";
 import {
     Card,
     CardContent,
@@ -47,20 +46,15 @@ function TargetCard({ title, current, target, unit, type }) {
     const successStatus = targetSuccessStatus(type, status);
 
     const statusClasses = {
-        fail: " ring-red-500/30",
+        fail: " bg-red-500/30",
 
-        okay: " ring-yellow-500",
+        okay: " bg-yellow-500",
 
-        success: " ring-green-500",
+        success: " bg-green-500",
     };
 
     return (
-        <Card
-            className={cn(
-                "w-full max-w-md rounded-lg gap-6 shadow-xl shrink-0",
-                statusClasses[successStatus],
-            )}
-        >
+        <Card className="w-full max-w-md rounded-lg gap-6 shadow-xl shrink-0">
             <CardHeader>
                 <div className="flex items-center">
                     <CardTitle>
@@ -82,7 +76,10 @@ function TargetCard({ title, current, target, unit, type }) {
                         {current} / {target} {unit}
                     </p>
                     <div className="flex items-center gap-3 w-1/2 ml-auto">
-                        <Progress value={barPercentage} />
+                        <Progress
+                            value={barPercentage}
+                            indicatorClassName={statusClasses[successStatus]}
+                        />
                         <span>{displayPercentage}%</span>
                     </div>
                 </div>

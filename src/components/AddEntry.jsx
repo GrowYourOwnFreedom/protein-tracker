@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { getProteinEfficiency, sortIngredientsByProteinEfficiency } from "./nutritonUtils";
+import {
+    getProteinEfficiency,
+    sortIngredientsByProteinEfficiency,
+} from "@/lib/proteinEfficiencyHelpers";
 
 function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
-
     const [selectedIngredient, setSelectedIngredient] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
 
-    function handleSaveEntryClick(saveEntryFormData)  {
+    function handleSaveEntryClick(saveEntryFormData) {
         const ingredientID = saveEntryFormData.get("ingredient");
         const ingredient = ingredients.find((i) => {
             return i.id === ingredientID;
@@ -38,7 +40,7 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
         addEntry(newEntry);
 
         setIngredientWeight("");
-    };
+    }
 
     function handleDeleteIngredientClick() {
         const deletedIngredient = ingredients.find((ingredient) => {
@@ -54,7 +56,7 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
         ) {
             deleteIngredient(updatedIngredients);
         }
-    };
+    }
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
 
     return (
