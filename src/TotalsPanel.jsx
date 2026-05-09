@@ -8,7 +8,7 @@ function TotalsPanel({
     setCalorieLimit,
     proteinTarget,
     setProteinTarget,
-    className
+    className,
 }) {
     const totals = {
         weight: 0,
@@ -24,9 +24,16 @@ function TotalsPanel({
     const { weight, calories, protein } = totals;
 
     return (
-        <section className={cn("flex flex-col ",className)}>
-            <h2 className="text-3xl p-6">Totals</h2>
-            <div className="flex p-6 gap-6">
+        <section
+            className={cn(
+                "flex flex-col border-4 min-h-0  border-mauve-400",
+                className,
+            )}
+        >
+            <h2 className="text-3xl text-center p-6 shrink-0">Totals</h2>
+            <p>Food Eaten: {weight.toFixed(0)}g</p>
+
+            <div className="flex p-6 gap-6 shrink-0">
                 <label>
                     calorie limit:
                     <input
@@ -42,7 +49,7 @@ function TotalsPanel({
                     />
                 </label>
             </div>
-            <div className="flex flex-col gap-6 items-center">
+            <div className="flex flex-1 flex-col gap-3 p-5 items-center border lg:overflow-y-auto">
                 <TargetCard
                     title={"Calories"}
                     current={calories.toFixed(0)}
@@ -56,15 +63,14 @@ function TotalsPanel({
                     target={proteinTarget}
                     unit={"g"}
                     type={"goal"}
-                    />
-                <SummaryCard
-                currentCaloriesTotal={calories}
-                currentProteinTotal={protein}
-                calorieLimit={calorieLimit}
-                proteinTarget={proteinTarget}
                 />
-                </div>
-            <p>Food Eaten: {weight.toFixed(0)}g</p>
+                <SummaryCard
+                    currentCaloriesTotal={calories}
+                    currentProteinTotal={protein}
+                    calorieLimit={calorieLimit}
+                    proteinTarget={proteinTarget}
+                />
+            </div>
         </section>
     );
 }

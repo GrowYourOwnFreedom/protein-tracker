@@ -96,38 +96,38 @@ function App() {
     }
 
     return (
-        <div className="max-w-2xl m-auto p-6 lg:max-w-none">
-            <div className="lg:flex">
-                <h1 className="text-4xl pb-6 m-auto lg:text-5xl">
+        <div className="min-h-screen lg:h-screen lg:flex lg:flex-col">
+            <header className="lg:shrink-0 p-4">
+                <h1 className="text-3xl text-center font-bold">
                     Protein And Calorie Tracker
                 </h1>
-            </div>
-            <div className="lg:flex">
+            </header>
+            <main className="grid grid-cols-1 gap-4  p-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr] ">
                 <TotalsPanel
+                    className=""
                     entries={entries}
                     calorieLimit={calorieLimit}
                     setCalorieLimit={setCalorieLimit}
                     proteinTarget={proteinTarget}
                     setProteinTarget={setProteinTarget}
-                    className="lg:flex-1"
                 />
-                <div className="lg:flex-1">
-                    <AddIngredientForm addIngredient={addIngredient} />
+                <div className="">
                     <AddEntryForm
                         ingredients={ingredients}
                         addEntry={addEntry}
                         deleteIngredient={deleteIngredient}
                     />
+                    <AddIngredientForm addIngredient={addIngredient} />
                 </div>
                 <EntriesList
-                    className="lg:flex-1"
+                    className=""
                     entries={entries}
                     deleteEntry={deleteEntry}
                     deleteAllEntries={deleteAllEntries}
                     calorieLimit={calorieLimit}
                     proteinTarget={proteinTarget}
                 />
-            </div>
+            </main>
         </div>
     );
 }

@@ -58,8 +58,8 @@ function AddEntryForm({ ingredients, addEntry, deleteIngredient }) {
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
 
     return (
-        <section>
-            <h2 className="text-3xl p-6">Add Entry</h2>
+        <section className="border  border-amber-500">
+            <h2 className="text-3xl text-center p-6">Add Entry</h2>
             <form action={handleSaveEntryClick}>
                 <label className="py-4">
                     Select an ingredient:

@@ -73,8 +73,8 @@ function AddIngredientForm({addIngredient}) {
     };
 
     return (
-        <section>
-            <h2 className="text-3xl p-6">Add Ingredients</h2>
+        <section className="border  border-amber-500">
+            <h2 className="text-3xl text-center p-6">Add Ingredients</h2>
             <form action={handleSaveIngredientClick}>
                 <label>
                     Ingredient name:
