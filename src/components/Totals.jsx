@@ -33,7 +33,7 @@ function TotalsPanel({
 
     return (
         <Panel title="Totals" className={className}>
-            <p className="text-center">Food Eaten: {weight.toFixed(0)}g</p>
+            <p className="text-center">Food Eaten: {weight.toFixed(0)} g</p>
             <div className="flex p-6 gap-4 shrink-0 items-center">
                 <FieldGroup>
                     <div className="grid grid-cols-2 gap-4">

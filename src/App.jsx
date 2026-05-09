@@ -94,7 +94,7 @@ function App() {
     }
 
     return (
-        <div className="h-screen overflow-y-auto snap-y snap-proximity lg:h-screen lg:flex lg:flex-col lg:overflow-hidden lg:snap-none">
+        <div className="h-screen lg:h-screen lg:flex lg:flex-col">
             <header className="lg:shrink-0 p-4">
                 <h1 className="text-3xl text-center font-bold">
                     Protein And Calorie Tracker
@@ -109,7 +109,7 @@ function App() {
                     proteinTarget={proteinTarget}
                     setProteinTarget={setProteinTarget}
                 />
-                <div className=" flex flex-col gap-4 h-screen lg:h-auto lg:min-h-0 snap-start ">
+                <div className=" flex flex-col gap-4 h-screen lg:h-auto lg:min-h-0">
                     <AddEntry
                         ingredients={ingredients}
                         addEntry={addEntry}

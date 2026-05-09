@@ -62,7 +62,7 @@ function TargetCard({ title, current, target, unit, type }) {
                         <p>{title} consumed:</p>
                     </CardTitle>
                     <p className="ml-auto inline-block text-xl">
-                        {current}
+                        {current}{" "}
                         {unit}
                     </p>
                 </div>
