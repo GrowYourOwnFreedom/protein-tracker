@@ -5,14 +5,24 @@ import {
 } from "@/lib/proteinEfficiencyHelpers";
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
-    const [selectedIngredient, setSelectedIngredient] = useState("");
+    const [selectedIngredientId, setSelectedIngredientId] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
 
     function handleSaveEntryClick(saveEntryFormData) {
-        const ingredientID = saveEntryFormData.get("ingredient");
+        const ingredientID = saveEntryFormData.get("ingredientId");
         const ingredient = ingredients.find((i) => {
             return i.id === ingredientID;
         });
@@ -46,10 +56,10 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
 
     function handleDeleteIngredientClick() {
         const deletedIngredient = ingredients.find((ingredient) => {
-            return ingredient.id === selectedIngredient;
+            return ingredient.id === selectedIngredientId;
         });
         const updatedIngredients = ingredients.filter((ingredient) => {
-            return ingredient.id !== selectedIngredient;
+            return ingredient.id !== selectedIngredientId;
         });
         if (
             confirm(
@@ -64,57 +74,60 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
     return (
         <Panel title="Add Entry" className={className}>
             <form action={handleSaveEntryClick}>
-                <label className="py-4">
-                    Select an ingredient:
-                    <select
-                        name="ingredient"
-                        required
-                        onChange={(e) => setSelectedIngredient(e.target.value)}
-                        value={selectedIngredient}
+                <FieldGroup>
+                    <Field>
+                        <FieldLabel>Select An Ingredient:</FieldLabel>
+                        <Select
+                            name="ingredientId"
+                            required
+                            value={selectedIngredientId}
+                            onValueChange={setSelectedIngredientId}
+                        >
+                            <SelectTrigger className="bg-muted/40 shadow-inner/10">
+                                <SelectValue placeholder="PLease Choose An Ingredient"/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    {sortedIngredients.map((ingredient) => {
+                                        return (
+                                            <SelectItem
+                                                key={ingredient.id}
+                                                value={String(ingredient.id)}
+                                            >
+                                                {ingredient.name}{" "}
+                                                {getProteinEfficiency(
+                                                    ingredient.caloriesPer100g,
+                                                    ingredient.proteinPer100g,
+                                                ).toFixed(2)}
+                                                g protein/100kcal
+                                            </SelectItem>
+                                        );
+                                    })}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </Field>
+                    <Field>
+                        <FieldLabel>Enter The Weight (g):</FieldLabel>
+                        <Input  name="weight"
+                                value={ingredientWeight}
+                                onChange={(e) =>
+                                    setIngredientWeight(e.target.value)
+                                }/>
+                                
+                                {weightInputError && (
+                            <FieldError>{weightInputError}</FieldError>
+                        )}
+                    </Field>
+                    <Button type="submit"> Save Entry</Button>
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={handleDeleteIngredientClick}
                     >
-                        {sortedIngredients.map((ingredient) => {
-                            return (
-                                <option
-                                    key={ingredient.id}
-                                    value={ingredient.id}
-                                >
-                                    {ingredient.name}{" "}
-                                    {getProteinEfficiency(
-                                        ingredient.caloriesPer100g,
-                                        ingredient.proteinPer100g,
-                                    ).toFixed(2)}
-                                    g protein/100kcal
-                                </option>
-                            );
-                        })}
-                    </select>
-                </label>
-
-                <label className="py-4">
-                    Enter the weight in grams:
-                    <div className="ingredient-weight-input-container">
-                        <input
-                            className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
-                            name="weight"
-                            value={ingredientWeight}
-                            onChange={(e) =>
-                                setIngredientWeight(e.target.value)
-                            }
-                        ></input>{" "}
-                        g
-                    </div>
-                    {weightInputError && (
-                        <p className="error">{weightInputError}</p>
-                    )}
-                </label>
-                <Button type="submit"> Save Entry</Button>
-                <Button
-                    type="button"
-                    variant="destructive"
-                    onClick={handleDeleteIngredientClick}
-                >
-                    Delete Ingredient
-                </Button>
+                        Delete Ingredient
+                    </Button>
+                </FieldGroup>
             </form>
         </Panel>
     );

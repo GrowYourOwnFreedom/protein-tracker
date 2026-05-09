@@ -102,14 +102,13 @@ function App() {
             </header>
             <main className="grid grid-cols-1 gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr]">
                 <TotalsPanel
-                    className=""
                     entries={entries}
                     calorieLimit={calorieLimit}
                     setCalorieLimit={setCalorieLimit}
                     proteinTarget={proteinTarget}
                     setProteinTarget={setProteinTarget}
                 />
-                <div className="">
+                <div className=" flex flex-col gap-4">
                     <AddEntry
                         ingredients={ingredients}
                         addEntry={addEntry}
@@ -118,7 +117,6 @@ function App() {
                     <AddIngredient addIngredient={addIngredient} />
                 </div>
                 <TodaysEntries
-                    className=""
                     entries={entries}
                     deleteEntry={deleteEntry}
                     deleteAllEntries={deleteAllEntries}

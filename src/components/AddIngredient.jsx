@@ -91,7 +91,6 @@ function AddIngredient({ addIngredient, className }) {
                         </FieldLabel>
                         <Input
                             id="ingredient-name"
-                            className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                             name="ingredient-name"
                             required
                             value={addIngredientName}
@@ -108,7 +107,6 @@ function AddIngredient({ addIngredient, className }) {
                             </FieldLabel>
                             <Input
                                 id="calories-per-100g"
-                                className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                                 name="ingredient-calories"
                                 required
                                 value={addIngredientCalories}
@@ -128,7 +126,6 @@ function AddIngredient({ addIngredient, className }) {
                             </FieldLabel>
                             <Input
                                 id="protein-per-100g"
-                                className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                                 name="ingredient-protein"
                                 required
                                 value={addIngredientProtein}
@@ -143,8 +140,11 @@ function AddIngredient({ addIngredient, className }) {
                             )}
                         </Field>
                     </div>
+                                        <FieldSeparator />
+
+                <Button className="w-full" type="submit">Save Ingredient</Button>
+                
                 </FieldGroup>
-                <Button type="submit">Save Ingredient</Button>
             </form>
         </Panel>
     );

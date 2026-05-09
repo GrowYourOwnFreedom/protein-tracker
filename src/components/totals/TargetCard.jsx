@@ -54,7 +54,7 @@ function TargetCard({ title, current, target, unit, type }) {
     };
 
     return (
-        <Card className="w-full max-w-md rounded-lg gap-6 shadow-xl shrink-0">
+        <Card className="w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0">
             <CardHeader>
                 <div className="flex items-center">
                     <CardTitle>

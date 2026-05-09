@@ -43,7 +43,6 @@ function TotalsPanel({
                                 Calorie Limit:
                             </FieldLabel>
                             <Input
-                                className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                                 id="calorie-limit"
                                 value={calorieLimit}
                                 onChange={(e) =>
@@ -56,7 +55,6 @@ function TotalsPanel({
                                 Protein Target:
                             </FieldLabel>
                             <Input
-                                className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
                                 id="protein-target"
                                 value={proteinTarget}
                                 onChange={(e) =>
@@ -67,7 +65,7 @@ function TotalsPanel({
                     </div>
                 </FieldGroup>
             </div>
-            <div className="flex flex-1 flex-col gap-3 p-5 items-center lg:overflow-y-auto shadow-inner/25 rounded-2xl">
+            <div className="flex flex-1 flex-col gap-3 p-5 items-center bg-muted/40 lg:overflow-y-auto shadow-[inset_0_2px_8px_rgb(0_0_0/0.12)] ring-1 ring-foreground/10 rounded-xl">
                 <TargetCard
                     title={"Calories"}
                     current={calories.toFixed(0)}

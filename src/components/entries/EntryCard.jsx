@@ -19,7 +19,7 @@ function EntryCard({
     const percentOfCalorieLimit = (entry.calories / calorieLimit) * 100 || 0;
     const percentOfProteinTarget = (entry.protein / proteinTarget) * 100 || 0;
     return (
-        <Card className="w-full shrink-0 max-w-md rounded-xl outline shadow-lg">
+        <Card className="w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0">
             <CardHeader>
                 <CardTitle>
                     <div className="flex gap-3">
