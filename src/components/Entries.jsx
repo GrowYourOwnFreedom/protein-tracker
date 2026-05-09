@@ -1,6 +1,5 @@
 import Panel from "@/components/app/Panel";
 import EntryCard from "./entries/EntryCard";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 function TodaysEntries({
@@ -27,7 +26,7 @@ function TodaysEntries({
     }
 
     return (
-        <Panel title="Today's Entries" className={cn("h-screen lg:h-auto lg:min-h-0", className)}>
+        <Panel title="Today's Entries" className={className}>
                 <div className=" shrink-0 flex flex-col gap-3">
                     <Button 
                     className="w-fit mx-auto"

@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import SummaryCard from "@/components/totals/SummaryCard";
 import TargetCard from "@/components/totals/TargetCard";
 import Panel from "@/components/app/Panel";
@@ -33,7 +32,7 @@ function TotalsPanel({
     const { weight, calories, protein } = totals;
 
     return (
-        <Panel title="Totals" className={cn("h-screen lg:h-auto lg:min-h-0", className)}>
+        <Panel title="Totals" className={className}>
             <p className="text-center">Food Eaten: {weight.toFixed(0)}g</p>
             <div className="flex p-6 gap-4 shrink-0 items-center">
                 <FieldGroup>

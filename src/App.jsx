@@ -94,7 +94,7 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen lg:h-screen lg:flex lg:flex-col">
+        <div className="h-screen overflow-y-auto snap-y snap-proximity lg:h-screen lg:flex lg:flex-col lg:overflow-hidden lg:snap-none">
             <header className="lg:shrink-0 p-4">
                 <h1 className="text-3xl text-center font-bold">
                     Protein And Calorie Tracker
@@ -102,13 +102,14 @@ function App() {
             </header>
             <main className="grid grid-cols-1 gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr]">
                 <TotalsPanel
+                    className="h-screen lg:h-auto lg:min-h-0 snap-start "
                     entries={entries}
                     calorieLimit={calorieLimit}
                     setCalorieLimit={setCalorieLimit}
                     proteinTarget={proteinTarget}
                     setProteinTarget={setProteinTarget}
                 />
-                <div className=" flex flex-col gap-4">
+                <div className=" flex flex-col gap-4 h-screen lg:h-auto lg:min-h-0 snap-start ">
                     <AddEntry
                         ingredients={ingredients}
                         addEntry={addEntry}
@@ -117,6 +118,7 @@ function App() {
                     <AddIngredient addIngredient={addIngredient} />
                 </div>
                 <TodaysEntries
+                    className="h-screen lg:h-auto lg:min-h-0 snap-start "
                     entries={entries}
                     deleteEntry={deleteEntry}
                     deleteAllEntries={deleteAllEntries}
