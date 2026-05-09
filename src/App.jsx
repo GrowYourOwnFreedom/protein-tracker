@@ -102,7 +102,7 @@ function App() {
             </header>
             <main className="grid grid-cols-1 gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr]">
                 <TotalsPanel
-                    className="h-screen lg:h-auto lg:min-h-0 snap-start "
+                    className="h-screen lg:h-auto lg:min-h-0 "
                     entries={entries}
                     calorieLimit={calorieLimit}
                     setCalorieLimit={setCalorieLimit}
@@ -118,7 +118,7 @@ function App() {
                     <AddIngredient addIngredient={addIngredient} />
                 </div>
                 <TodaysEntries
-                    className="h-screen lg:h-auto lg:min-h-0 snap-start "
+                    className="h-screen lg:h-auto lg:min-h-0"
                     entries={entries}
                     deleteEntry={deleteEntry}
                     deleteAllEntries={deleteAllEntries}
