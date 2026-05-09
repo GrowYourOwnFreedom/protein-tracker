@@ -46,11 +46,6 @@ select {
 .error {
     color: darkred;
 }
-.add-ingredient-inputs-container {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-}
 
 .card {
     display: flex;

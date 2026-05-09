@@ -27,7 +27,7 @@ function TotalsPanel({
     return (
         <Panel title="Totals" className={cn("min-h-0", className)}>
             <p>Food Eaten: {weight.toFixed(0)}g</p>
-            <div className="flex p-6 gap-6 shrink-0">
+            <div className="flex p-6 gap-6 shrink-0 items-baseline">
                 <label>
                     calorie limit:
                     <input
