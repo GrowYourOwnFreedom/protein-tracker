@@ -88,7 +88,7 @@ function AddIngredient({ addIngredient, className }) {
                             }
                         ></input>
                     </label>
-                    <div className="flex items-baseline gap-4">
+                    <div className="flex items-center gap-4">
                         <label>
                             Calories per 100g:
                             <input

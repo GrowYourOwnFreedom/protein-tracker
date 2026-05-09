@@ -2,6 +2,14 @@ import { cn } from "@/lib/utils";
 import SummaryCard from "@/components/totals/SummaryCard";
 import TargetCard from "@/components/totals/TargetCard";
 import Panel from "@/components/app/Panel";
+import {
+    Field,
+    FieldGroup,
+    FieldLabel,
+    FieldSeparator,
+} from "@/components/ui/field";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 function TotalsPanel({
     entries,
@@ -26,24 +34,38 @@ function TotalsPanel({
 
     return (
         <Panel title="Totals" className={cn("min-h-0", className)}>
-            <p>Food Eaten: {weight.toFixed(0)}g</p>
-            <div className="flex p-6 gap-6 shrink-0 items-baseline">
-                <label>
-                    calorie limit:
-                    <input
-                        className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
-                        value={calorieLimit}
-                        onChange={(e) => setCalorieLimit(e.target.value)}
-                    />
-                </label>
-                <label>
-                    protein target:
-                    <input
-                        className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
-                        value={proteinTarget}
-                        onChange={(e) => setProteinTarget(e.target.value)}
-                    />
-                </label>
+            <p className="text-center">Food Eaten: {weight.toFixed(0)}g</p>
+            <div className="flex p-6 gap-4 shrink-0 items-center">
+                <FieldGroup>
+                    <div className="grid grid-cols-2 gap-4">
+                        <Field>
+                            <FieldLabel htmlFor="calorie-limit">
+                                Calorie Limit:
+                            </FieldLabel>
+                            <Input
+                                className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
+                                id="calorie-limit"
+                                value={calorieLimit}
+                                onChange={(e) =>
+                                    setCalorieLimit(e.target.value)
+                                }
+                            />
+                        </Field>
+                        <Field>
+                            <FieldLabel htmlFor="protein-target">
+                                Protein Target:
+                            </FieldLabel>
+                            <Input
+                                className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
+                                id="protein-target"
+                                value={proteinTarget}
+                                onChange={(e) =>
+                                    setProteinTarget(e.target.value)
+                                }
+                            />
+                        </Field>
+                    </div>
+                </FieldGroup>
             </div>
             <div className="flex flex-1 flex-col gap-3 p-5 items-center lg:overflow-y-auto shadow-inner/25 rounded-2xl">
                 <TargetCard
