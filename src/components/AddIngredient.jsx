@@ -1,4 +1,5 @@
 import Panel from "@/components/app/Panel";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 function AddIngredient({ addIngredient, className }) {
@@ -123,9 +124,7 @@ function AddIngredient({ addIngredient, className }) {
                             )}
                         </label>
                     </div>
-                    <button className="save-button" type="submit">
-                        Save Ingredient
-                    </button>
+                    <Button type="submit">Save Ingredient</Button>
                 </form>
         </Panel>
     );

@@ -26,24 +26,6 @@ select {
     border-radius: 8px;
 }
 
-button {
-    padding: 0.7rem 1rem;
-    border: none;
-    border-radius: 2rem;
-    background: #222;
-    color: white;
-    cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.7;
-}
-.delete-button {
-    background-color: darkred;
-}
-.save-button {
-    background-color: darkgreen;
-}
 
 .delete-entry-button {
     background-color: darkred;
@@ -55,24 +37,6 @@ button:hover {
     line-height: 1;
 }
 
-.entry-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.entry-list li {
-    padding: 0.75rem 0;
-    border-bottom: 1px solid #eee;
-}
-
-.totals {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    font-weight: 600;
-    flex-wrap: wrap;
-}
 .ingredient-weight-input-container {
     width: 8rem;
     display: flex;
