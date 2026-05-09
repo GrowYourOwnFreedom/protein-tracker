@@ -34,7 +34,7 @@ function TodaysEntries({
                     variant="destructive"
                         onClick={handleDeleteAllEntriesClick}>Delete All Entries</Button>
                 </div>
-                <div className=" flex flex-1 flex-col gap-3 p-5 items-center bg-muted/40 lg:overflow-y-auto shadow-[inset_0_2px_8px_rgb(0_0_0/0.12)] ring-1 ring-foreground/10 rounded-xl">
+                <div className=" flex flex-1 flex-col gap-3 p-5 items-center bg-muted/40 overflow-y-auto shadow-[inset_0_2px_8px_rgb(0_0_0/0.12)] ring-1 ring-foreground/10 rounded-xl">
                     {entries.map((entry, index) => {
                         return (
                             <EntryCard
