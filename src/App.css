@@ -8,17 +8,6 @@
     font-size: 1rem;
     line-height: 1;
 }
-
-.ingredient-weight-input-container {
-    width: 8rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-.error {
-    color: darkred;
-}
-
 .card {
     display: flex;
     flex-direction: column;

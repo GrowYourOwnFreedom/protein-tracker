@@ -27,7 +27,7 @@ function TodaysEntries({
     }
 
     return (
-        <Panel title="Today's Entries" className={cn("min-h-0", className)}>
+        <Panel title="Today's Entries" className={cn("h-screen lg:h-auto lg:min-h-0", className)}>
                 <div className=" shrink-0 flex flex-col gap-3">
                     <Button 
                     className="w-fit mx-auto"
