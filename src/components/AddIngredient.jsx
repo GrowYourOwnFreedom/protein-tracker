@@ -1,3 +1,4 @@
+import Panel from "@/components/app/Panel";
 import { useState } from "react";
 
 function AddIngredientForm({ addIngredient }) {
@@ -72,58 +73,61 @@ function AddIngredientForm({ addIngredient }) {
     }
 
     return (
-        <section className="ring-2 ring-foreground/10">
-            <h2 className="text-3xl text-center p-6">Add Ingredients</h2>
-            <form action={handleSaveIngredientClick}>
-                <label>
-                    Ingredient name:
-                    <input
-                        className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
-                        name="ingredient-name"
-                        required
-                        value={addIngredientName}
-                        onChange={(e) => setAddIngredientName(e.target.value)}
-                    ></input>
-                </label>
-                <div className="add-ingredient-inputs-container">
+        <Panel title="Add Ingredient">
+                <form action={handleSaveIngredientClick}>
                     <label>
-                        Calories per 100g:
+                        Ingredient name:
                         <input
                             className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
-                            name="ingredient-calories"
+                            name="ingredient-name"
                             required
-                            value={addIngredientCalories}
+                            value={addIngredientName}
                             onChange={(e) =>
-                                setAddIngredientCalories(e.target.value)
+                                setAddIngredientName(e.target.value)
                             }
                         ></input>
-                        {addIngredientCaloriesError && (
-                            <p className="error">
-                                {addIngredientCaloriesError}
-                            </p>
-                        )}
                     </label>
-                    <label>
-                        Protein per 100g:
-                        <input
-                            className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
-                            name="ingredient-protein"
-                            required
-                            value={addIngredientProtein}
-                            onChange={(e) =>
-                                setAddIngredientProtein(e.target.value)
-                            }
-                        ></input>
-                        {addIngredientProteinError && (
-                            <p className="error">{addIngredientProteinError}</p>
-                        )}
-                    </label>
-                </div>
-                <button className="save-button" type="submit">
-                    Save Ingredient
-                </button>
-            </form>
-        </section>
+                    <div className="add-ingredient-inputs-container">
+                        <label>
+                            Calories per 100g:
+                            <input
+                                className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
+                                name="ingredient-calories"
+                                required
+                                value={addIngredientCalories}
+                                onChange={(e) =>
+                                    setAddIngredientCalories(e.target.value)
+                                }
+                            ></input>
+                            {addIngredientCaloriesError && (
+                                <p className="error">
+                                    {addIngredientCaloriesError}
+                                </p>
+                            )}
+                        </label>
+                        <label>
+                            Protein per 100g:
+                            <input
+                                className="bg-muted/40 shadow-inner/25 border-border focus-visible:ring-2 focus-visible:ring-ring"
+                                name="ingredient-protein"
+                                required
+                                value={addIngredientProtein}
+                                onChange={(e) =>
+                                    setAddIngredientProtein(e.target.value)
+                                }
+                            ></input>
+                            {addIngredientProteinError && (
+                                <p className="error">
+                                    {addIngredientProteinError}
+                                </p>
+                            )}
+                        </label>
+                    </div>
+                    <button className="save-button" type="submit">
+                        Save Ingredient
+                    </button>
+                </form>
+        </Panel>
     );
 }
 export default AddIngredientForm;
