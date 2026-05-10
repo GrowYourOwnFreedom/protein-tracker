@@ -21,16 +21,19 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { getToday } from "@/lib/getToday";
+import createNewId from "@/lib/createNewId";
+import { getCurrentUser } from "@/lib/storageCrudHelpers";
 
 function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
     const [selectedIngredientId, setSelectedIngredientId] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
 
-    function handleSaveEntryClick(saveEntryFormData) {
+   async function handleSaveEntryClick(saveEntryFormData) {
         const ingredientID = saveEntryFormData.get("ingredientId");
-        const ingredient = ingredients.find((i) => {
-            return i.id === ingredientID;
+        const ingredient = ingredients.find((ingredient) => {
+            return ingredient.ingredientId === ingredientID;
         });
         const weight = Number(saveEntryFormData.get("weight"));
 
@@ -46,26 +49,36 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
         } else {
             setWeightInputError("");
         }
+       
 
         const protein = (weight / 100) * ingredient.proteinPer100g;
         const calories = (weight / 100) * ingredient.caloriesPer100g;
+        const createdAt = getToday();
+        const foodEntryId = createNewId()
+        const user = await getCurrentUser()
+        const userId = user.userId
+        const name = ingredient.name
+        const ingredientId = ingredient.ingredientId
         const newEntry = {
-            name: ingredient.name,
+            name,
             weight,
             calories,
             protein,
+            createdAt,
+            foodEntryId,
+            userId,
+            ingredientId
         };
-        addEntry(newEntry);
-
+        addEntry(newEntry);        
         setIngredientWeight("");
     }
 
     function handleDeleteIngredientClick() {
         const deletedIngredient = ingredients.find((ingredient) => {
-            return ingredient.id === selectedIngredientId;
+            return ingredient.ingredientId === selectedIngredientId;
         });
         const updatedIngredients = ingredients.filter((ingredient) => {
-            return ingredient.id !== selectedIngredientId;
+            return ingredient.ingredientId !== selectedIngredientId;
         });
         if (
             confirm(
@@ -97,8 +110,8 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
                                     {sortedIngredients.map((ingredient) => {
                                         return (
                                             <SelectItem
-                                                key={ingredient.id}
-                                                value={String(ingredient.id)}
+                                                key={ingredient.ingredientId}
+                                                value={String(ingredient.ingredientId)}
                                             >
                                                 {ingredient.name}{" "}
                                                 {getProteinEfficiency(

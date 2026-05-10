@@ -1,4 +1,5 @@
-import { FoodEntry, Ingredient } from "@/types";
+import { dummyUser } from "@/data/dummyUser";
+import { FoodEntry, Ingredient, User } from "@/types";
 
 function fetchLocalIngredients(baseIngredients: Ingredient[]): Ingredient[] {
     const savedIngredients = localStorage.getItem("proteinTrackerIngredients");
@@ -48,6 +49,10 @@ function fetchLocalProteinTarget():string {
     return savedProteinTarget;
 }
 
+async function fetchDummyUser():Promise<User>{
+    return dummyUser
+}
+
 export {
     fetchLocalEntries as fetchEntries,
     fetchLocalIngredients as fetchIngredients,
@@ -57,4 +62,5 @@ export {
     updateLocalCalorieLimit as updateCaloreLimit,
     updateLocalProteinTarget as updateProteinTarget,
     fetchLocalProteinTarget as fetchProteinTarget,
+    fetchDummyUser as getCurrentUser
 };

@@ -70,7 +70,7 @@ function AddIngredient({ addIngredient, className }) {
         setAddIngredientCaloriesError("");
 
         const newIngredient = {};
-        newIngredient.id = crypto.randomUUID();
+        newIngredient.ingredientId = crypto.randomUUID();
         newIngredient.name = addIngredientFormData.get("ingredient-name");
         newIngredient.caloriesPer100g = newIngredientCalories;
         newIngredient.proteinPer100g = newIngredientProtein;

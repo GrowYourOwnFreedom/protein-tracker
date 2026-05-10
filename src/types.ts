@@ -1,8 +1,10 @@
 export type Ingredient = {
-    id: string;
+    ingredientId: string;
     name: string;
     caloriesPer100g: number;
     proteinPer100g: number;
+    userId?:string;
+    createdAt?:string;
 };
 
 // Later: add id and ingredientId when delete/edit/date grouping needs it.
@@ -11,4 +13,12 @@ export type FoodEntry = {
     weight: number;
     protein: number;
     calories: number;
+    foodEntryId: string;
+    userId: string;
+    createdAt:string;
+};
+
+export type User = {
+    userId: string;
+    name: string;
 };
