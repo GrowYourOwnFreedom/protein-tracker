@@ -7,7 +7,6 @@ import {
     FieldLabel,
     FieldSeparator,
 } from "@/components/ui/field";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 
 function TotalsPanel({

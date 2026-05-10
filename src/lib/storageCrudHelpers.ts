@@ -1,22 +1,25 @@
-function fetchLocalIngredients(baseIngredients) {
-    const savedIngredients =
-        JSON.parse(localStorage.getItem("proteinTrackerIngredients")) ??
-        baseIngredients;
-    return savedIngredients;
+import { FoodEntry, Ingredient } from "@/types";
+
+function fetchLocalIngredients(baseIngredients: Ingredient[]): Ingredient[] {
+    const savedIngredients = localStorage.getItem("proteinTrackerIngredients");
+
+    if (savedIngredients === null) return baseIngredients;
+
+    return JSON.parse(savedIngredients);
 }
 
-function fetchLocalEntries() {
-    const savedEntries =
-        JSON.parse(localStorage.getItem("proteinTrackerEntries")) ?? [];
-    return savedEntries;
+function fetchLocalEntries(): FoodEntry[] {
+    const savedEntries = localStorage.getItem("proteinTrackerEntries");
+    if (savedEntries === null) return [];
+    return JSON.parse(savedEntries);
 }
 
-function updateLocalEntries(entries) {
+function updateLocalEntries(entries:FoodEntry[]):void {
     const proteinTrackerEntries = JSON.stringify(entries);
     localStorage.setItem("proteinTrackerEntries", proteinTrackerEntries);
 }
 
-function updateLocalIngredients(ingredients) {
+function updateLocalIngredients(ingredients:Ingredient[]):void {
     const proteinTrackerIngredients = JSON.stringify(ingredients);
     localStorage.setItem(
         "proteinTrackerIngredients",
@@ -24,21 +27,21 @@ function updateLocalIngredients(ingredients) {
     );
 }
 
-function updateLocalCalorieLimit(calories) {
-    localStorage.setItem("proteinTrackerCalorieLimit", calories);
+function updateLocalCalorieLimit(calories:string):void {
+    localStorage.setItem("proteinTrackerCalorieLimit", String(calories));
 }
 
-function fetchLocalCalorieLimit() {
+function fetchLocalCalorieLimit():string {
     const calories = localStorage.getItem("proteinTrackerCalorieLimit") ?? "";
 
     return calories;
 }
 
-function updateLocalProteinTarget(proteinTarget) {
+function updateLocalProteinTarget(proteinTarget:string):void {
     localStorage.setItem("proteinTrackerProteinTarget", proteinTarget);
 }
 
-function fetchLocalProteinTarget() {
+function fetchLocalProteinTarget():string {
     const savedProteinTarget =
         localStorage.getItem("proteinTrackerProteinTarget") ?? "";
 
