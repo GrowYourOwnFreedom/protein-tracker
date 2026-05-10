@@ -1,7 +1,7 @@
- function formatNumber(number) {
+ function formatNumber(number:number):string {
         const roundedNumber = Math.round(number * 10) / 10;
         if (Number.isInteger(roundedNumber)) {
-            return roundedNumber;
+            return String(roundedNumber);
         }
         return roundedNumber.toFixed(1);
     }
