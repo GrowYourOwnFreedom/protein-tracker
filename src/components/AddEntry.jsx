@@ -25,7 +25,7 @@ import { getToday } from "@/lib/getToday";
 import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 
-function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
+function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }) {
     const [selectedIngredientId, setSelectedIngredientId] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");

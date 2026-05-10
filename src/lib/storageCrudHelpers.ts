@@ -28,25 +28,25 @@ function updateLocalIngredients(ingredients:Ingredient[]):void {
     );
 }
 
-function updateLocalCalorieLimit(calories:string):void {
+function updateLocalCalorieLimit(calories:number):void {
     localStorage.setItem("proteinTrackerCalorieLimit", String(calories));
 }
 
-function fetchLocalCalorieLimit():string {
+function fetchLocalCalorieLimit():number {
     const calories = localStorage.getItem("proteinTrackerCalorieLimit") ?? "";
 
-    return calories;
+    return Number(calories);
 }
 
-function updateLocalProteinTarget(proteinTarget:string):void {
-    localStorage.setItem("proteinTrackerProteinTarget", proteinTarget);
+function updateLocalProteinTarget(proteinTarget:number):void {
+    localStorage.setItem("proteinTrackerProteinTarget", String(proteinTarget));
 }
 
-function fetchLocalProteinTarget():string {
+function fetchLocalProteinTarget():number {
     const savedProteinTarget =
         localStorage.getItem("proteinTrackerProteinTarget") ?? "";
 
-    return savedProteinTarget;
+    return Number(savedProteinTarget);
 }
 
 async function fetchDummyUser():Promise<User>{

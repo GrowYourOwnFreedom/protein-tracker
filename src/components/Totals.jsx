@@ -12,9 +12,9 @@ import { Input } from "@/components/ui/input";
 function TotalsPanel({
     entries,
     calorieLimit,
-    setCalorieLimit,
+    onCalorieLimitChange,
     proteinTarget,
-    setProteinTarget,
+    onProteinTargetChange,
     className,
 }) {
     const totals = {
@@ -44,7 +44,7 @@ function TotalsPanel({
                                 id="calorie-limit"
                                 value={calorieLimit}
                                 onChange={(e) =>
-                                    setCalorieLimit(e.target.value)
+                                    onCalorieLimitChange(Number(e.target.value))
                                 }
                             />
                         </Field>
@@ -56,7 +56,7 @@ function TotalsPanel({
                                 id="protein-target"
                                 value={proteinTarget}
                                 onChange={(e) =>
-                                    setProteinTarget(e.target.value)
+                                    onProteinTargetChange(Number(e.target.value))
                                 }
                             />
                         </Field>

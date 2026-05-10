@@ -13,7 +13,7 @@ import { getToday } from "@/lib/getToday";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { useState } from "react";
 
-function AddIngredient({ addIngredient, className }) {
+function AddIngredient({ addIngredient, className = "" }) {
     const [addIngredientName, setAddIngredientName] = useState("");
     const [addIngredientCalories, setAddIngredientCalories] = useState("");
     const [addIngredientProtein, setAddIngredientProtein] = useState("");

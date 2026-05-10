@@ -15,14 +15,16 @@ import {
     updateProteinTarget,
 } from "@/lib/storageCrudHelpers";
 import { baseIngredients } from "@/data/baseIngredients";
+import { FoodEntry, Ingredient } from "@/types";
 
 function App() {
-    const [entries, setEntries] = useState(fetchEntries);
-    const [ingredients, setIngredients] = useState(() =>
+    const [entries, setEntries] = useState<FoodEntry[]>(fetchEntries);
+    const [ingredients, setIngredients] = useState<Ingredient[]>(() =>
         fetchIngredients(baseIngredients),
     );
-    const [calorieLimit, setCalorieLimit] = useState(fetchCalorieLimit);
-    const [proteinTarget, setProteinTarget] = useState(fetchProteinTarget);
+    const [calorieLimit, setCalorieLimit] = useState<number>(fetchCalorieLimit);
+    const [proteinTarget, setProteinTarget] =
+        useState<number>(fetchProteinTarget);
 
     useEffect(() => {
         updateEntries(entries);
@@ -40,26 +42,33 @@ function App() {
         updateProteinTarget(proteinTarget);
     }, [proteinTarget]);
 
-    function addIngredient(newIngredient) {
+    function addIngredient(newIngredient: Ingredient): void {
         const newIngredients = [...ingredients, newIngredient];
         setIngredients(newIngredients);
     }
 
-    function deleteIngredient(updatedIngredients) {
+    function deleteIngredient(updatedIngredients: Ingredient[]): void {
         setIngredients(updatedIngredients);
     }
 
-    function addEntry(newEntry) {
+    function addEntry(newEntry: FoodEntry): void {
         const newEntries = [...entries, newEntry];
         setEntries(newEntries);
     }
 
-    function deleteEntry(updatedEntries) {
+    function deleteEntry(updatedEntries: FoodEntry[]): void {
         setEntries(updatedEntries);
     }
 
-    function deleteAllEntries() {
+    function deleteAllEntries(): void {
         setEntries([]);
+    }
+
+    function handleCalorieLimitChange(newCalorieLimit: number): void {
+        setCalorieLimit(newCalorieLimit);
+    }
+    function handleProteinTargetChange(newPoteinLimit: number): void {
+        setProteinTarget(newPoteinLimit);
     }
 
     return (
@@ -74,9 +83,9 @@ function App() {
                     className="h-screen lg:h-auto lg:min-h-0 "
                     entries={entries}
                     calorieLimit={calorieLimit}
-                    setCalorieLimit={setCalorieLimit}
+                    onCalorieLimitChange={handleCalorieLimitChange}
                     proteinTarget={proteinTarget}
-                    setProteinTarget={setProteinTarget}
+                    onProteinTargetChange={handleProteinTargetChange}
                 />
                 <div className=" flex flex-col gap-4 h-screen lg:h-auto lg:min-h-0">
                     <AddEntry
