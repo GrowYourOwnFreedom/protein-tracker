@@ -30,7 +30,7 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
 
-   async function handleSaveEntryClick(saveEntryFormData) {
+    async function handleSaveEntryClick(saveEntryFormData) {
         const ingredientID = saveEntryFormData.get("ingredientId");
         const ingredient = ingredients.find((ingredient) => {
             return ingredient.ingredientId === ingredientID;
@@ -49,16 +49,15 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
         } else {
             setWeightInputError("");
         }
-       
 
         const protein = (weight / 100) * ingredient.proteinPer100g;
         const calories = (weight / 100) * ingredient.caloriesPer100g;
         const createdAt = getToday();
-        const foodEntryId = createNewId()
-        const user = await getCurrentUser()
-        const userId = user.userId
-        const name = ingredient.name
-        const ingredientId = ingredient.ingredientId
+        const foodEntryId = createNewId();
+        const user = await getCurrentUser();
+        const userId = user.userId;
+        const name = ingredient.name;
+        const ingredientId = ingredient.ingredientId;
         const newEntry = {
             name,
             weight,
@@ -67,9 +66,9 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
             createdAt,
             foodEntryId,
             userId,
-            ingredientId
+            ingredientId,
         };
-        addEntry(newEntry);        
+        addEntry(newEntry);
         setIngredientWeight("");
     }
 
@@ -107,21 +106,29 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    {sortedIngredients.map((ingredient) => {
-                                        return (
-                                            <SelectItem
-                                                key={ingredient.ingredientId}
-                                                value={String(ingredient.ingredientId)}
-                                            >
-                                                {ingredient.name}{" "}
-                                                {getProteinEfficiency(
-                                                    ingredient.caloriesPer100g,
-                                                    ingredient.proteinPer100g,
-                                                ).toFixed(2)}
-                                                g protein/100kcal
-                                            </SelectItem>
-                                        );
-                                    })}
+                                    {sortedIngredients.map(
+                                        ({
+                                            name,
+                                            caloriesPer100g,
+                                            proteinPer100g,
+                                            ingredientId,
+                                        }) => {
+                                            const proteinEfficiency =
+                                                getProteinEfficiency(
+                                                    caloriesPer100g,
+                                                    proteinPer100g,
+                                                ).toFixed(2);
+                                            const ingredientDisplayString = `${name} ${proteinEfficiency}g protein/100kcal`;
+                                            return (
+                                                <SelectItem
+                                                    key={ingredientId}
+                                                    value={String(ingredientId)}
+                                                >
+                                                    {ingredientDisplayString}
+                                                </SelectItem>
+                                            );
+                                        },
+                                    )}
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
