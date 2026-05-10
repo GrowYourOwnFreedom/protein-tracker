@@ -14,38 +14,7 @@ import {
     updateIngredients,
     updateProteinTarget,
 } from "@/lib/storageCrudHelpers";
-const baseIngredients = [
-    {
-        id: "1",
-        name: "Rolled oats, dry",
-        caloriesPer100g: 389,
-        proteinPer100g: 13.5,
-    },
-    {
-        id: "2",
-        name: "Lentils, dry",
-        caloriesPer100g: 352,
-        proteinPer100g: 24.6,
-    },
-    {
-        id: "3",
-        name: "Broccoli, raw",
-        caloriesPer100g: 34,
-        proteinPer100g: 2.82,
-    },
-    {
-        id: "4",
-        name: "Cauliflower, raw",
-        caloriesPer100g: 25,
-        proteinPer100g: 1.92,
-    },
-    {
-        id: "5",
-        name: "Tempeh",
-        caloriesPer100g: 195,
-        proteinPer100g: 19.9,
-    },
-];
+import { baseIngredients } from "@/data/baseIngredients";
 
 function App() {
     const [entries, setEntries] = useState(fetchEntries);
