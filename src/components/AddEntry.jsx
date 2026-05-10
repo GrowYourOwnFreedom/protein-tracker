@@ -31,7 +31,7 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
     const [weightInputError, setWeightInputError] = useState("");
 
     async function handleSaveEntryClick(saveEntryFormData) {
-        const ingredientID = saveEntryFormData.get("ingredientId");
+        const ingredientID = selectedIngredientId
         const ingredient = ingredients.find((ingredient) => {
             return ingredient.ingredientId === ingredientID;
         });
@@ -122,7 +122,7 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className }) {
                                             return (
                                                 <SelectItem
                                                     key={ingredientId}
-                                                    value={String(ingredientId)}
+                                                    value={ingredientId}
                                                 >
                                                     {ingredientDisplayString}
                                                 </SelectItem>
