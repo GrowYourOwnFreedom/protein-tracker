@@ -45,6 +45,10 @@ Data saved in localStorage:
 ### 4.5.26
 gave succes/warning colours to efficiency summary
 and dynamically assigned classNames
+### 9.5.26
+completeley refactored all button and input components to use shadcn radix components
+styled so it scrolls nicely on a phone and takes up one simple page on a larger screen
+gave scroll trays and cards nice styling and got everything working ready for typescript conversion
 
 ## Next session restart note
 
