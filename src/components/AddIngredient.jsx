@@ -8,6 +8,9 @@ import {
     FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import createNewId from "@/lib/createNewId";
+import { getToday } from "@/lib/getToday";
+import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { useState } from "react";
 
 function AddIngredient({ addIngredient, className }) {
@@ -19,7 +22,7 @@ function AddIngredient({ addIngredient, className }) {
     const [addIngredientProteinError, setAddIngredientProteinError] =
         useState("");
 
-    function handleSaveIngredientClick(addIngredientFormData) {
+    async function handleSaveIngredientClick(addIngredientFormData) {
         const newIngredientCalories = Number(
             addIngredientFormData.get("ingredient-calories"),
         );
@@ -69,13 +72,25 @@ function AddIngredient({ addIngredient, className }) {
         setAddIngredientProteinError("");
         setAddIngredientCaloriesError("");
 
-        const newIngredient = {};
-        newIngredient.ingredientId = crypto.randomUUID();
-        newIngredient.name = addIngredientFormData.get("ingredient-name");
-        newIngredient.caloriesPer100g = newIngredientCalories;
-        newIngredient.proteinPer100g = newIngredientProtein;
+        const ingredientId = createNewId()
+        const name = addIngredientFormData.get("ingredient-name");
+        const caloriesPer100g = newIngredientCalories;
+        const proteinPer100g = newIngredientProtein;
+        const user =  await getCurrentUser()
+        const userId = user.userId
+        const createdAt = getToday()
 
-        addIngredient(newIngredient);
+
+        const newIngredient = {
+            ingredientId,
+            name,
+            caloriesPer100g,
+            proteinPer100g,
+            userId,
+            createdAt
+        }
+            
+        addIngredient(newIngredient);        
         setAddIngredientName("");
         setAddIngredientCalories("");
         setAddIngredientProtein("");
