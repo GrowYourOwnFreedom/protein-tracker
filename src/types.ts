@@ -35,3 +35,11 @@ export type User = {
     userId: string;
     name: string;
 };
+
+export type FoodEntryCardProps = {
+    entry:FoodEntry;
+    calorieLimit:number
+    proteinTarget:number
+    onDeleteEntryClick:(index:number)=> void
+    index:number
+}

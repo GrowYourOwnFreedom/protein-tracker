@@ -7,14 +7,15 @@ import {
     CardTitle,
     CardAction,
 } from "@/components/ui/card";
+import { FoodEntryCardProps } from "@/types";
 
 function EntryCard({
     entry,
     calorieLimit,
     proteinTarget,
-    handleDeleteEntryClick,
+    onDeleteEntryClick,
     index,
-}) {
+}:FoodEntryCardProps) {
     const { weight, calories, protein, name } = entry;
     const percentOfCalorieLimit = (entry.calories / calorieLimit) * 100 || 0;
     const percentOfProteinTarget = (entry.protein / proteinTarget) * 100 || 0;
@@ -31,7 +32,7 @@ function EntryCard({
                     <button
                         className="delete-entry-button"
                         onClick={() => {
-                            handleDeleteEntryClick(index);
+                            onDeleteEntryClick(index);
                         }}
                     >
                         x

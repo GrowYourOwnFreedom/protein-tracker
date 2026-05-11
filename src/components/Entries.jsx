@@ -42,7 +42,7 @@ function TodaysEntries({
                                 proteinTarget={proteinTarget}
                                 entry={entry}
                                 calorieLimit={calorieLimit}
-                                handleDeleteEntryClick={handleDeleteEntryClick}
+                                onDeleteEntryClick={handleDeleteEntryClick}
                             />
                         );
                     })}
