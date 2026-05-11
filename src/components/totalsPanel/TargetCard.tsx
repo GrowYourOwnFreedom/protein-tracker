@@ -22,7 +22,7 @@ function TargetCard({ title, current, target, unit, type }:TargetCardProps) {
     const barPercentage = Math.min(percentage, 100);
     const displayPercentage = Math.round(percentage);
 
-    function getTargetStatus(target, currTotal) {
+    function getTargetStatus(target:number, currTotal:number):string {
         if (currTotal < target * 0.8) {
             return "low";
         }
@@ -33,7 +33,7 @@ function TargetCard({ title, current, target, unit, type }:TargetCardProps) {
     }
     const status = getTargetStatus(target, current);
 
-    function targetSuccessStatus(type, status) {
+    function targetSuccessStatus(type:string, status:string):string {
         if (type === "goal") {
             if (status === "low") return "fail";
             if (status === "near") return "okay";
@@ -48,11 +48,11 @@ function TargetCard({ title, current, target, unit, type }:TargetCardProps) {
     const successStatus = targetSuccessStatus(type, status);
 
     const statusClasses = {
-        fail: " bg-red-500/30",
+        fail: " bg-destructive/40",
 
-        okay: " bg-yellow-500",
+        okay: " bg-warning/40",
 
-        success: " bg-green-500",
+        success: " bg-success/40",
     };
 
     return (

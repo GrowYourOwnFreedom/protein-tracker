@@ -1,9 +1,13 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { formatNumber } from "@/lib/formatNumber";
 import { getProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { SummaryCardProps } from "@/types";
-
-// convert to shadcn
 
 function SummaryCard({
     currentCaloriesTotal,
@@ -15,33 +19,71 @@ function SummaryCard({
         currentCaloriesTotal,
         currentProteinTotal,
     );
+
     const proteinEfficiencyTarget = getProteinEfficiency(
         calorieLimit,
         proteinTarget,
     );
+
     const proteinNeeded = proteinTarget - currentProteinTotal;
     const caloriesLeft = calorieLimit - currentCaloriesTotal;
+
     const remainingProteinEfficiencyNeeded = getProteinEfficiency(
         caloriesLeft,
         proteinNeeded,
     );
-    const currentEfficiencySuccess =
-        currentProteinEfficiency >= proteinEfficiencyTarget;
-    const cardClass = currentEfficiencySuccess
-        ? "target-success"
-        : "target-warning";
+    function getEfficiencyStatus(current: number, target: number): string {
+        if (current < target * 0.8) return "low";
+        if (current < target) return "near";
+        return "reached";
+    }
+    const currentEfficiencyStatus = getEfficiencyStatus(
+        currentProteinEfficiency,
+        proteinEfficiencyTarget,
+    );
+
+    const efficiencyStatusClasses = {
+        low: " text-destructive",
+        near: " text-warning",
+        reached: "text-success",
+    };
+
     return (
-        <Card>
+        <Card className="w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0">
             <CardHeader>
-                <h3>Efficiency</h3>
-                <p>target:{proteinEfficiencyTarget} g/100kcal</p>
+                <div className="flex items-center">
+                    <CardTitle>
+                        <h3>Efficiency Target:</h3>
+                    </CardTitle>
+                    <p className="ml-auto inline-block text-lg">
+                        {proteinEfficiencyTarget} g/100kcal
+                    </p>
+                </div>
+                <CardDescription>
+                    <p>Efficiency summary</p>
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <p>
-                    current: {formatNumber(currentProteinEfficiency)} g/100kcal
+                    current:{" "}
+                    <span
+                        className={
+                            efficiencyStatusClasses[currentEfficiencyStatus]
+                        }
+                    >
+                        {formatNumber(currentProteinEfficiency)}
+                    </span>{" "}
+                    g/100kcal
                 </p>
                 <p>
-                    remaining: {formatNumber(remainingProteinEfficiencyNeeded)}{" "}
+                    remaining:{" "}
+                    <span
+                        className={
+                            efficiencyStatusClasses[currentEfficiencyStatus]
+                        }
+                    >
+                        {formatNumber(remainingProteinEfficiencyNeeded)}
+                    </span>{" "}
                     g/100kcal
                 </p>
             </CardContent>
