@@ -79,7 +79,7 @@ function AddIngredient({ addIngredient, className = "" }) {
         const user =  await getCurrentUser()
         const userId = user.userId
         const createdAt = getToday()
-
+        const ingredientCategory = "uncategorised"
 
         const newIngredient = {
             ingredientId,
@@ -87,7 +87,8 @@ function AddIngredient({ addIngredient, className = "" }) {
             caloriesPer100g,
             proteinPer100g,
             userId,
-            createdAt
+            createdAt,
+            ingredientCategory
         }
             
         addIngredient(newIngredient);        

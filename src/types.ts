@@ -3,9 +3,22 @@ export type Ingredient = {
     name: string;
     caloriesPer100g: number;
     proteinPer100g: number;
+    userId:string;
+    createdAt:string;
+    ingredientCategory:string
+
+};
+
+export type OldIngredient = {
+    ingredientId?: string;
+    id?:string
+    name: string;
+    caloriesPer100g: number;
+    proteinPer100g: number;
     userId?:string;
     createdAt?:string;
-};
+    ingredientCategory?:string
+}
 
 // Later: add id and ingredientId when delete/edit/date grouping needs it.
 export type FoodEntry = {

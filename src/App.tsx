@@ -9,6 +9,8 @@ import {
     fetchEntries,
     fetchIngredients,
     fetchProteinTarget,
+    getCurrentUser,
+    normaliseIngredientsFromStorage,
     updateCaloreLimit,
     updateEntries,
     updateIngredients,
@@ -19,18 +21,44 @@ import { FoodEntry, Ingredient } from "@/types";
 
 function App() {
     const [entries, setEntries] = useState<FoodEntry[]>(fetchEntries);
-    const [ingredients, setIngredients] = useState<Ingredient[]>(() =>
-        fetchIngredients(baseIngredients),
-    );
+    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+    const [hasLoadedIngredients, setHasLoadedIngredients] =
+        useState<boolean>(false);
     const [calorieLimit, setCalorieLimit] = useState<number>(fetchCalorieLimit);
     const [proteinTarget, setProteinTarget] =
         useState<number>(fetchProteinTarget);
+
+    useEffect(() => {
+        async function loadIngredients() {
+            const fetchedIngredients = fetchIngredients(baseIngredients);
+            const dataVersion = localStorage.getItem("dataVersion");
+            const user = await getCurrentUser();
+
+            const cleanIngredients = normaliseIngredientsFromStorage(
+                fetchedIngredients,
+                user,
+            );
+
+            if (dataVersion !== "2") {
+                localStorage.setItem(
+                    "ingredientsMigrationBackup",
+                    JSON.stringify(fetchedIngredients),
+                );
+                localStorage.setItem("dataVersion", "2");
+                console.log("Migrating ingredients to version 2");
+            }
+            setIngredients(cleanIngredients);
+            setHasLoadedIngredients(true);
+        }
+        loadIngredients();
+    }, []);
 
     useEffect(() => {
         updateEntries(entries);
     }, [entries]);
 
     useEffect(() => {
+        if (!hasLoadedIngredients) return;
         updateIngredients(ingredients);
     }, [ingredients]);
 
