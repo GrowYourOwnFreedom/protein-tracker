@@ -84,5 +84,12 @@ export type PanelProps = {
 
 export type AddIngredientProps = {
     addIngredient: (newIngredient: Ingredient) => void;
-    className: string;
+    className?: string;
+};
+
+export type AddEntryProps = {
+    ingredients: Ingredient[];
+    addEntry: (newEntry: FoodEntry) => void;
+    deleteIngredient: (updatedIngredients: Ingredient[]) => void;
+    className?: string;
 };
