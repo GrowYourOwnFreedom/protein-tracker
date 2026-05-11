@@ -1,5 +1,4 @@
-import { Progress as ProgressPrimitive } from "radix-ui"
-
+import { Progress as ProgressPrimitive } from "radix-ui";
 
 export type Ingredient = {
     ingredientId: string;
@@ -52,7 +51,14 @@ export type TargetCardProps = {
     unit: string;
     type: string;
 };
-export type CustomProgressProps = React.ComponentProps<typeof ProgressPrimitive.Root> & {
-    indicatorClassName?:string
-
-}
+export type CustomProgressProps = React.ComponentProps<
+    typeof ProgressPrimitive.Root
+> & {
+    indicatorClassName?: string;
+};
+export type SummaryCardProps = {
+    currentCaloriesTotal: number;
+    currentProteinTotal: number;
+    proteinTarget: number;
+    calorieLimit: number;
+};
