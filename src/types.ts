@@ -57,3 +57,12 @@ export type SummaryCardProps = {
     proteinTarget: number;
     calorieLimit: number;
 };
+
+export type TodaysEntriesProps = {
+    entries:FoodEntry[];
+    deleteEntry:(updatedEntries: FoodEntry[]) => void;
+    deleteAllEntries:()=>void;
+    calorieLimit:number;
+    proteinTarget:number;
+    className:string;
+}

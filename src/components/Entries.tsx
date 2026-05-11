@@ -1,6 +1,7 @@
 import Panel from "@/components/app/Panel";
 import EntryCard from "./entries/EntryCard";
 import { Button } from "@/components/ui/button";
+import { TodaysEntriesProps } from "@/types";
 
 function TodaysEntries({
     entries,
@@ -9,15 +10,15 @@ function TodaysEntries({
     calorieLimit,
     proteinTarget,
     className,
-}) {
-    function handleDeleteEntryClick(index) {
+}:TodaysEntriesProps) {
+    function handleDeleteEntryClick(index:number):void {
         const updatedEntries = [...entries].filter((entry, i) => {
             return i !== index;
         });
         deleteEntry(updatedEntries);
     }
 
-    function handleDeleteAllEntriesClick() {
+    function handleDeleteAllEntriesClick():void {
         if (entries.length > 0) {
             if (confirm("Are you sure you want to delete all the entries?")) {
                 deleteAllEntries();
