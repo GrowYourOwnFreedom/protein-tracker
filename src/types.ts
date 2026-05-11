@@ -51,11 +51,6 @@ export type TargetCardProps = {
     unit: string;
     type: string;
 };
-export type CustomProgressProps = React.ComponentProps<
-    typeof ProgressPrimitive.Root
-> & {
-    indicatorClassName?: string;
-};
 export type SummaryCardProps = {
     currentCaloriesTotal: number;
     currentProteinTotal: number;
