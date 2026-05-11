@@ -3,7 +3,7 @@ import EntryCard from "./entries/EntryCard";
 import { Button } from "@/components/ui/button";
 import { TodaysEntriesProps } from "@/types";
 
-function TodaysEntries({
+function EntriesPanel({
     entries,
     deleteEntry,
     deleteAllEntries,
@@ -51,4 +51,4 @@ function TodaysEntries({
         </Panel>
     );
 }
-export default TodaysEntries;
+export default EntriesPanel;

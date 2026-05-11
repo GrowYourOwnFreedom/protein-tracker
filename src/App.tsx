@@ -1,6 +1,5 @@
 import "./App.css";
-import TotalsPanel from "@/components/Totals";
-import TodaysEntries from "@/components/Entries";
+import TotalsPanel from "@/components/TotalsPanel";
 import { useState, useEffect } from "react";
 import AddEntry from "@/components/AddEntry";
 import AddIngredient from "@/components/AddIngredient";
@@ -18,6 +17,7 @@ import {
 } from "@/lib/storageCrudHelpers";
 import { baseIngredients } from "@/data/baseIngredients";
 import { FoodEntry, Ingredient } from "@/types";
+import EntriesPanel from "@/components/EntriesPanel";
 
 function App() {
     const [entries, setEntries] = useState<FoodEntry[]>(fetchEntries);
@@ -123,7 +123,7 @@ function App() {
                     />
                     <AddIngredient addIngredient={addIngredient} />
                 </div>
-                <TodaysEntries
+                <EntriesPanel
                     className="h-screen lg:h-auto lg:min-h-0"
                     entries={entries}
                     deleteEntry={deleteEntry}
