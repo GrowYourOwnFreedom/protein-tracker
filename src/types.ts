@@ -60,23 +60,29 @@ export type SummaryCardProps = {
 };
 
 export type TodaysEntriesProps = {
-    entries:FoodEntry[];
-    deleteEntry:(updatedEntries: FoodEntry[]) => void;
-    deleteAllEntries:()=>void;
-    calorieLimit:number;
-    proteinTarget:number;
-    className:string;
-}
+    entries: FoodEntry[];
+    deleteEntry: (updatedEntries: FoodEntry[]) => void;
+    deleteAllEntries: () => void;
+    calorieLimit: number;
+    proteinTarget: number;
+    className: string;
+};
 
 export type TotalsPanelProps = {
-    entries:FoodEntry[];
-    calorieLimit:number;
-    onCalorieLimitChange:(newCalorieLimit: number)=> void;
-    proteinTarget:number;
-    onProteinTargetChange:(newPoteinLimit: number)=> void;
-    className:string;
-}
-export type PanelProps = { 
-    title:string;
-     children:ReactNode;
-      className:string; }
+    entries: FoodEntry[];
+    calorieLimit: number;
+    onCalorieLimitChange: (newCalorieLimit: number) => void;
+    proteinTarget: number;
+    onProteinTargetChange: (newPoteinLimit: number) => void;
+    className: string;
+};
+export type PanelProps = {
+    title: string;
+    children: ReactNode;
+    className: string;
+};
+
+export type AddIngredientProps = {
+    addIngredient: (newIngredient: Ingredient) => void;
+    className: string;
+};

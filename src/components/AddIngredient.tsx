@@ -11,9 +11,10 @@ import { Input } from "@/components/ui/input";
 import createNewId from "@/lib/createNewId";
 import { getToday } from "@/lib/getToday";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
+import { AddIngredientProps } from "@/types";
 import { useState } from "react";
 
-function AddIngredient({ addIngredient, className = "" }) {
+function AddIngredient({ addIngredient, className = "" }:AddIngredientProps) {
     const [addIngredientName, setAddIngredientName] = useState("");
     const [addIngredientCalories, setAddIngredientCalories] = useState("");
     const [addIngredientProtein, setAddIngredientProtein] = useState("");
@@ -22,7 +23,7 @@ function AddIngredient({ addIngredient, className = "" }) {
     const [addIngredientProteinError, setAddIngredientProteinError] =
         useState("");
 
-    async function handleSaveIngredientClick(addIngredientFormData) {
+    async function handleSaveIngredientClick(addIngredientFormData:FormData) {
         const newIngredientCalories = Number(
             addIngredientFormData.get("ingredient-calories"),
         );
@@ -73,7 +74,7 @@ function AddIngredient({ addIngredient, className = "" }) {
         setAddIngredientCaloriesError("");
 
         const ingredientId = createNewId()
-        const name = addIngredientFormData.get("ingredient-name");
+        const name = String(addIngredientFormData.get("ingredient-name"));
         const caloriesPer100g = newIngredientCalories;
         const proteinPer100g = newIngredientProtein;
         const user =  await getCurrentUser()
