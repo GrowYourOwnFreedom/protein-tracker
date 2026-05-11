@@ -9,12 +9,14 @@ import {
     CardTitle,
     CardAction,
 } from "@/components/ui/card";
+import { TargetCardProps } from "@/types";
 
-function TargetCard({ title, current, target, unit, type }) {
-    const remaining = formatNumber(target - current);
+function TargetCard({ title, current, target, unit, type }:TargetCardProps) {
+    const remaining = target - current;
+    const formattedRemaining = Number(formatNumber(remaining))
     let statusText = `${remaining} ${unit} remaining`;
     if (remaining < 0) {
-        statusText = `${Math.abs(remaining)} ${unit} over ${type}`;
+        statusText = `${Math.abs(formattedRemaining)} ${unit} over ${type}`;
     }
     const percentage = (current / target) * 100;
     const barPercentage = Math.min(percentage, 100);

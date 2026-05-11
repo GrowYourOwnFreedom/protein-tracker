@@ -2,13 +2,14 @@ import * as React from "react"
 import { Progress as ProgressPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
+import { CustomProgressProps } from "@/types";
 
 function Progress({
   className,
   indicatorClassName,
   value,
   ...props
-}) {
+}:CustomProgressProps) {
   return (
     <ProgressPrimitive.Root
       data-slot="progress"

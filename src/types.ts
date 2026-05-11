@@ -1,24 +1,26 @@
+import { Progress as ProgressPrimitive } from "radix-ui"
+
+
 export type Ingredient = {
     ingredientId: string;
     name: string;
     caloriesPer100g: number;
     proteinPer100g: number;
-    userId:string;
-    createdAt:string;
-    ingredientCategory:string
-
+    userId: string;
+    createdAt: string;
+    ingredientCategory: string;
 };
 
 export type OldIngredient = {
     ingredientId?: string;
-    id?:string
+    id?: string;
     name: string;
     caloriesPer100g: number;
     proteinPer100g: number;
-    userId?:string;
-    createdAt?:string;
-    ingredientCategory?:string
-}
+    userId?: string;
+    createdAt?: string;
+    ingredientCategory?: string;
+};
 
 // Later: add id and ingredientId when delete/edit/date grouping needs it.
 export type FoodEntry = {
@@ -28,7 +30,7 @@ export type FoodEntry = {
     calories: number;
     foodEntryId: string;
     userId: string;
-    createdAt:string;
+    createdAt: string;
 };
 
 export type User = {
@@ -37,9 +39,20 @@ export type User = {
 };
 
 export type FoodEntryCardProps = {
-    entry:FoodEntry;
-    calorieLimit:number
-    proteinTarget:number
-    onDeleteEntryClick:(index:number)=> void
-    index:number
+    entry: FoodEntry;
+    calorieLimit: number;
+    proteinTarget: number;
+    onDeleteEntryClick: (index: number) => void;
+    index: number;
+};
+export type TargetCardProps = {
+    title: string;
+    current: number;
+    target: number;
+    unit: string;
+    type: string;
+};
+export type CustomProgressProps = React.ComponentProps<typeof ProgressPrimitive.Root> & {
+    indicatorClassName?:string
+
 }
