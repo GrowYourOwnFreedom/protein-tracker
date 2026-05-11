@@ -8,6 +8,7 @@ import {
     FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { TotalsPanelProps } from "@/types";
 
 function TotalsPanel({
     entries,
@@ -16,12 +17,15 @@ function TotalsPanel({
     proteinTarget,
     onProteinTargetChange,
     className,
-}) {
+}:TotalsPanelProps) {
+
+
     const totals = {
         weight: 0,
         calories: 0,
         protein: 0,
     };
+
     entries.forEach((entry) => {
         totals.calories = totals.calories + entry.calories;
         totals.protein = totals.protein + entry.protein;
@@ -66,14 +70,14 @@ function TotalsPanel({
             <div className="flex flex-1 flex-col gap-3 p-5 items-center bg-muted/40 overflow-y-auto shadow-[inset_0_2px_8px_rgb(0_0_0/0.12)] ring-1 ring-foreground/10 rounded-xl">
                 <TargetCard
                     title={"Calories"}
-                    current={calories.toFixed(0)}
+                    current={Number(calories.toFixed(0))}
                     target={calorieLimit}
                     unit={"kcal"}
                     type={"limit"}
                 />
                 <TargetCard
                     title={"Protein"}
-                    current={protein.toFixed(1)}
+                    current={Number(protein.toFixed(1))}
                     target={proteinTarget}
                     unit={"g"}
                     type={"goal"}

@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
+import { PanelProps } from "@/types";
 
-function Panel({ title, children, className }) {
+function Panel({ title, children, className }:PanelProps) {
     return (
         <section
             className={cn(

@@ -1,4 +1,5 @@
 import { Progress as ProgressPrimitive } from "radix-ui";
+import { ReactNode } from "react";
 
 export type Ingredient = {
     ingredientId: string;
@@ -66,3 +67,16 @@ export type TodaysEntriesProps = {
     proteinTarget:number;
     className:string;
 }
+
+export type TotalsPanelProps = {
+    entries:FoodEntry[];
+    calorieLimit:number;
+    onCalorieLimitChange:(newCalorieLimit: number)=> void;
+    proteinTarget:number;
+    onProteinTargetChange:(newPoteinLimit: number)=> void;
+    className:string;
+}
+export type PanelProps = { 
+    title:string;
+     children:ReactNode;
+      className:string; }
