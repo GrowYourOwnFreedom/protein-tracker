@@ -1,5 +1,5 @@
 import Panel from "@/components/app/Panel";
-import EntryCard from "./entries/EntryCard";
+import EntryCard from "./entriesPanel/EntryCard";
 import { Button } from "@/components/ui/button";
 import { TodaysEntriesProps } from "@/types";
 

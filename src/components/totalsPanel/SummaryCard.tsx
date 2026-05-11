@@ -1,3 +1,4 @@
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { formatNumber } from "@/lib/formatNumber";
 import { getProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { SummaryCardProps } from "@/types";
@@ -30,17 +31,21 @@ function SummaryCard({
         ? "target-success"
         : "target-warning";
     return (
-        <section className={"card"}>
-            <h3 className={`card-label ${cardClass}`}>Efficiency</h3>
-            <p>target:{proteinEfficiencyTarget} g/100kcal</p>
-            <p className={`card-value ${cardClass}`}>
-                current: {formatNumber(currentProteinEfficiency)} g/100kcal
-            </p>
-            <p className={`card-detail ${cardClass}`}>
-                remaining: {formatNumber(remainingProteinEfficiencyNeeded)}{" "}
-                g/100kcal
-            </p>
-        </section>
+        <Card>
+            <CardHeader>
+                <h3>Efficiency</h3>
+                <p>target:{proteinEfficiencyTarget} g/100kcal</p>
+            </CardHeader>
+            <CardContent>
+                <p>
+                    current: {formatNumber(currentProteinEfficiency)} g/100kcal
+                </p>
+                <p>
+                    remaining: {formatNumber(remainingProteinEfficiencyNeeded)}{" "}
+                    g/100kcal
+                </p>
+            </CardContent>
+        </Card>
     );
 }
 export default SummaryCard;
