@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
     getProteinEfficiency,
     sortIngredientsByProteinEfficiency,
@@ -29,9 +29,10 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }) {
     const [selectedIngredientId, setSelectedIngredientId] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
+    const inputRef = useRef(null);
 
     async function handleSaveEntryClick(saveEntryFormData) {
-        const ingredientID = selectedIngredientId
+        const ingredientID = selectedIngredientId;
         const ingredient = ingredients.find((ingredient) => {
             return ingredient.ingredientId === ingredientID;
         });
@@ -88,7 +89,26 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }) {
         }
     }
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
+    const shouldFocusInputRef = useRef(false)
 
+    function handleValueChange(value) {
+        console.log("select changed:", value);
+        console.log("input ref:", inputRef.current);
+        shouldFocusInputRef.current = true
+        setSelectedIngredientId(value);
+       
+    }
+    function handleSelectOpenChange(open){
+        if(!open && shouldFocusInputRef.current){
+            shouldFocusInputRef.current = false
+             setTimeout(() => {
+            console.log("trying to focus");
+
+            inputRef.current?.focus();
+        }, 0);
+        }
+
+    }
     return (
         <Panel title="Add Entry" className={className}>
             <form action={handleSaveEntryClick}>
@@ -99,7 +119,8 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }) {
                             name="ingredientId"
                             required
                             value={selectedIngredientId}
-                            onValueChange={setSelectedIngredientId}
+                            onValueChange={handleValueChange}
+                            onOpenChange={handleSelectOpenChange}
                         >
                             <SelectTrigger className="bg-muted/40 shadow-inner/10">
                                 <SelectValue placeholder="PLease Choose An Ingredient" />
@@ -136,6 +157,7 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }) {
                     <Field>
                         <FieldLabel>Enter The Weight (g):</FieldLabel>
                         <Input
+                        ref={inputRef}
                             name="weight"
                             value={ingredientWeight}
                             onChange={(e) =>
@@ -147,6 +169,13 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }) {
                             <FieldError>{weightInputError}</FieldError>
                         )}
                     </Field>
+                    <button
+                        onClick={() => {
+                            inputRef.current?.focus();
+                        }}
+                    >
+                        focus input
+                    </button>
                     <FieldSeparator />
                     <Button type="submit"> Save Entry</Button>
                     <Button

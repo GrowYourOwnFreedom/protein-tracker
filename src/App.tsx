@@ -80,7 +80,7 @@ function App() {
     }
 
     function addEntry(newEntry: FoodEntry): void {
-        const newEntries = [...entries, newEntry];
+        const newEntries = [newEntry, ...entries];
         setEntries(newEntries);
     }
 
