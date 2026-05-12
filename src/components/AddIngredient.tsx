@@ -157,7 +157,7 @@ function AddIngredient({ addIngredient, className = "" }:AddIngredientProps) {
                         </Field>
                     </div>
                     <FieldSeparator />
-                    <Button className="w-full" type="submit">
+                    <Button className="w-full rounded-full" type="submit">
                         Save Ingredient
                     </Button>
                 </FieldGroup>

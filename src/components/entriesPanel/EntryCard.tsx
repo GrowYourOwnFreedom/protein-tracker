@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -15,7 +16,7 @@ function EntryCard({
     proteinTarget,
     onDeleteEntryClick,
     index,
-}:FoodEntryCardProps) {
+}: FoodEntryCardProps) {
     const { weight, calories, protein, name } = entry;
     const percentOfCalorieLimit = (entry.calories / calorieLimit) * 100 || 0;
     const percentOfProteinTarget = (entry.protein / proteinTarget) * 100 || 0;
@@ -29,14 +30,14 @@ function EntryCard({
                     </div>
                 </CardTitle>
                 <CardAction>
-                    <button
-                        className="delete-entry-button"
+                    <Button
+                    className="rounded-full"
+                        size="icon"
+                        variant="destructive"
                         onClick={() => {
                             onDeleteEntryClick(index);
                         }}
-                    >
-                        x
-                    </button>
+                    >X</Button>
                 </CardAction>
             </CardHeader>
             <CardContent>

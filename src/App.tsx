@@ -88,10 +88,6 @@ function App() {
         setEntries(updatedEntries);
     }
 
-    function deleteAllEntries(): void {
-        setEntries([]);
-    }
-
     function handleCalorieLimitChange(newCalorieLimit: number): void {
         setCalorieLimit(newCalorieLimit);
     }
@@ -127,7 +123,6 @@ function App() {
                     className="h-screen lg:h-auto lg:min-h-0"
                     entries={entries}
                     deleteEntry={deleteEntry}
-                    deleteAllEntries={deleteAllEntries}
                     calorieLimit={calorieLimit}
                     proteinTarget={proteinTarget}
                 />

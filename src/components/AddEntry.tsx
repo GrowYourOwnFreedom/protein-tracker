@@ -170,17 +170,10 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }:Ad
                             <FieldError>{weightInputError}</FieldError>
                         )}
                     </Field>
-                    <button
-                        onClick={() => {
-                            inputRef.current?.focus();
-                        }}
-                    >
-                        focus input
-                    </button>
                     <FieldSeparator />
-                    <Button type="submit"> Save Entry</Button>
+                    <Button type="submit" className="rounded-full"> Save Entry</Button>
                     <Button
-                        className="w-fit mx-auto"
+                        className="w-fit mx-auto rounded-full"
                         type="button"
                         variant="destructive"
                         onClick={handleDeleteIngredientClick}
