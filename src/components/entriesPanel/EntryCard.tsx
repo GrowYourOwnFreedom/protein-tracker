@@ -36,6 +36,8 @@ function EntryCard({
                         variant="destructive"
                         onClick={() => {
                             onDeleteEntryClick(index);
+                            console.log(index,"entry to delete");
+                            
                         }}
                     >X</Button>
                 </CardAction>

@@ -18,6 +18,7 @@ import {
 import { baseIngredients } from "@/data/baseIngredients";
 import { FoodEntry, Ingredient } from "@/types";
 import EntriesPanel from "@/components/EntriesPanel";
+import { getToday } from "@/lib/getToday";
 
 function App() {
     const [entries, setEntries] = useState<FoodEntry[]>(fetchEntries);
@@ -27,6 +28,7 @@ function App() {
     const [calorieLimit, setCalorieLimit] = useState<number>(fetchCalorieLimit);
     const [proteinTarget, setProteinTarget] =
         useState<number>(fetchProteinTarget);
+    const [selectedDate, setSelectedDate ] = useState<string>(getToday)
 
     useEffect(() => {
         async function loadIngredients() {
@@ -53,8 +55,9 @@ function App() {
         loadIngredients();
     }, []);
 
+
     useEffect(() => {
-        updateEntries(entries);
+        updateEntries(entries);        
     }, [entries]);
 
     useEffect(() => {
@@ -80,11 +83,13 @@ function App() {
     }
 
     function addEntry(newEntry: FoodEntry): void {
+        
         const newEntries = [newEntry, ...entries];
         setEntries(newEntries);
     }
 
     function deleteEntry(updatedEntries: FoodEntry[]): void {
+        
         setEntries(updatedEntries);
     }
 
@@ -93,6 +98,10 @@ function App() {
     }
     function handleProteinTargetChange(newPoteinLimit: number): void {
         setProteinTarget(newPoteinLimit);
+    }
+
+    function handleSelectedDateChange(date:string):void {
+        setSelectedDate(date)
     }
 
     return (
@@ -116,6 +125,7 @@ function App() {
                         ingredients={ingredients}
                         addEntry={addEntry}
                         deleteIngredient={deleteIngredient}
+                        selectedDate={selectedDate}
                     />
                     <AddIngredient addIngredient={addIngredient} />
                 </div>
@@ -125,7 +135,8 @@ function App() {
                     deleteEntry={deleteEntry}
                     calorieLimit={calorieLimit}
                     proteinTarget={proteinTarget}
-                />
+                    onSelectedDateChange={handleSelectedDateChange}  
+                    selectedDate={selectedDate}              />
             </main>
         </div>
     );

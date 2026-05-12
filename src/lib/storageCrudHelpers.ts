@@ -14,13 +14,11 @@ function normaliseIngredient(
         proteinPer100g: oldIngredient.proteinPer100g,
         userId: oldIngredient.userId ?? userId,
         createdAt: oldIngredient.createdAt ?? getToday(),
-        ingredientCategory: "uncategorised"
+        ingredientCategory: "uncategorised",
     };
 }
 
- function fetchLocalIngredients(
-    baseIngredients: Ingredient[],
-): OldIngredient[] {
+function fetchLocalIngredients(baseIngredients: Ingredient[]): OldIngredient[] {
     const savedIngredientsJSON = localStorage.getItem(
         "proteinTrackerIngredients",
     );
@@ -28,28 +26,34 @@ function normaliseIngredient(
     if (!savedIngredientsJSON) return baseIngredients;
 
     const savedIngredients = JSON.parse(savedIngredientsJSON);
-    if (!Array.isArray(savedIngredients)) return baseIngredients
-    if(savedIngredients.length === 0 ) return baseIngredients
+    if (!Array.isArray(savedIngredients)) return baseIngredients;
+    if (savedIngredients.length === 0) return baseIngredients;
 
     return savedIngredients;
 }
- function normaliseIngredientsFromStorage(oldIngredients:OldIngredient[],user:User) { 
-        const cleanIngredients = oldIngredients.map((oldIngredient) =>
-            normaliseIngredient(oldIngredient, user),
-        );
-        return cleanIngredients;
-    
+
+function normaliseIngredientsFromStorage(
+    oldIngredients: OldIngredient[],
+    user: User,
+) {
+    const cleanIngredients = oldIngredients.map((oldIngredient) =>
+        normaliseIngredient(oldIngredient, user),
+    );
+    return cleanIngredients;
 }
 
 function fetchLocalEntries(): FoodEntry[] {
     const savedEntries = localStorage.getItem("proteinTrackerEntries");
     if (savedEntries === null) return [];
     return JSON.parse(savedEntries);
+    
 }
 
 function updateLocalEntries(entries: FoodEntry[]): void {
     const proteinTrackerEntries = JSON.stringify(entries);
     localStorage.setItem("proteinTrackerEntries", proteinTrackerEntries);
+    const savedEntries = localStorage.getItem("proteinTrackerEntries");
+
 }
 
 function updateLocalIngredients(ingredients: Ingredient[]): void {
@@ -95,5 +99,5 @@ export {
     updateLocalProteinTarget as updateProteinTarget,
     fetchLocalProteinTarget as fetchProteinTarget,
     fetchDummyUser as getCurrentUser,
-    normaliseIngredientsFromStorage
+    normaliseIngredientsFromStorage,
 };

@@ -26,7 +26,7 @@ import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { AddEntryProps } from "@/types";
 
-function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }:AddEntryProps) {
+function AddEntry({ ingredients, addEntry, deleteIngredient, selectedDate, className = "" }:AddEntryProps) {
     const [selectedIngredientId, setSelectedIngredientId] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
@@ -54,7 +54,8 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }:Ad
 
         const protein = (weight / 100) * ingredient.proteinPer100g;
         const calories = (weight / 100) * ingredient.caloriesPer100g;
-        const createdAt = getToday();
+        const date = selectedDate
+        const createdAt = new Date().toISOString()
         const foodEntryId = createNewId();
         const user = await getCurrentUser();
         const userId = user.userId;
@@ -65,6 +66,7 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }:Ad
             weight,
             calories,
             protein,
+            date,
             createdAt,
             foodEntryId,
             userId,
@@ -75,6 +77,7 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }:Ad
     }
 
     function handleDeleteIngredientClick() {
+
         const deletedIngredient = ingredients.find((ingredient) => {
             return ingredient.ingredientId === selectedIngredientId;
         });
@@ -93,18 +96,16 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, className = "" }:Ad
     const shouldFocusInputRef = useRef(false)
 
     function handleValueChange(value) {
-        console.log("select changed:", value);
-        console.log("input ref:", inputRef.current);
+
         shouldFocusInputRef.current = true
         setSelectedIngredientId(value);
        
     }
     function handleSelectOpenChange(open){
+
         if(!open && shouldFocusInputRef.current){
             shouldFocusInputRef.current = false
              setTimeout(() => {
-            console.log("trying to focus");
-
             inputRef.current?.focus();
         }, 0);
         }
