@@ -119,6 +119,7 @@ function App() {
                     onCalorieLimitChange={handleCalorieLimitChange}
                     proteinTarget={proteinTarget}
                     onProteinTargetChange={handleProteinTargetChange}
+                    selectedDate={selectedDate}
                 />
                 <div className=" flex flex-col gap-4 h-screen lg:h-auto lg:min-h-0">
                     <AddEntry

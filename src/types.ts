@@ -76,6 +76,7 @@ export type TotalsPanelProps = {
     onCalorieLimitChange: (newCalorieLimit: number) => void;
     proteinTarget: number;
     onProteinTargetChange: (newPoteinLimit: number) => void;
+    selectedDate:string;
     className: string;
 };
 export type PanelProps = {

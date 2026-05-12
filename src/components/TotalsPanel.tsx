@@ -16,6 +16,7 @@ function TotalsPanel({
     onCalorieLimitChange,
     proteinTarget,
     onProteinTargetChange,
+    selectedDate,
     className,
 }:TotalsPanelProps) {
 
@@ -26,7 +27,7 @@ function TotalsPanel({
         protein: 0,
     };
 
-    entries.forEach((entry) => {
+    entries.filter((entry)=>entry.date === selectedDate).forEach((entry) => {
         totals.calories = totals.calories + entry.calories;
         totals.protein = totals.protein + entry.protein;
         totals.weight = totals.weight + entry.weight;
