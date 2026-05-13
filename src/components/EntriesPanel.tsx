@@ -20,11 +20,9 @@ function EntriesPanel({
     selectedDate,
     className,
 }: EntriesPanelProps) {
-    function handleDeleteEntryClick(index: number): void {
-        const updatedEntries = [...entries].filter((entry, i) => {
-            return i !== index;
-        });
-        deleteEntry(updatedEntries);
+    function handleDeleteEntryClick(foodEntryId: string): void {
+        
+        deleteEntry(foodEntryId);
     }
 
     function handleDateSelect(dateObject: Date): void {
@@ -38,7 +36,7 @@ function EntriesPanel({
     }
 
     return (
-        <Panel title="Today's Entries" className={className}>
+        <Panel title="Food Entries" className={className}>
             <Field className="mx-auto w-44">
                 <div className="flex flex-col items-center gap-2">
                     <FieldLabel htmlFor="date-picker">
@@ -61,11 +59,11 @@ function EntriesPanel({
                 </div>
             </Field>
             <div className=" flex flex-1 flex-col gap-3 p-5 items-center bg-muted/40 overflow-y-auto shadow-[inset_0_2px_8px_rgb(0_0_0/0.12)] ring-1 ring-foreground/10 rounded-xl">
-                {entries.filter((entry)=>entry.date === selectedDate).map((entry, index) => {
+                {entries.map((entry) => {
                     return (
                         <EntryCard
-                            key={index}
-                            index={index}
+                            key={entry.foodEntryId}
+                            foodEntryId={entry.foodEntryId}
                             proteinTarget={proteinTarget}
                             entry={entry}
                             calorieLimit={calorieLimit}

@@ -42,17 +42,46 @@ function normaliseIngredientsFromStorage(
     return cleanIngredients;
 }
 
-function fetchLocalEntries(): FoodEntry[] {
-    const savedEntries = localStorage.getItem("proteinTrackerEntries");
-    if (savedEntries === null) return [];
-    return JSON.parse(savedEntries);
-    
+function fetchLocalEntries(selectedDate: string): FoodEntry[] {
+    const savedEntriesJSON = localStorage.getItem("proteinTrackerEntries");
+    if (savedEntriesJSON === null) return [];
+    const savedEntries = JSON.parse(savedEntriesJSON);
+    const selectedEntries = savedEntries.filter(
+        (entry: FoodEntry): boolean => entry.date === selectedDate,
+    );
+    return selectedEntries;
 }
 
-function updateLocalEntries(entries: FoodEntry[]): void {
-    const proteinTrackerEntries = JSON.stringify(entries);
-    localStorage.setItem("proteinTrackerEntries", proteinTrackerEntries);
-    const savedEntries = localStorage.getItem("proteinTrackerEntries");
+
+function saveLocalEntry(newEntry: FoodEntry): void {
+    const existingEntriesJSON = localStorage.getItem("proteinTrackerEntries");
+    let existingEntries: FoodEntry[] = [];
+    if (existingEntriesJSON) {
+        existingEntries = JSON.parse(existingEntriesJSON);
+    } else {
+        existingEntries = [];
+    }
+    existingEntries.push(newEntry);
+    const updatedEntriesString = JSON.stringify(existingEntries);
+    localStorage.setItem("proteinTrackerEntries", updatedEntriesString);
+}
+
+
+function deleteLocalEntry(entryId: string): void {
+    
+    const existingEntriesJSON = localStorage.getItem("proteinTrackerEntries");
+    let existingEntries: FoodEntry[] = [];
+
+    if (existingEntriesJSON) {
+        existingEntries = JSON.parse(existingEntriesJSON);
+    } else {
+        return;
+    }
+    const filteredEntries = existingEntries.filter((entry) => {
+        return entry.foodEntryId !== entryId;
+    });
+    const filteredEntriesString = JSON.stringify(filteredEntries);
+    localStorage.setItem("proteinTrackerEntries", filteredEntriesString);
 
 }
 
@@ -91,8 +120,9 @@ async function fetchDummyUser(): Promise<User> {
 
 export {
     fetchLocalEntries as fetchEntries,
+    saveLocalEntry as saveEntry,
+    deleteLocalEntry as deleteEntry,
     fetchLocalIngredients as fetchIngredients,
-    updateLocalEntries as updateEntries,
     updateLocalIngredients as updateIngredients,
     fetchLocalCalorieLimit as fetchCalorieLimit,
     updateLocalCalorieLimit as updateCaloreLimit,

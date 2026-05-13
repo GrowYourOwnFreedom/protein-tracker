@@ -27,7 +27,7 @@ function TotalsPanel({
         protein: 0,
     };
 
-    entries.filter((entry)=>entry.date === selectedDate).forEach((entry) => {
+    entries.forEach((entry) => {
         totals.calories = totals.calories + entry.calories;
         totals.protein = totals.protein + entry.protein;
         totals.weight = totals.weight + entry.weight;

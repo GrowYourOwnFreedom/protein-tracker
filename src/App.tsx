@@ -11,9 +11,10 @@ import {
     getCurrentUser,
     normaliseIngredientsFromStorage,
     updateCaloreLimit,
-    updateEntries,
     updateIngredients,
     updateProteinTarget,
+    deleteEntry,
+    saveEntry,
 } from "@/lib/storageCrudHelpers";
 import { baseIngredients } from "@/data/baseIngredients";
 import { FoodEntry, Ingredient } from "@/types";
@@ -21,14 +22,15 @@ import EntriesPanel from "@/components/EntriesPanel";
 import { getToday } from "@/lib/getToday";
 
 function App() {
-    const [entries, setEntries] = useState<FoodEntry[]>(fetchEntries);
+    const [entries, setEntries] = useState<FoodEntry[]>([]);
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+    const [selectedDate, setSelectedDate] = useState<string>(getToday);
+    const [calorieLimit, setCalorieLimit] = useState<number>(fetchCalorieLimit);
+    const [hasLoadedEntries, setHasLoadedEntries] = useState<Boolean>(false);
     const [hasLoadedIngredients, setHasLoadedIngredients] =
         useState<boolean>(false);
-    const [calorieLimit, setCalorieLimit] = useState<number>(fetchCalorieLimit);
     const [proteinTarget, setProteinTarget] =
         useState<number>(fetchProteinTarget);
-    const [selectedDate, setSelectedDate ] = useState<string>(getToday)
 
     useEffect(() => {
         async function loadIngredients() {
@@ -55,10 +57,14 @@ function App() {
         loadIngredients();
     }, []);
 
-
     useEffect(() => {
-        updateEntries(entries);        
-    }, [entries]);
+        function loadEntries() {
+            const entriesToDisplay = fetchEntries(selectedDate);
+            setEntries(entriesToDisplay);
+            setHasLoadedEntries(true);
+        }
+        loadEntries()
+    }, [selectedDate]);
 
     useEffect(() => {
         if (!hasLoadedIngredients) return;
@@ -83,14 +89,17 @@ function App() {
     }
 
     function addEntry(newEntry: FoodEntry): void {
-        
         const newEntries = [newEntry, ...entries];
         setEntries(newEntries);
+         saveEntry(newEntry)
     }
 
-    function deleteEntry(updatedEntries: FoodEntry[]): void {
-        
-        setEntries(updatedEntries);
+    function deleteEntry(foodEntryId: string): void {
+        const filteredEntries = entries.filter((entry) => {
+            return entry.foodEntryId !== foodEntryId;
+        });
+        setEntries(filteredEntries)
+        deleteEntry(foodEntryId);
     }
 
     function handleCalorieLimitChange(newCalorieLimit: number): void {
@@ -100,8 +109,8 @@ function App() {
         setProteinTarget(newPoteinLimit);
     }
 
-    function handleSelectedDateChange(date:string):void {
-        setSelectedDate(date)
+    function handleSelectedDateChange(date: string): void {
+        setSelectedDate(date);
     }
 
     return (
@@ -136,8 +145,9 @@ function App() {
                     deleteEntry={deleteEntry}
                     calorieLimit={calorieLimit}
                     proteinTarget={proteinTarget}
-                    onSelectedDateChange={handleSelectedDateChange}  
-                    selectedDate={selectedDate}              />
+                    onSelectedDateChange={handleSelectedDateChange}
+                    selectedDate={selectedDate}
+                />
             </main>
         </div>
     );

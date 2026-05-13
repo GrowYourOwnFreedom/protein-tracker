@@ -15,7 +15,7 @@ function EntryCard({
     calorieLimit,
     proteinTarget,
     onDeleteEntryClick,
-    index,
+    foodEntryId,
 }: FoodEntryCardProps) {
     const { weight, calories, protein, name } = entry;
     const percentOfCalorieLimit = (entry.calories / calorieLimit) * 100 || 0;
@@ -35,9 +35,7 @@ function EntryCard({
                         size="icon"
                         variant="destructive"
                         onClick={() => {
-                            onDeleteEntryClick(index);
-                            console.log(index,"entry to delete");
-                            
+                            onDeleteEntryClick(foodEntryId);                            
                         }}
                     >X</Button>
                 </CardAction>

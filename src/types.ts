@@ -43,8 +43,8 @@ export type FoodEntryCardProps = {
     entry: FoodEntry;
     calorieLimit: number;
     proteinTarget: number;
-    onDeleteEntryClick: (index: number) => void;
-    index: number;
+    onDeleteEntryClick: (foodEntryId: string) => void;
+    foodEntryId: string;
 };
 export type TargetCardProps = {
     title: string;
@@ -62,7 +62,7 @@ export type SummaryCardProps = {
 
 export type EntriesPanelProps = {
     entries: FoodEntry[];
-    deleteEntry: (updatedEntries: FoodEntry[]) => void;
+    deleteEntry: (foodEntryId: string) => void;
     onSelectedDateChange: (date: string) => void;
     selectedDate:string;
     calorieLimit: number;
