@@ -134,7 +134,11 @@ function AddEntry({
                                 {defaultIngredientCategories.map(
                                     (category, index) => {
                                         return (
-                                            <SelectGroup>
+                                            <SelectGroup
+                                                key={
+                                                    category.ingredientCategoryId
+                                                }
+                                            >
                                                 <SelectLabel>
                                                     {
                                                         category.ingredientCategoryName
@@ -161,11 +165,10 @@ function AddEntry({
                                                                 ).toFixed(2);
                                                             const ingredientDisplayString = `${name} ${proteinEfficiency}g protein/100kcal`;
                                                             return (
-                                                                <>
-                                                                    <SelectItem
-                                                                        key={
+                                                                <div key={
                                                                             ingredientId
-                                                                        }
+                                                                        }>
+                                                                    <SelectItem
                                                                         value={
                                                                             ingredientId
                                                                         }
@@ -179,7 +182,7 @@ function AddEntry({
                                                                             1 && (
                                                                         <SelectSeparator />
                                                                     )}
-                                                                </>
+                                                                </div>
                                                             );
                                                         },
                                                     )}

@@ -13,7 +13,7 @@ import {
     updateCaloreLimit,
     updateIngredients,
     updateProteinTarget,
-    deleteEntry,
+    removeEntry,
     saveEntry,
 } from "@/lib/storageCrudHelpers";
 import { baseIngredients } from "@/data/baseIngredients";
@@ -99,8 +99,8 @@ function App() {
         const filteredEntries = entries.filter((entry) => {
             return entry.foodEntryId !== foodEntryId;
         });
-        setEntries(filteredEntries)
-        deleteEntry(foodEntryId);
+        setEntries(filteredEntries)        
+        removeEntry(foodEntryId);
     }
 
     function handleCalorieLimitChange(newCalorieLimit: number): void {

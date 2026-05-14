@@ -121,7 +121,7 @@ async function fetchDummyUser(): Promise<User> {
 export {
     fetchLocalEntries as fetchEntries,
     saveLocalEntry as saveEntry,
-    deleteLocalEntry as deleteEntry,
+    deleteLocalEntry as removeEntry,
     fetchLocalIngredients as fetchIngredients,
     updateLocalIngredients as updateIngredients,
     fetchLocalCalorieLimit as fetchCalorieLimit,
