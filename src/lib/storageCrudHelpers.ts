@@ -13,8 +13,8 @@ function normaliseIngredient(
         caloriesPer100g: oldIngredient.caloriesPer100g,
         proteinPer100g: oldIngredient.proteinPer100g,
         userId: oldIngredient.userId ?? userId,
-        createdAt: oldIngredient.createdAt ?? getToday(),
-        ingredientCategory: "uncategorised",
+        dateCreated: (oldIngredient.createdAt || oldIngredient.dateCreated) ?? getToday(),
+        ingredientCategoryId: oldIngredient.ingredientCategoryId ?? "other",
     };
 }
 
@@ -32,10 +32,10 @@ function fetchLocalIngredients(baseIngredients: Ingredient[]): OldIngredient[] {
     return savedIngredients;
 }
 
-function normaliseIngredientsFromStorage(
+function normaliseIngredients(
     oldIngredients: OldIngredient[],
     user: User,
-) {
+): Ingredient[]{
     const cleanIngredients = oldIngredients.map((oldIngredient) =>
         normaliseIngredient(oldIngredient, user),
     );
@@ -129,5 +129,5 @@ export {
     updateLocalProteinTarget as updateProteinTarget,
     fetchLocalProteinTarget as fetchProteinTarget,
     fetchDummyUser as getCurrentUser,
-    normaliseIngredientsFromStorage,
+    normaliseIngredients,
 };

@@ -7,8 +7,8 @@ export type Ingredient = {
     caloriesPer100g: number;
     proteinPer100g: number;
     userId: string;
-    createdAt: string;
-    ingredientCategory: string;
+    dateCreated: string;
+    ingredientCategoryId: string;
 };
 
 export type OldIngredient = {
@@ -20,6 +20,8 @@ export type OldIngredient = {
     userId?: string;
     createdAt?: string;
     ingredientCategory?: string;
+    ingredientCategoryId?:string
+    dateCreated?:string
 };
 
 // Later: add id and ingredientId when delete/edit/date grouping needs it.
@@ -97,3 +99,7 @@ export type AddEntryProps = {
     className?: string;
     selectedDate:string
 };
+export type IngredientCategory = {
+    ingredientCategoryId:string;
+    ingredientCategoryName:string;
+}

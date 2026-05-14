@@ -20,6 +20,7 @@ function EntriesPanel({
     selectedDate,
     className,
 }: EntriesPanelProps) {
+    
     function handleDeleteEntryClick(foodEntryId: string): void {
         
         deleteEntry(foodEntryId);
@@ -40,7 +41,7 @@ function EntriesPanel({
             <Field className="mx-auto w-44">
                 <div className="flex flex-col items-center gap-2">
                     <FieldLabel htmlFor="date-picker">
-                        <p>date to display:</p>
+                        <p>Select Date To Display:</p>
                     </FieldLabel>
                     <Popover>
                         <PopoverTrigger asChild>

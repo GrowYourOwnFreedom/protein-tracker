@@ -18,15 +18,23 @@ import {
     SelectContent,
     SelectGroup,
     SelectItem,
+    SelectLabel,
+    SelectSeparator,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { getToday } from "@/lib/getToday";
 import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { AddEntryProps } from "@/types";
+import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
 
-function AddEntry({ ingredients, addEntry, deleteIngredient, selectedDate, className = "" }:AddEntryProps) {
+function AddEntry({
+    ingredients,
+    addEntry,
+    deleteIngredient,
+    selectedDate,
+    className = "",
+}: AddEntryProps) {
     const [selectedIngredientId, setSelectedIngredientId] = useState("");
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
@@ -54,8 +62,8 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, selectedDate, class
 
         const protein = (weight / 100) * ingredient.proteinPer100g;
         const calories = (weight / 100) * ingredient.caloriesPer100g;
-        const date = selectedDate
-        const createdAt = new Date().toISOString()
+        const date = selectedDate;
+        const createdAt = new Date().toISOString();
         const foodEntryId = createNewId();
         const user = await getCurrentUser();
         const userId = user.userId;
@@ -77,7 +85,6 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, selectedDate, class
     }
 
     function handleDeleteIngredientClick() {
-
         const deletedIngredient = ingredients.find((ingredient) => {
             return ingredient.ingredientId === selectedIngredientId;
         });
@@ -93,23 +100,19 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, selectedDate, class
         }
     }
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
-    const shouldFocusInputRef = useRef(false)
+    const shouldFocusInputRef = useRef(false);
 
     function handleValueChange(value) {
-
-        shouldFocusInputRef.current = true
+        shouldFocusInputRef.current = true;
         setSelectedIngredientId(value);
-       
     }
-    function handleSelectOpenChange(open){
-
-        if(!open && shouldFocusInputRef.current){
-            shouldFocusInputRef.current = false
-             setTimeout(() => {
-            inputRef.current?.focus();
-        }, 0);
+    function handleSelectOpenChange(open) {
+        if (!open && shouldFocusInputRef.current) {
+            shouldFocusInputRef.current = false;
+            setTimeout(() => {
+                inputRef.current?.focus();
+            }, 0);
         }
-
     }
     return (
         <Panel title="Add Entry" className={className}>
@@ -125,41 +128,72 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, selectedDate, class
                             onOpenChange={handleSelectOpenChange}
                         >
                             <SelectTrigger className="bg-muted/40 shadow-inner/10">
-                                <SelectValue placeholder="PLease Choose An Ingredient" />
+                                <SelectValue placeholder="PLease choose an ingredient..." />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectGroup>
-                                    {sortedIngredients.map(
-                                        ({
-                                            name,
-                                            caloriesPer100g,
-                                            proteinPer100g,
-                                            ingredientId,
-                                        }) => {
-                                            const proteinEfficiency =
-                                                getProteinEfficiency(
-                                                    caloriesPer100g,
-                                                    proteinPer100g,
-                                                ).toFixed(2);
-                                            const ingredientDisplayString = `${name} ${proteinEfficiency}g protein/100kcal`;
-                                            return (
-                                                <SelectItem
-                                                    key={ingredientId}
-                                                    value={ingredientId}
-                                                >
-                                                    {ingredientDisplayString}
-                                                </SelectItem>
-                                            );
-                                        },
-                                    )}
-                                </SelectGroup>
+                                {defaultIngredientCategories.map(
+                                    (category, index) => {
+                                        return (
+                                            <SelectGroup>
+                                                <SelectLabel>
+                                                    {
+                                                        category.ingredientCategoryName
+                                                    }
+                                                </SelectLabel>
+                                                {sortedIngredients
+                                                    .filter((ingredient) => {
+                                                        return (
+                                                            ingredient.ingredientCategoryId ===
+                                                            category.ingredientCategoryId
+                                                        );
+                                                    })
+                                                    .map(
+                                                        ({
+                                                            name,
+                                                            caloriesPer100g,
+                                                            proteinPer100g,
+                                                            ingredientId,
+                                                        }) => {
+                                                            const proteinEfficiency =
+                                                                getProteinEfficiency(
+                                                                    caloriesPer100g,
+                                                                    proteinPer100g,
+                                                                ).toFixed(2);
+                                                            const ingredientDisplayString = `${name} ${proteinEfficiency}g protein/100kcal`;
+                                                            return (
+                                                                <>
+                                                                    <SelectItem
+                                                                        key={
+                                                                            ingredientId
+                                                                        }
+                                                                        value={
+                                                                            ingredientId
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            ingredientDisplayString
+                                                                        }
+                                                                    </SelectItem>
+                                                                    {index !==
+                                                                        defaultIngredientCategories.length -
+                                                                            1 && (
+                                                                        <SelectSeparator />
+                                                                    )}
+                                                                </>
+                                                            );
+                                                        },
+                                                    )}
+                                            </SelectGroup>
+                                        );
+                                    },
+                                )}
                             </SelectContent>
                         </Select>
                     </Field>
                     <Field>
                         <FieldLabel>Enter The Weight (g):</FieldLabel>
                         <Input
-                        ref={inputRef}
+                            ref={inputRef}
                             name="weight"
                             value={ingredientWeight}
                             onChange={(e) =>
@@ -172,7 +206,10 @@ function AddEntry({ ingredients, addEntry, deleteIngredient, selectedDate, class
                         )}
                     </Field>
                     <FieldSeparator />
-                    <Button type="submit" className="rounded-full"> Save Entry</Button>
+                    <Button type="submit" className="rounded-full">
+                        {" "}
+                        Save Entry
+                    </Button>
                     <Button
                         className="w-fit mx-auto rounded-full"
                         type="button"

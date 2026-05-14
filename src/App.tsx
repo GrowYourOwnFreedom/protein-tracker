@@ -9,7 +9,7 @@ import {
     fetchIngredients,
     fetchProteinTarget,
     getCurrentUser,
-    normaliseIngredientsFromStorage,
+    normaliseIngredients,
     updateCaloreLimit,
     updateIngredients,
     updateProteinTarget,
@@ -34,11 +34,12 @@ function App() {
 
     useEffect(() => {
         async function loadIngredients() {
-            const fetchedIngredients = fetchIngredients(baseIngredients);
-            const dataVersion = localStorage.getItem("dataVersion");
             const user = await getCurrentUser();
+            const cleanBaseIngredients = normaliseIngredients(baseIngredients, user )
+            const fetchedIngredients = fetchIngredients(cleanBaseIngredients);
+            const dataVersion = localStorage.getItem("dataVersion");
 
-            const cleanIngredients = normaliseIngredientsFromStorage(
+            const cleanIngredients = normaliseIngredients(
                 fetchedIngredients,
                 user,
             );

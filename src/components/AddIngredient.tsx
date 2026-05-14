@@ -8,22 +8,33 @@ import {
     FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import createNewId from "@/lib/createNewId";
 import { getToday } from "@/lib/getToday";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { AddIngredientProps } from "@/types";
-import { useState } from "react";
+import { AddIngredientProps, IngredientCategory } from "@/types";
+import { useRef, useState } from "react";
+import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
 
-function AddIngredient({ addIngredient, className = "" }:AddIngredientProps) {
+function AddIngredient({ addIngredient, className = "" }: AddIngredientProps) {
     const [addIngredientName, setAddIngredientName] = useState("");
     const [addIngredientCalories, setAddIngredientCalories] = useState("");
     const [addIngredientProtein, setAddIngredientProtein] = useState("");
+    const [ingredientCategoryId, setIngredientCategoryId] = useState("");
     const [addIngredientCaloriesError, setAddIngredientCaloriesError] =
         useState("");
     const [addIngredientProteinError, setAddIngredientProteinError] =
         useState("");
+    const inputRef = useRef(null);
 
-    async function handleSaveIngredientClick(addIngredientFormData:FormData) {
+    async function handleSaveIngredientClick(addIngredientFormData: FormData) {
         const newIngredientCalories = Number(
             addIngredientFormData.get("ingredient-calories"),
         );
@@ -73,14 +84,13 @@ function AddIngredient({ addIngredient, className = "" }:AddIngredientProps) {
         setAddIngredientProteinError("");
         setAddIngredientCaloriesError("");
 
-        const ingredientId = createNewId()
+        const ingredientId = createNewId();
         const name = String(addIngredientFormData.get("ingredient-name"));
         const caloriesPer100g = newIngredientCalories;
         const proteinPer100g = newIngredientProtein;
-        const user =  await getCurrentUser()
-        const userId = user.userId
-        const createdAt = getToday()
-        const ingredientCategory = "uncategorised"
+        const user = await getCurrentUser();
+        const userId = user.userId;
+        const dateCreated = getToday();
 
         const newIngredient = {
             ingredientId,
@@ -88,15 +98,30 @@ function AddIngredient({ addIngredient, className = "" }:AddIngredientProps) {
             caloriesPer100g,
             proteinPer100g,
             userId,
-            createdAt,
-            ingredientCategory
-        }
-            
-        addIngredient(newIngredient);        
+            dateCreated,
+            ingredientCategoryId,
+        };
+
+        addIngredient(newIngredient);
         setAddIngredientName("");
         setAddIngredientCalories("");
         setAddIngredientProtein("");
     }
+    const shouldFocusInputRef = useRef(false);
+
+    function handleValueChange(value) {
+        shouldFocusInputRef.current = true;
+        setIngredientCategoryId(value);
+    }
+    function handleSelectOpenChange(open) {
+        if (!open && shouldFocusInputRef.current) {
+            shouldFocusInputRef.current = false;
+            setTimeout(() => {
+                inputRef.current?.focus();
+            }, 0);
+        }
+    }
+
 
     return (
         <Panel title="Add Ingredient" className={className}>
@@ -116,12 +141,46 @@ function AddIngredient({ addIngredient, className = "" }:AddIngredientProps) {
                             }
                         />
                     </Field>
+                    <Field>
+                        <FieldLabel>Ingredient Category:</FieldLabel>
+                        <Select
+                            required
+                            name="ingredient-category-id"
+                            value={ingredientCategoryId}
+                            onValueChange={handleValueChange}
+                            onOpenChange={handleSelectOpenChange}
+                        >
+                            <SelectTrigger className="bg-muted/40 shadow-inner/10">
+                                <SelectValue placeholder="PLease choose a category..." />
+                            </SelectTrigger>
+                            <SelectContent position="popper">
+                                <SelectGroup>
+                                    {defaultIngredientCategories.map(
+                                        ({
+                                            ingredientCategoryId,
+                                            ingredientCategoryName,
+                                        }: IngredientCategory) => {
+                                            return (
+                                                <SelectItem
+                                                    key={ingredientCategoryId}
+                                                    value={ingredientCategoryId}
+                                                >
+                                                    {ingredientCategoryName}
+                                                </SelectItem>
+                                            );
+                                        },
+                                    )}
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                    </Field>
                     <div className="grid grid-cols-2 gap-4">
                         <Field>
                             <FieldLabel htmlFor="calories-per-100g">
                                 Calories per 100g:
                             </FieldLabel>
                             <Input
+                                ref={inputRef}
                                 id="calories-per-100g"
                                 name="ingredient-calories"
                                 required
