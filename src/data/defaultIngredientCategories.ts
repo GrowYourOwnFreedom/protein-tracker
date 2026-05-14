@@ -14,6 +14,10 @@ export const defaultIngredientCategories: IngredientCategory[] = [
             ingredientCategoryName: "Products",
         },
         {
+            ingredientCategoryId: "snacks",
+            ingredientCategoryName: "Snacks",
+        },
+        {
             ingredientCategoryId: "other",
             ingredientCategoryName: "Other",
         },
