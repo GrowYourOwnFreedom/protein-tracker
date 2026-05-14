@@ -10,6 +10,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import { useState } from "react";
 
 function EntriesPanel({
     entries,
@@ -20,6 +21,7 @@ function EntriesPanel({
     selectedDate,
     className,
 }: EntriesPanelProps) {
+    const [datePickerOpen, setDatePickerOpen ] = useState<boolean>(false)
     
     function handleDeleteEntryClick(foodEntryId: string): void {
         
@@ -43,16 +45,19 @@ function EntriesPanel({
                     <FieldLabel htmlFor="date-picker">
                         <p>Select Date To Display:</p>
                     </FieldLabel>
-                    <Popover>
+                    <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
                         <PopoverTrigger asChild>
                             <Button id="date-picker" className="rounded-full px-6">
                                 {format(selectedDate, "PPP")}
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent align="start" className="w-auto p-0">
+                        <PopoverContent  align="start" className="w-auto p-0">
                             <Calendar
                                 selected={makeDateObject(selectedDate)}
-                                onSelect={handleDateSelect}
+                                onSelect={(date)=>{
+                                    handleDateSelect(date)
+                                    setDatePickerOpen(false)
+                                }}
                                 mode="single"
                             />
                         </PopoverContent>

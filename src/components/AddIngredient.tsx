@@ -83,6 +83,7 @@ function AddIngredient({ addIngredient, className = "" }: AddIngredientProps) {
 
         setAddIngredientProteinError("");
         setAddIngredientCaloriesError("");
+        setIngredientCategoryId("")
 
         const ingredientId = createNewId();
         const name = String(addIngredientFormData.get("ingredient-name"));
