@@ -84,6 +84,13 @@ function App() {
         const newIngredients = [...ingredients, newIngredient];
         setIngredients(newIngredients);
     }
+    function handleEditIngredient(updatedIngredient:Ingredient) {
+        const updatedIngredients = [...ingredients.filter((ingredient)=>{
+            return (ingredient.ingredientId !== updatedIngredient.ingredientId)
+        }), updatedIngredient]
+        setIngredients(updatedIngredients)
+        
+    } 
 
     function deleteIngredient(updatedIngredients: Ingredient[]): void {
         setIngredients(updatedIngredients);
@@ -137,6 +144,7 @@ function App() {
                         addEntry={addEntry}
                         deleteIngredient={deleteIngredient}
                         selectedDate={selectedDate}
+                        onEditIngredient={handleEditIngredient}
                     />
                     <AddIngredient addIngredient={addIngredient} />
                 </div>

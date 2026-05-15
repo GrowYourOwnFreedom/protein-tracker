@@ -33,6 +33,7 @@ function AddIngredient({ addIngredient, className = "" }: AddIngredientProps) {
     const [addIngredientProteinError, setAddIngredientProteinError] =
         useState("");
     const inputRef = useRef(null);
+    const shouldFocusInputRef = useRef(false);
 
     async function handleSaveIngredientClick(addIngredientFormData: FormData) {
         const newIngredientCalories = Number(
@@ -108,7 +109,6 @@ function AddIngredient({ addIngredient, className = "" }: AddIngredientProps) {
         setAddIngredientCalories("");
         setAddIngredientProtein("");
     }
-    const shouldFocusInputRef = useRef(false);
 
     function handleValueChange(value) {
         shouldFocusInputRef.current = true;

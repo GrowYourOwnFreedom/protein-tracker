@@ -20,8 +20,8 @@ export type OldIngredient = {
     userId?: string;
     createdAt?: string;
     ingredientCategory?: string;
-    ingredientCategoryId?:string
-    dateCreated?:string
+    ingredientCategoryId?: string;
+    dateCreated?: string;
 };
 
 // Later: add id and ingredientId when delete/edit/date grouping needs it.
@@ -32,7 +32,7 @@ export type FoodEntry = {
     calories: number;
     foodEntryId: string;
     userId: string;
-    date:string;
+    date: string;
     createdAt: string;
 };
 
@@ -66,7 +66,7 @@ export type EntriesPanelProps = {
     entries: FoodEntry[];
     deleteEntry: (foodEntryId: string) => void;
     onSelectedDateChange: (date: string) => void;
-    selectedDate:string;
+    selectedDate: string;
     calorieLimit: number;
     proteinTarget: number;
     className: string;
@@ -78,7 +78,7 @@ export type TotalsPanelProps = {
     onCalorieLimitChange: (newCalorieLimit: number) => void;
     proteinTarget: number;
     onProteinTargetChange: (newPoteinLimit: number) => void;
-    selectedDate:string;
+    selectedDate: string;
     className: string;
 };
 export type PanelProps = {
@@ -97,9 +97,21 @@ export type AddEntryProps = {
     addEntry: (newEntry: FoodEntry) => void;
     deleteIngredient: (updatedIngredients: Ingredient[]) => void;
     className?: string;
-    selectedDate:string
+    selectedDate: string;
+    onEditIngredient:(updatedIngredient:Ingredient)=>void
 };
 export type IngredientCategory = {
-    ingredientCategoryId:string;
-    ingredientCategoryName:string;
-}
+    ingredientCategoryId: string;
+    ingredientCategoryName: string;
+};
+export type IngredientDetailsProps = {
+    onAddIngredient?: (newIngredient: Ingredient) => void;
+    onEditIngredient?: (ingredient: Ingredient) => void;
+    existingIngredient?: Ingredient;
+    className?: string;
+};
+export type EditIngredientPopoverProps = {
+    onEditIngredient: (updatedIngredient: Ingredient) => void;
+    selectedIngredient: Ingredient;
+    onClick: () => void;
+};

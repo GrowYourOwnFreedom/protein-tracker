@@ -25,8 +25,9 @@ import {
 } from "@/components/ui/select";
 import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { AddEntryProps } from "@/types";
+import { AddEntryProps, Ingredient } from "@/types";
 import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
+import EditIngredientPopover from "@/components/addEntry/EditIngredientPopover";
 
 function AddEntry({
     ingredients,
@@ -34,8 +35,11 @@ function AddEntry({
     deleteIngredient,
     selectedDate,
     className = "",
+    onEditIngredient
 }: AddEntryProps) {
     const [selectedIngredientId, setSelectedIngredientId] = useState("");
+    const [selectedIngredient, setSelectedingredient] =
+        useState<Ingredient>(null);
     const [ingredientWeight, setIngredientWeight] = useState("");
     const [weightInputError, setWeightInputError] = useState("");
     const inputRef = useRef(null);
@@ -114,6 +118,12 @@ function AddEntry({
             }, 0);
         }
     }
+    function handlePopoverClick() {
+        const selectedIngredientToEdit = ingredients.find((ingredient) => {
+            return ingredient.ingredientId === selectedIngredientId;
+        });        
+        setSelectedingredient(selectedIngredientToEdit);
+    }
     return (
         <Panel title="Add Entry" className={className}>
             <form action={handleSaveEntryClick}>
@@ -139,11 +149,7 @@ function AddEntry({
                                                     category.ingredientCategoryId
                                                 }
                                             >
-                                                <SelectGroup
-                                                    key={
-                                                        category.ingredientCategoryId
-                                                    }
-                                                >
+                                                <SelectGroup>
                                                     <SelectLabel>
                                                         {
                                                             category.ingredientCategoryName
@@ -175,6 +181,9 @@ function AddEntry({
                                                                 const ingredientDisplayString = `${name} ${proteinEfficiency}g protein/100kcal`;
                                                                 return (
                                                                     <SelectItem
+                                                                        key={
+                                                                            ingredientId
+                                                                        }
                                                                         value={
                                                                             ingredientId
                                                                         }
@@ -222,14 +231,21 @@ function AddEntry({
                         {" "}
                         Save Entry
                     </Button>
-                    <Button
-                        className="w-fit mx-auto rounded-full"
-                        type="button"
-                        variant="destructive"
-                        onClick={handleDeleteIngredientClick}
-                    >
-                        Delete Ingredient
-                    </Button>
+                    <div className="grid grid-cols-2 gap-4 ">
+                        <Button
+                            className="w-fit mx-auto rounded-full"
+                            type="button"
+                            variant="destructive"
+                            onClick={handleDeleteIngredientClick}
+                        >
+                            Delete Ingredient
+                        </Button>
+                        <EditIngredientPopover
+                            onClick={handlePopoverClick}
+                            selectedIngredient={selectedIngredient}
+                            onEditIngredient={onEditIngredient}
+                        />
+                    </div>
                 </FieldGroup>
             </form>
         </Panel>
