@@ -34,6 +34,6 @@ export const baseIngredients: OldIngredient[] = [
         name: "Tempeh",
         caloriesPer100g: 195,
         proteinPer100g: 19.9,
-        ingredientCategoryId: "product"
+        ingredientCategoryId: "products"
     },
 ];

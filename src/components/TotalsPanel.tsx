@@ -38,7 +38,6 @@ function TotalsPanel({
     return (
         <Panel title="Totals" className={className}>
             <p className="text-center">Food Eaten: {weight.toFixed(0)} g</p>
-            <div className="flex p-6 gap-4 shrink-0 items-center">
                 <FieldGroup>
                     <div className="grid grid-cols-2 gap-4">
                         <Field>
@@ -67,7 +66,6 @@ function TotalsPanel({
                         </Field>
                     </div>
                 </FieldGroup>
-            </div>
             <div className="flex flex-1 flex-col gap-3 p-5 items-center bg-muted/40 overflow-y-auto shadow-[inset_0_2px_8px_rgb(0_0_0/0.12)] ring-1 ring-foreground/10 rounded-xl">
                 <TargetCard
                     title={"Calories"}

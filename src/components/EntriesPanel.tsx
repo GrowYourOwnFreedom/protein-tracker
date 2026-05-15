@@ -21,21 +21,22 @@ function EntriesPanel({
     selectedDate,
     className,
 }: EntriesPanelProps) {
-    const [datePickerOpen, setDatePickerOpen ] = useState<boolean>(false)
-    
+    const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false);
+
     function handleDeleteEntryClick(foodEntryId: string): void {
-        
         deleteEntry(foodEntryId);
     }
 
     function handleDateSelect(dateObject: Date): void {
-        const date = format(dateObject,"yyyy-MM-dd")        
+        if(!dateObject) return
+        const date = format(dateObject, "yyyy-MM-dd");
         onSelectedDateChange(date);
+        setDatePickerOpen(false);
     }
-    function makeDateObject(selectedDate: string):Date{
-        const [year,month,day] = selectedDate.split("-").map(Number)
-        const dateObject = new Date(year,month-1,day)
-        return dateObject
+    function makeDateObject(selectedDate: string): Date {
+        const [year, month, day] = selectedDate.split("-").map(Number);
+        const dateObject = new Date(year, month - 1, day);
+        return dateObject;
     }
 
     return (
@@ -45,19 +46,22 @@ function EntriesPanel({
                     <FieldLabel htmlFor="date-picker">
                         <p>Select Date To Display:</p>
                     </FieldLabel>
-                    <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                    <Popover
+                        open={datePickerOpen}
+                        onOpenChange={setDatePickerOpen}
+                    >
                         <PopoverTrigger asChild>
-                            <Button id="date-picker" className="rounded-full px-6">
+                            <Button
+                                id="date-picker"
+                                className="rounded-full px-6"
+                            >
                                 {format(selectedDate, "PPP")}
                             </Button>
                         </PopoverTrigger>
-                        <PopoverContent  align="start" className="w-auto p-0">
+                        <PopoverContent align="start" className="w-auto p-0">
                             <Calendar
                                 selected={makeDateObject(selectedDate)}
-                                onSelect={(date)=>{
-                                    handleDateSelect(date)
-                                    setDatePickerOpen(false)
-                                }}
+                                onSelect={handleDateSelect}
                                 mode="single"
                             />
                         </PopoverContent>

@@ -134,40 +134,46 @@ function AddEntry({
                                 {defaultIngredientCategories.map(
                                     (category, index) => {
                                         return (
-                                            <SelectGroup
+                                            <div
                                                 key={
                                                     category.ingredientCategoryId
                                                 }
                                             >
-                                                <SelectLabel>
-                                                    {
-                                                        category.ingredientCategoryName
+                                                <SelectGroup
+                                                    key={
+                                                        category.ingredientCategoryId
                                                     }
-                                                </SelectLabel>
-                                                {sortedIngredients
-                                                    .filter((ingredient) => {
-                                                        return (
-                                                            ingredient.ingredientCategoryId ===
-                                                            category.ingredientCategoryId
-                                                        );
-                                                    })
-                                                    .map(
-                                                        ({
-                                                            name,
-                                                            caloriesPer100g,
-                                                            proteinPer100g,
-                                                            ingredientId,
-                                                        }) => {
-                                                            const proteinEfficiency =
-                                                                getProteinEfficiency(
-                                                                    caloriesPer100g,
-                                                                    proteinPer100g,
-                                                                ).toFixed(2);
-                                                            const ingredientDisplayString = `${name} ${proteinEfficiency}g protein/100kcal`;
-                                                            return (
-                                                                <div key={
-                                                                            ingredientId
-                                                                        }>
+                                                >
+                                                    <SelectLabel>
+                                                        {
+                                                            category.ingredientCategoryName
+                                                        }
+                                                    </SelectLabel>
+                                                    {sortedIngredients
+                                                        .filter(
+                                                            (ingredient) => {
+                                                                return (
+                                                                    ingredient.ingredientCategoryId ===
+                                                                    category.ingredientCategoryId
+                                                                );
+                                                            },
+                                                        )
+                                                        .map(
+                                                            ({
+                                                                name,
+                                                                caloriesPer100g,
+                                                                proteinPer100g,
+                                                                ingredientId,
+                                                            }) => {
+                                                                const proteinEfficiency =
+                                                                    getProteinEfficiency(
+                                                                        caloriesPer100g,
+                                                                        proteinPer100g,
+                                                                    ).toFixed(
+                                                                        2,
+                                                                    );
+                                                                const ingredientDisplayString = `${name} ${proteinEfficiency}g protein/100kcal`;
+                                                                return (
                                                                     <SelectItem
                                                                         value={
                                                                             ingredientId
@@ -177,16 +183,16 @@ function AddEntry({
                                                                             ingredientDisplayString
                                                                         }
                                                                     </SelectItem>
-                                                                    {index !==
-                                                                        defaultIngredientCategories.length -
-                                                                            1 && (
-                                                                        <SelectSeparator />
-                                                                    )}
-                                                                </div>
-                                                            );
-                                                        },
-                                                    )}
-                                            </SelectGroup>
+                                                                );
+                                                            },
+                                                        )}
+                                                </SelectGroup>
+                                                {index !==
+                                                    defaultIngredientCategories.length -
+                                                        1 && (
+                                                    <SelectSeparator />
+                                                )}
+                                            </div>
                                         );
                                     },
                                 )}
@@ -194,8 +200,11 @@ function AddEntry({
                         </Select>
                     </Field>
                     <Field>
-                        <FieldLabel>Enter The Weight (g):</FieldLabel>
+                        <FieldLabel htmlFor="ingredient-weight-input">
+                            Enter The Weight (g):
+                        </FieldLabel>
                         <Input
+                            id="ingredient-weight-input"
                             ref={inputRef}
                             name="weight"
                             value={ingredientWeight}
