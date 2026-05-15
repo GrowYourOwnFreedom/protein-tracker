@@ -18,6 +18,18 @@ export const defaultIngredientCategories: IngredientCategory[] = [
             ingredientCategoryName: "Snacks",
         },
         {
+            ingredientCategoryId: "fast-food",
+            ingredientCategoryName: "Fast Food",
+        },
+        {
+            ingredientCategoryId: "home-made",
+            ingredientCategoryName: "Home Made",
+        },
+        {
+            ingredientCategoryId: "drinks",
+            ingredientCategoryName: "Drinks",
+        },
+        {
             ingredientCategoryId: "other",
             ingredientCategoryName: "Other",
         },
