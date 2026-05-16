@@ -104,7 +104,7 @@ export type IngredientCategory = {
     ingredientCategoryId: string;
     ingredientCategoryName: string;
 };
-export type IngredientDetailsProps = {
+export type IngredientDetailsFormProps = {
     onAddIngredient?: (newIngredient: Ingredient) => void;
     onEditIngredient?: (ingredient: Ingredient) => void;
     existingIngredient?: Ingredient;

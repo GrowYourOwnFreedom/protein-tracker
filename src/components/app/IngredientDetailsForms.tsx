@@ -23,7 +23,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useEffect, useRef, useState } from "react";
 import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
-import { IngredientCategory, IngredientDetailsProps } from "@/types";
+import { IngredientCategory, IngredientDetailsFormProps } from "@/types";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { getToday } from "@/lib/getToday";
@@ -34,10 +34,10 @@ function IngredientDetailsForm({
     existingIngredient,
     onEditIngredient,
     className,
-}: IngredientDetailsProps) {
+}: IngredientDetailsFormProps) {
     const [addIngredientName, setAddIngredientName] = useState(existingIngredient?.name ?? "");
-    const [addIngredientCalories, setAddIngredientCalories] = useState(String(existingIngredient?.caloriesPer100g) ?? "");
-    const [addIngredientProtein, setAddIngredientProtein] = useState(String(existingIngredient?.proteinPer100g) ?? "");
+    const [addIngredientCalories, setAddIngredientCalories] = useState(String(existingIngredient?.caloriesPer100g ?? ""));
+    const [addIngredientProtein, setAddIngredientProtein] = useState(String(existingIngredient?.proteinPer100g ?? ""));
     const [ingredientCategoryId, setIngredientCategoryId] = useState(existingIngredient?.ingredientCategoryId ?? "");
     const [addIngredientCaloriesError, setAddIngredientCaloriesError] =
         useState("");

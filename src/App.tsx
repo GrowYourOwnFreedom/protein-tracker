@@ -82,6 +82,8 @@ function App() {
 
     function addIngredient(newIngredient: Ingredient): void {
         const newIngredients = [...ingredients, newIngredient];
+        console.log(newIngredient);
+        
         setIngredients(newIngredients);
     }
     function handleEditIngredient(updatedIngredient:Ingredient) {
