@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
 import { IngredientCategory, IngredientDetailsFormProps } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -30,9 +30,8 @@ import { getToday } from "@/lib/getToday";
 import createNewId from "@/lib/createNewId";
 
 function IngredientDetailsForm({
-    onAddIngredient,
     existingIngredient,
-    onEditIngredient,
+    onSave,
     className,
 }: IngredientDetailsFormProps) {
     const [addIngredientName, setAddIngredientName] = useState(
@@ -132,11 +131,7 @@ function IngredientDetailsForm({
             ingredientCategoryId,
         };
 
-        if (existingIngredient) {
-            onEditIngredient(ingredientObj);
-        } else {
-            onAddIngredient(ingredientObj);
-        }
+        onSave(ingredientObj)
         setAddIngredientName("");
         setAddIngredientCalories("");
         setAddIngredientProtein("");

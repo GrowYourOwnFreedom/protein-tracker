@@ -9,14 +9,14 @@ import {
     fetchIngredients,
     fetchProteinTarget,
     getCurrentUser,
-    normaliseIngredients,
     updateCaloreLimit,
-    updateIngredients,
     updateProteinTarget,
     removeEntry,
     saveEntry,
+    saveIngredient,
+    deleteIngredient,
+    editIngredient,
 } from "@/lib/storageCrudHelpers";
-import { baseIngredients } from "@/data/baseIngredients";
 import { FoodEntry, Ingredient } from "@/types";
 import EntriesPanel from "@/components/EntriesPanel";
 import { getToday } from "@/lib/getToday";
@@ -26,23 +26,15 @@ function App() {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>(getToday);
     const [calorieLimit, setCalorieLimit] = useState<number>(fetchCalorieLimit);
-    const [hasLoadedEntries, setHasLoadedEntries] = useState<Boolean>(false);
-    const [hasLoadedIngredients, setHasLoadedIngredients] =
-        useState<boolean>(false);
+    const [meals, setMeals] = useState();
     const [proteinTarget, setProteinTarget] =
         useState<number>(fetchProteinTarget);
 
     useEffect(() => {
         async function loadIngredients() {
             const user = await getCurrentUser();
-            const cleanBaseIngredients = normaliseIngredients(baseIngredients, user )
-            const fetchedIngredients = fetchIngredients(cleanBaseIngredients);
+            const fetchedIngredients = fetchIngredients(user.userId);
             const dataVersion = localStorage.getItem("dataVersion");
-
-            const cleanIngredients = normaliseIngredients(
-                fetchedIngredients,
-                user,
-            );
 
             if (dataVersion !== "2") {
                 localStorage.setItem(
@@ -52,8 +44,7 @@ function App() {
                 localStorage.setItem("dataVersion", "2");
                 console.log("Migrating ingredients to version 2");
             }
-            setIngredients(cleanIngredients);
-            setHasLoadedIngredients(true);
+            setIngredients(fetchedIngredients);
         }
         loadIngredients();
     }, []);
@@ -62,15 +53,9 @@ function App() {
         function loadEntries() {
             const entriesToDisplay = fetchEntries(selectedDate);
             setEntries(entriesToDisplay);
-            setHasLoadedEntries(true);
         }
-        loadEntries()
+        loadEntries();
     }, [selectedDate]);
-
-    useEffect(() => {
-        if (!hasLoadedIngredients) return;
-        updateIngredients(ingredients);
-    }, [ingredients]);
 
     useEffect(() => {
         updateCaloreLimit(calorieLimit);
@@ -80,35 +65,44 @@ function App() {
         updateProteinTarget(proteinTarget);
     }, [proteinTarget]);
 
-    function addIngredient(newIngredient: Ingredient): void {
+    function handleAddIngredient(newIngredient: Ingredient): void {
         const newIngredients = [...ingredients, newIngredient];
-        console.log(newIngredient);
-        
         setIngredients(newIngredients);
+        saveIngredient(newIngredient);
     }
-    function handleEditIngredient(updatedIngredient:Ingredient) {
-        const updatedIngredients = [...ingredients.filter((ingredient)=>{
-            return (ingredient.ingredientId !== updatedIngredient.ingredientId)
-        }), updatedIngredient]
-        setIngredients(updatedIngredients)
-        
-    } 
 
-    function deleteIngredient(updatedIngredients: Ingredient[]): void {
+    function handleEditIngredient(updatedIngredient: Ingredient) {
+        const updatedIngredients = [
+            ...ingredients.filter((ingredient) => {
+                return (
+                    ingredient.ingredientId !== updatedIngredient.ingredientId
+                );
+            }),
+            updatedIngredient,
+        ];
         setIngredients(updatedIngredients);
+        editIngredient(updatedIngredient)
+    }
+
+    function handleDeleteIngredient(ingredientId: string): void {
+        const updatedIngredients = ingredients.filter((ingredient) => {
+            return ingredient.ingredientId !== ingredientId;
+        });
+        setIngredients(updatedIngredients);
+        deleteIngredient(ingredientId)
     }
 
     function addEntry(newEntry: FoodEntry): void {
         const newEntries = [newEntry, ...entries];
         setEntries(newEntries);
-         saveEntry(newEntry)
+        saveEntry(newEntry);
     }
 
     function deleteEntry(foodEntryId: string): void {
         const filteredEntries = entries.filter((entry) => {
             return entry.foodEntryId !== foodEntryId;
         });
-        setEntries(filteredEntries)        
+        setEntries(filteredEntries);
         removeEntry(foodEntryId);
     }
 
@@ -144,11 +138,11 @@ function App() {
                     <AddEntryPanel
                         ingredients={ingredients}
                         addEntry={addEntry}
-                        deleteIngredient={deleteIngredient}
+                        deleteIngredient={handleDeleteIngredient}
                         selectedDate={selectedDate}
                         onEditIngredient={handleEditIngredient}
                     />
-                    <AddIngredientPanel addIngredient={addIngredient} />
+                    <AddIngredientPanel onAddIngredient={handleAddIngredient} />
                 </div>
                 <EntriesPanel
                     className="h-screen lg:h-auto lg:min-h-0"

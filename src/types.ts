@@ -1,6 +1,16 @@
 import { Progress as ProgressPrimitive } from "radix-ui";
 import { ReactNode } from "react";
 
+export type User = {
+    userId: string;
+    name: string;
+};
+
+export type IngredientCategory = {
+    ingredientCategoryId: string;
+    ingredientCategoryName: string;
+};
+
 export type Ingredient = {
     ingredientId: string;
     name: string;
@@ -33,29 +43,27 @@ export type FoodEntry = {
     userId: string;
     date: string;
     createdAt: string;
+    mealId?: string;
+    ingredientId?: string ;
 };
 
-export type IngredientCategory = {
-    ingredientCategoryId: string;
-    ingredientCategoryName: string;
-};
 
-export type User = {
-    userId: string;
-    name: string;
-};
+
+
+
+
 
 export type AddEntryPanelProps = {
     ingredients: Ingredient[];
     addEntry: (newEntry: FoodEntry) => void;
-    deleteIngredient: (updatedIngredients: Ingredient[]) => void;
+    deleteIngredient: (ingredientId: string) => void;
     className?: string;
     selectedDate: string;
     onEditIngredient: (updatedIngredient: Ingredient) => void;
 };
 
 export type AddIngredientPanelProps = {
-    addIngredient: (newIngredient: Ingredient) => void;
+    onAddIngredient: (newIngredient: Ingredient) => void;
     className?: string;
 };
 
@@ -92,8 +100,7 @@ export type EditIngredientPopoverProps = {
 };
 
 export type IngredientDetailsFormProps = {
-    onAddIngredient?: (newIngredient: Ingredient) => void;
-    onEditIngredient?: (ingredient: Ingredient) => void;
+    onSave: (newIngredient: Ingredient) => void;
     existingIngredient?: Ingredient;
     className?: string;
 };

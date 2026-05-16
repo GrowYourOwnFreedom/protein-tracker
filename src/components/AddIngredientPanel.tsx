@@ -1,15 +1,15 @@
 import Panel from "@/components/app/Panel";
-import { AddIngredientPanelProps, IngredientCategory } from "@/types";
+import { AddIngredientPanelProps } from "@/types";
 import IngredientDetailsForm from "@/components/app/IngredientDetailsForms";
 
-function AddIngredient({
-    addIngredient,
+function AddIngredientPanel({
+    onAddIngredient,
     className = "",
 }: AddIngredientPanelProps) {
     return (
         <Panel title="Add Ingredient" className={className}>
-            <IngredientDetailsForm onAddIngredient={addIngredient} />
+            <IngredientDetailsForm onSave={onAddIngredient} />
         </Panel>
     );
 }
-export default AddIngredient;
+export default AddIngredientPanel;

@@ -47,7 +47,7 @@ function EditIngredientPopover({
                 </PopoverHeader>
                 <IngredientDetailsForm
                     existingIngredient={selectedIngredient}
-                    onEditIngredient={handleEditIngredient}
+                    onSave={handleEditIngredient}
                 />
             </PopoverContent>
         </Popover>

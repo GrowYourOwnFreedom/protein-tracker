@@ -29,7 +29,7 @@ import { AddEntryPanelProps, Ingredient } from "@/types";
 import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
 import EditIngredientPopover from "@/components/AddEntryPanel-components/EditIngredientPopover";
 
-function AddEntry({
+function AddEntryPanel({
     ingredients,
     addEntry,
     deleteIngredient,
@@ -92,15 +92,12 @@ function AddEntry({
         const deletedIngredient = ingredients.find((ingredient) => {
             return ingredient.ingredientId === selectedIngredientId;
         });
-        const updatedIngredients = ingredients.filter((ingredient) => {
-            return ingredient.ingredientId !== selectedIngredientId;
-        });
         if (
             confirm(
                 `Are you sure you want to permanently delete the ingredient ${deletedIngredient.name} from your list?`,
             )
         ) {
-            deleteIngredient(updatedIngredients);
+            deleteIngredient(selectedIngredientId);
         }
     }
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
@@ -252,4 +249,4 @@ function AddEntry({
     );
 }
 
-export default AddEntry;
+export default AddEntryPanel;

@@ -1,6 +1,6 @@
-import { Ingredient, OldIngredient } from "@/types";
+import { OldIngredient } from "@/types";
 
-export const baseIngredients: OldIngredient[] = [
+export const defaultIngredients: OldIngredient[] = [
     {
         ingredientId: "1",
         name: "Rolled oats, dry",
