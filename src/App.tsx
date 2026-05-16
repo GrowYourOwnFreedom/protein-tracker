@@ -1,8 +1,8 @@
 import "./App.css";
 import TotalsPanel from "@/components/TotalsPanel";
 import { useState, useEffect } from "react";
-import AddEntry from "@/components/AddEntry";
-import AddIngredient from "@/components/AddIngredient";
+import AddEntryPanel from "@/components/AddEntryPanel";
+import AddIngredientPanel from "@/components/AddIngredientPanel";
 import {
     fetchCalorieLimit,
     fetchEntries,
@@ -141,14 +141,14 @@ function App() {
                     selectedDate={selectedDate}
                 />
                 <div className=" flex flex-col gap-4 h-screen lg:h-auto lg:min-h-0">
-                    <AddEntry
+                    <AddEntryPanel
                         ingredients={ingredients}
                         addEntry={addEntry}
                         deleteIngredient={deleteIngredient}
                         selectedDate={selectedDate}
                         onEditIngredient={handleEditIngredient}
                     />
-                    <AddIngredient addIngredient={addIngredient} />
+                    <AddIngredientPanel addIngredient={addIngredient} />
                 </div>
                 <EntriesPanel
                     className="h-screen lg:h-auto lg:min-h-0"

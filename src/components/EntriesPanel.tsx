@@ -1,5 +1,5 @@
 import Panel from "@/components/app/Panel";
-import EntryCard from "./entriesPanel/EntryCard";
+import EntryCard from "./EntriesPanel-components/EntryCard";
 import { Button } from "@/components/ui/button";
 import { EntriesPanelProps } from "@/types";
 import { Calendar } from "@/components/ui/calendar";
@@ -28,7 +28,7 @@ function EntriesPanel({
     }
 
     function handleDateSelect(dateObject: Date): void {
-        if(!dateObject) return
+        if (!dateObject) return;
         const date = format(dateObject, "yyyy-MM-dd");
         onSelectedDateChange(date);
         setDatePickerOpen(false);

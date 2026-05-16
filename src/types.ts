@@ -24,7 +24,6 @@ export type OldIngredient = {
     dateCreated?: string;
 };
 
-// Later: add id and ingredientId when delete/edit/date grouping needs it.
 export type FoodEntry = {
     name: string;
     weight: number;
@@ -36,30 +35,28 @@ export type FoodEntry = {
     createdAt: string;
 };
 
+export type IngredientCategory = {
+    ingredientCategoryId: string;
+    ingredientCategoryName: string;
+};
+
 export type User = {
     userId: string;
     name: string;
 };
 
-export type FoodEntryCardProps = {
-    entry: FoodEntry;
-    calorieLimit: number;
-    proteinTarget: number;
-    onDeleteEntryClick: (foodEntryId: string) => void;
-    foodEntryId: string;
+export type AddEntryPanelProps = {
+    ingredients: Ingredient[];
+    addEntry: (newEntry: FoodEntry) => void;
+    deleteIngredient: (updatedIngredients: Ingredient[]) => void;
+    className?: string;
+    selectedDate: string;
+    onEditIngredient: (updatedIngredient: Ingredient) => void;
 };
-export type TargetCardProps = {
-    title: string;
-    current: number;
-    target: number;
-    unit: string;
-    type: string;
-};
-export type SummaryCardProps = {
-    currentCaloriesTotal: number;
-    currentProteinTotal: number;
-    proteinTarget: number;
-    calorieLimit: number;
+
+export type AddIngredientPanelProps = {
+    addIngredient: (newIngredient: Ingredient) => void;
+    className?: string;
 };
 
 export type EntriesPanelProps = {
@@ -81,37 +78,44 @@ export type TotalsPanelProps = {
     selectedDate: string;
     className: string;
 };
+
 export type PanelProps = {
     title: string;
     children: ReactNode;
     className: string;
 };
 
-export type AddIngredientProps = {
-    addIngredient: (newIngredient: Ingredient) => void;
-    className?: string;
+export type EditIngredientPopoverProps = {
+    onEditIngredient: (updatedIngredient: Ingredient) => void;
+    selectedIngredient: Ingredient;
+    onClick: () => void;
 };
 
-export type AddEntryProps = {
-    ingredients: Ingredient[];
-    addEntry: (newEntry: FoodEntry) => void;
-    deleteIngredient: (updatedIngredients: Ingredient[]) => void;
-    className?: string;
-    selectedDate: string;
-    onEditIngredient:(updatedIngredient:Ingredient)=>void
-};
-export type IngredientCategory = {
-    ingredientCategoryId: string;
-    ingredientCategoryName: string;
-};
 export type IngredientDetailsFormProps = {
     onAddIngredient?: (newIngredient: Ingredient) => void;
     onEditIngredient?: (ingredient: Ingredient) => void;
     existingIngredient?: Ingredient;
     className?: string;
 };
-export type EditIngredientPopoverProps = {
-    onEditIngredient: (updatedIngredient: Ingredient) => void;
-    selectedIngredient: Ingredient;
-    onClick: () => void;
+
+export type FoodEntryCardProps = {
+    entry: FoodEntry;
+    calorieLimit: number;
+    proteinTarget: number;
+    onDeleteEntryClick: (foodEntryId: string) => void;
+    foodEntryId: string;
+};
+
+export type TargetCardProps = {
+    title: string;
+    current: number;
+    target: number;
+    unit: string;
+    type: string;
+};
+export type SummaryCardProps = {
+    currentCaloriesTotal: number;
+    currentProteinTotal: number;
+    proteinTarget: number;
+    calorieLimit: number;
 };

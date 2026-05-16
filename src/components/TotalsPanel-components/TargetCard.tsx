@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/card";
 import { TargetCardProps } from "@/types";
 
-function TargetCard({ title, current, target, unit, type }:TargetCardProps) {
+function TargetCard({ title, current, target, unit, type }: TargetCardProps) {
     const remaining = target - current;
-    const formattedRemaining = Number(formatNumber(remaining))
+    const formattedRemaining = Number(formatNumber(remaining));
     let statusText = `${remaining} ${unit} remaining`;
     if (remaining < 0) {
         statusText = `${Math.abs(formattedRemaining)} ${unit} over ${type}`;
@@ -22,7 +22,7 @@ function TargetCard({ title, current, target, unit, type }:TargetCardProps) {
     const barPercentage = Math.min(percentage, 100);
     const displayPercentage = Math.round(percentage);
 
-    function getTargetStatus(target:number, currTotal:number):string {
+    function getTargetStatus(target: number, currTotal: number): string {
         if (currTotal < target * 0.8) {
             return "low";
         }
@@ -33,7 +33,7 @@ function TargetCard({ title, current, target, unit, type }:TargetCardProps) {
     }
     const status = getTargetStatus(target, current);
 
-    function targetSuccessStatus(type:string, status:string):string {
+    function targetSuccessStatus(type: string, status: string): string {
         if (type === "goal") {
             if (status === "low") return "fail";
             if (status === "near") return "okay";
@@ -64,8 +64,7 @@ function TargetCard({ title, current, target, unit, type }:TargetCardProps) {
                         <p>{title} consumed:</p>
                     </CardTitle>
                     <p className="ml-auto inline-block text-xl">
-                        {current}{" "}
-                        {unit}
+                        {current} {unit}
                     </p>
                 </div>
                 <CardDescription>

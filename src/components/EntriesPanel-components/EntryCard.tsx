@@ -31,13 +31,15 @@ function EntryCard({
                 </CardTitle>
                 <CardAction>
                     <Button
-                    className="rounded-full"
+                        className="rounded-full"
                         size="icon"
                         variant="destructive"
                         onClick={() => {
-                            onDeleteEntryClick(foodEntryId);                            
+                            onDeleteEntryClick(foodEntryId);
                         }}
-                    >X</Button>
+                    >
+                        X
+                    </Button>
                 </CardAction>
             </CardHeader>
             <CardContent>

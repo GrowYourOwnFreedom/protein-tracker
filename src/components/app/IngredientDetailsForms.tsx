@@ -35,10 +35,18 @@ function IngredientDetailsForm({
     onEditIngredient,
     className,
 }: IngredientDetailsFormProps) {
-    const [addIngredientName, setAddIngredientName] = useState(existingIngredient?.name ?? "");
-    const [addIngredientCalories, setAddIngredientCalories] = useState(String(existingIngredient?.caloriesPer100g ?? ""));
-    const [addIngredientProtein, setAddIngredientProtein] = useState(String(existingIngredient?.proteinPer100g ?? ""));
-    const [ingredientCategoryId, setIngredientCategoryId] = useState(existingIngredient?.ingredientCategoryId ?? "");
+    const [addIngredientName, setAddIngredientName] = useState(
+        existingIngredient?.name ?? "",
+    );
+    const [addIngredientCalories, setAddIngredientCalories] = useState(
+        String(existingIngredient?.caloriesPer100g ?? ""),
+    );
+    const [addIngredientProtein, setAddIngredientProtein] = useState(
+        String(existingIngredient?.proteinPer100g ?? ""),
+    );
+    const [ingredientCategoryId, setIngredientCategoryId] = useState(
+        existingIngredient?.ingredientCategoryId ?? "",
+    );
     const [addIngredientCaloriesError, setAddIngredientCaloriesError] =
         useState("");
     const [addIngredientProteinError, setAddIngredientProteinError] =
@@ -159,7 +167,7 @@ function IngredientDetailsForm({
                         onOpenChange={handleSelectOpenChange}
                     >
                         <SelectTrigger className="bg-muted/40 shadow-inner/10">
-                            <SelectValue placeholder="PLease choose a category..."  />
+                            <SelectValue placeholder="PLease choose a category..." />
                         </SelectTrigger>
                         <SelectContent position="popper">
                             <SelectGroup>

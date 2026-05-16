@@ -25,9 +25,9 @@ import {
 } from "@/components/ui/select";
 import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { AddEntryProps, Ingredient } from "@/types";
+import { AddEntryPanelProps, Ingredient } from "@/types";
 import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
-import EditIngredientPopover from "@/components/addEntry/EditIngredientPopover";
+import EditIngredientPopover from "@/components/AddEntryPanel-components/EditIngredientPopover";
 
 function AddEntry({
     ingredients,
@@ -35,8 +35,8 @@ function AddEntry({
     deleteIngredient,
     selectedDate,
     className = "",
-    onEditIngredient
-}: AddEntryProps) {
+    onEditIngredient,
+}: AddEntryPanelProps) {
     const [selectedIngredientId, setSelectedIngredientId] = useState("");
     const [selectedIngredient, setSelectedingredient] =
         useState<Ingredient>(null);
@@ -121,7 +121,7 @@ function AddEntry({
     function handlePopoverClick() {
         const selectedIngredientToEdit = ingredients.find((ingredient) => {
             return ingredient.ingredientId === selectedIngredientId;
-        });        
+        });
         setSelectedingredient(selectedIngredientToEdit);
     }
     return (
