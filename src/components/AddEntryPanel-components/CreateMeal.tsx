@@ -15,19 +15,19 @@ import { useState } from "react";
 
 function CreateMeal({ onSave, selectedDate }: CreateMealProps) {
     const [mealName, setMealName] = useState<string>("");
-    const [popoverOpen, setPopoverOpen] = useState(false);
-    const [inputError, setInputError] = useState(false);
+    const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
+    const [inputError, setInputError] = useState<string>("");
 
     function handleSave() {
-        if (mealName.length === 0) {
-            setInputError(true);
+        if (mealName.trim() === "") {
+            setInputError("Please enter a meal name");
             return;
         }
-        setInputError(false);
+        setInputError("");
         const mealId = createNewId();
         const date = selectedDate;
         const newMeal = {
-            name: mealName,
+            name: mealName.trim(),
             mealId,
             date,
         };
@@ -35,21 +35,18 @@ function CreateMeal({ onSave, selectedDate }: CreateMealProps) {
         setPopoverOpen(false);
     }
 
-    function handlePopoverClick() {
-        setPopoverOpen(true);
-    }
     return (
         <Popover
             open={popoverOpen}
             onOpenChange={(open) => {
                 if (!open) {
                     setMealName("");
-                    setInputError(false);
+                    setInputError("");
                 }
                 setPopoverOpen(open);
             }}
         >
-            <PopoverTrigger onClick={handlePopoverClick} asChild>
+            <PopoverTrigger asChild>
                 <Button className="rounded-full" variant="outline">
                     Create New Meal
                 </Button>
@@ -58,7 +55,7 @@ function CreateMeal({ onSave, selectedDate }: CreateMealProps) {
                 <PopoverHeader>
                     <PopoverTitle>Create Meal:</PopoverTitle>
                     <PopoverDescription>
-                        a meal can group ingredients to display the subtotals
+                        A meal can group ingredients to display the subtotals
                     </PopoverDescription>
                 </PopoverHeader>
                 <form action={handleSave}>
@@ -67,15 +64,11 @@ function CreateMeal({ onSave, selectedDate }: CreateMealProps) {
                         <Input
                             value={mealName}
                             onChange={({ target: { value } }) => {
-                                if (value.length > 0) {
-                                    setInputError(false);
-                                }
                                 setMealName(value);
+                                setInputError("");
                             }}
                         />
-                        {inputError && (
-                            <FieldError>Please Enter A Meal Name</FieldError>
-                        )}
+                        {inputError && <FieldError>{inputError}</FieldError>}
                     </Field>
                     <Button type="submit" className="rounded-full">
                         Save Meal

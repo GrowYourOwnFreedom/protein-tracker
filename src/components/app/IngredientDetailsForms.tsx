@@ -1,14 +1,9 @@
 import {
     Field,
-    FieldContent,
-    FieldDescription,
     FieldError,
     FieldGroup,
     FieldLabel,
-    FieldLegend,
     FieldSeparator,
-    FieldSet,
-    FieldTitle,
 } from "@/components/ui/field";
 
 import {
@@ -43,19 +38,22 @@ function IngredientDetailsForm({
     const [addIngredientProtein, setAddIngredientProtein] = useState(
         String(existingIngredient?.proteinPer100g ?? ""),
     );
-    const [ingredientCategoryId, setIngredientCategoryId] = useState(
-        existingIngredient?.ingredientCategoryId ?? "",
-    );
+    const [selectedIngredientCategoryId, setSelectedIngredientCategoryId] =
+        useState(existingIngredient?.ingredientCategoryId ?? "");
     const [addIngredientCaloriesError, setAddIngredientCaloriesError] =
         useState("");
     const [addIngredientProteinError, setAddIngredientProteinError] =
         useState("");
-    const inputRef = useRef(null);
+    const [ingredientCategorySelectError, setIngredientCategorySelectError] =
+        useState<string>("");
+    const [ingredientNameError, setIngredientNameError] = useState<string>("");
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const shouldFocusInputRef = useRef(false);
 
     function handleValueChange(value) {
         shouldFocusInputRef.current = true;
-        setIngredientCategoryId(value);
+        setSelectedIngredientCategoryId(value);
+        setIngredientCategorySelectError("");
     }
     function handleSelectOpenChange(open) {
         if (!open && shouldFocusInputRef.current) {
@@ -66,60 +64,71 @@ function IngredientDetailsForm({
         }
     }
 
-    async function handleSaveIngredientClick(addIngredientFormData: FormData) {
+    async function handleSaveIngredientClick() {
         const newIngredientCalories = Number(addIngredientCalories);
         const newIngredientProtein = Number(addIngredientProtein);
 
-        var caloriesError = "";
-        var proteinError = "";
+        let caloriesError = "";
+        let proteinError = "";
+        let categorySelectError = "";
+        let nameError = "";
 
-        if (Number.isNaN(newIngredientCalories)) {
-            caloriesError = "Please enter a valid number";
-            console.log(caloriesError);
-            setAddIngredientCaloriesError(caloriesError);
-        } else if (newIngredientCalories <= 0) {
-            caloriesError = "calories must be a postive number";
-            console.log(caloriesError);
-            setAddIngredientCaloriesError(caloriesError);
+        if (addIngredientName.trim() === "") {
+            nameError = "Please enter a name";
+            setIngredientNameError(nameError);
+        } else {
+            nameError = "";
+            setIngredientNameError("");
         }
 
-        if (Number.isNaN(newIngredientProtein)) {
-            proteinError = "Please enter a valid number";
-            console.log(proteinError);
+        if (!selectedIngredientCategoryId) {
+            categorySelectError = "Please select a category";
+            setIngredientCategorySelectError(categorySelectError);
+        } else {
+            categorySelectError = "";
+            setIngredientCategorySelectError("");
+        }
 
+        if (addIngredientCalories === "") {
+            caloriesError = "Please enter a number";
+            setAddIngredientCaloriesError(caloriesError);
+        } else if (Number.isNaN(newIngredientCalories)) {
+            caloriesError = "Please enter a valid number";
+            setAddIngredientCaloriesError(caloriesError);
+        } else if (newIngredientCalories <= 0) {
+            caloriesError = "Calories must be a postive number";
+            setAddIngredientCaloriesError(caloriesError);
+        } else {
+            caloriesError = "";
+            setAddIngredientCaloriesError("");
+        }
+
+        if (addIngredientProtein === "") {
+            proteinError = "Please enter a number";
+            setAddIngredientProteinError(proteinError);
+        } else if (Number.isNaN(newIngredientProtein)) {
+            proteinError = "Please enter a valid number";
             setAddIngredientProteinError(proteinError);
         } else if (newIngredientProtein < 0) {
             proteinError = "Protein must not be a negative number";
-            console.log(proteinError);
-
             setAddIngredientProteinError(proteinError);
-        }
-
-        if (caloriesError && !proteinError) {
+        } else {
+            proteinError = "";
             setAddIngredientProteinError("");
-            return;
         }
 
-        if (proteinError && !caloriesError) {
-            setAddIngredientCaloriesError("");
+        if (caloriesError || proteinError || categorySelectError || nameError) {
             return;
         }
-
-        if (proteinError && caloriesError) {
-            return;
-        }
-
-        setAddIngredientProteinError("");
-        setAddIngredientCaloriesError("");
-        setIngredientCategoryId("");
 
         const ingredientId = existingIngredient?.ingredientId ?? createNewId();
-        const name = addIngredientName;
+        const name = addIngredientName.trim();
         const caloriesPer100g = newIngredientCalories;
         const proteinPer100g = newIngredientProtein;
         const user = await getCurrentUser();
         const userId = user.userId;
         const dateCreated = existingIngredient?.dateCreated ?? getToday();
+        const ingredientCategoryId = selectedIngredientCategoryId;
 
         const ingredientObj = {
             ingredientId,
@@ -131,10 +140,15 @@ function IngredientDetailsForm({
             ingredientCategoryId,
         };
 
-        onSave(ingredientObj)
+        onSave(ingredientObj);
         setAddIngredientName("");
         setAddIngredientCalories("");
         setAddIngredientProtein("");
+        setAddIngredientProteinError("");
+        setAddIngredientCaloriesError("");
+        setIngredientCategorySelectError("");
+        setIngredientNameError("");
+        setSelectedIngredientCategoryId("");
     }
 
     return (
@@ -147,16 +161,20 @@ function IngredientDetailsForm({
                     <Input
                         id="ingredient-name"
                         name="ingredient-name"
-                        required
                         value={addIngredientName}
-                        onChange={(e) => setAddIngredientName(e.target.value)}
+                        onChange={(e) => {
+                            setAddIngredientName(e.target.value);
+                            setIngredientNameError("");
+                        }}
                     />
+                    {ingredientNameError && (
+                        <FieldError>{ingredientNameError}</FieldError>
+                    )}
                 </Field>
                 <Field>
                     <FieldLabel>Ingredient Category:</FieldLabel>
                     <Select
-                        value={ingredientCategoryId}
-                        required
+                        value={selectedIngredientCategoryId}
                         name="ingredient-category-id"
                         onValueChange={handleValueChange}
                         onOpenChange={handleSelectOpenChange}
@@ -184,6 +202,9 @@ function IngredientDetailsForm({
                             </SelectGroup>
                         </SelectContent>
                     </Select>
+                    {ingredientCategorySelectError && (
+                        <FieldError>{ingredientCategorySelectError}</FieldError>
+                    )}
                 </Field>
                 <div className="grid grid-cols-2 gap-4">
                     <Field>
@@ -194,11 +215,11 @@ function IngredientDetailsForm({
                             ref={inputRef}
                             id="calories-per-100g"
                             name="ingredient-calories"
-                            required
                             value={addIngredientCalories}
-                            onChange={(e) =>
-                                setAddIngredientCalories(e.target.value)
-                            }
+                            onChange={(e) => {
+                                setAddIngredientCalories(e.target.value);
+                                setAddIngredientCaloriesError("");
+                            }}
                         />
                         {addIngredientCaloriesError && (
                             <FieldError>
@@ -213,11 +234,11 @@ function IngredientDetailsForm({
                         <Input
                             id="protein-per-100g"
                             name="ingredient-protein"
-                            required
                             value={addIngredientProtein}
-                            onChange={(e) =>
-                                setAddIngredientProtein(e.target.value)
-                            }
+                            onChange={(e) => {
+                                setAddIngredientProtein(e.target.value);
+                                setAddIngredientProteinError("");
+                            }}
                         />
                         {addIngredientProteinError && (
                             <FieldError>{addIngredientProteinError}</FieldError>

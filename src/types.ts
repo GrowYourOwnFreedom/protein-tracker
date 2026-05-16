@@ -22,11 +22,12 @@ export type Ingredient = {
 };
 
 export type OldIngredient = {
-    ingredientId?: string;
-    id?: string;
     name: string;
     caloriesPer100g: number;
     proteinPer100g: number;
+
+    ingredientId?: string;
+    id?: string;
     userId?: string;
     createdAt?: string;
     ingredientCategory?: string;
@@ -43,8 +44,10 @@ export type FoodEntry = {
     userId: string;
     date: string;
     createdAt: string;
+    ingredientId: string;
+
     mealId?: string;
-    ingredientId?: string;
+    mealName?;
 };
 export type Meal = {
     name: string;
@@ -56,15 +59,17 @@ export type AddEntryPanelProps = {
     ingredients: Ingredient[];
     addEntry: (newEntry: FoodEntry) => void;
     deleteIngredient: (ingredientId: string) => void;
-    className?: string;
     selectedDate: string;
     onEditIngredient: (updatedIngredient: Ingredient) => void;
     onCreateMealClick: (newMeal: Meal) => void;
     meals: Meal[];
+
+    className?: string;
 };
 
 export type AddIngredientPanelProps = {
     onAddIngredient: (newIngredient: Ingredient) => void;
+
     className?: string;
 };
 
@@ -97,11 +102,11 @@ export type PanelProps = {
 export type EditIngredientPopoverProps = {
     onEditIngredient: (updatedIngredient: Ingredient) => void;
     selectedIngredient: Ingredient;
-    onClick: () => void;
 };
 
 export type IngredientDetailsFormProps = {
     onSave: (newIngredient: Ingredient) => void;
+
     existingIngredient?: Ingredient;
     className?: string;
 };
@@ -109,6 +114,13 @@ export type IngredientDetailsFormProps = {
 export type CreateMealProps = {
     onSave: (newMeal: Meal) => void;
     selectedDate: string;
+};
+export type IngredientSelectFieldProps = {
+    ingredients: Ingredient[];
+    selectedIngredientId: string;
+    onChange: (value: string) => void;
+    onOpenChange: (open: boolean) => void;
+    ingredientSelectError: string;
 };
 
 export type FoodEntryCardProps = {

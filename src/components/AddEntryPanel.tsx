@@ -1,8 +1,5 @@
 import { useRef, useState } from "react";
-import {
-    getProteinEfficiency,
-    sortIngredientsByProteinEfficiency,
-} from "@/lib/proteinEfficiencyHelpers";
+import { sortIngredientsByProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,25 +7,16 @@ import {
     FieldError,
     FieldGroup,
     FieldLabel,
-    FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectSeparator,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+
 import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { AddEntryPanelProps, Ingredient } from "@/types";
-import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
+import { AddEntryPanelProps, FoodEntry } from "@/types";
 import EditIngredientPopover from "@/components/AddEntryPanel-components/EditIngredientPopover";
 import CreateMeal from "@/components/AddEntryPanel-components/CreateMeal";
+import IngredientSelectField from "@/components/AddEntryPanel-components/IngredientSelectField";
+import MealSelectField from "@/components/AddEntryPanel-components/MealSelectField";
 
 function AddEntryPanel({
     ingredients,
@@ -42,31 +30,49 @@ function AddEntryPanel({
 }: AddEntryPanelProps) {
     const [selectedIngredientId, setSelectedIngredientId] =
         useState<string>("");
-    const [selectedIngredient, setSelectedingredient] =
-        useState<Ingredient>(null);
     const [ingredientWeight, setIngredientWeight] = useState<string>("");
     const [weightInputError, setWeightInputError] = useState<string>("");
-    const inputRef = useRef(null);
+    const [ingredientSelectError, setIngredientSelectError] =
+        useState<string>("");
+    const inputRef = useRef<HTMLInputElement | null>(null);
     const [selectedMealId, setSelectedMealId] = useState<string>("");
 
-    async function handleSaveEntryClick(saveEntryFormData) {
-        const ingredientID = selectedIngredientId;
+    async function handleSaveEntryClick() {
         const ingredient = ingredients.find((ingredient) => {
-            return ingredient.ingredientId === ingredientID;
+            return ingredient.ingredientId === selectedIngredientId;
         });
-        const weight = Number(saveEntryFormData.get("weight"));
+        const weight = Number(ingredientWeight);
+        let inputError = false;
+        let selectError = false;
 
-        if (saveEntryFormData.get("weight") === "") {
+        if (ingredientWeight === "") {
+            inputError = true;
             setWeightInputError("Please enter a weight");
-            return;
-        } else if (weight <= 0) {
-            setWeightInputError("Weight must be above 0g");
-            return;
         } else if (Number.isNaN(weight)) {
+            inputError = true;
             setWeightInputError("Please enter a valid number");
-            return;
+        } else if (weight <= 0) {
+            inputError = true;
+            setWeightInputError("Weight must be above 0g");
         } else {
+            inputError = false;
             setWeightInputError("");
+        }
+
+        if (!selectedIngredientId) {
+            selectError = true;
+            setIngredientSelectError("Please select an ingredient");
+        } else {
+            selectError = false;
+            setIngredientSelectError("");
+        }
+
+        if (inputError || selectError) {
+            return;
+        }
+        if (!ingredient) {
+            setIngredientSelectError("Please select a valid ingredient");
+            return;
         }
 
         const protein = (weight / 100) * ingredient.proteinPer100g;
@@ -78,8 +84,7 @@ function AddEntryPanel({
         const userId = user.userId;
         const name = ingredient.name;
         const ingredientId = ingredient.ingredientId;
-        const mealId = selectedMealId
-        const newEntry = {
+        const newEntry: FoodEntry = {
             name,
             weight,
             calories,
@@ -89,32 +94,49 @@ function AddEntryPanel({
             foodEntryId,
             userId,
             ingredientId,
-            mealId
         };
+        if (selectedMealId) {
+            const selectedMeal = meals.find((meal) => {
+                return meal.mealId === selectedMealId;
+            });
+            if (selectedMeal) {
+                newEntry.mealId = selectedMealId;
+                newEntry.mealName = selectedMeal.name;
+            }
+        }
+
         addEntry(newEntry);
         setIngredientWeight("");
+        setWeightInputError("");
+        setIngredientSelectError("");
     }
 
     function handleDeleteIngredientClick() {
         const deletedIngredient = ingredients.find((ingredient) => {
             return ingredient.ingredientId === selectedIngredientId;
         });
+        if (!deletedIngredient) {
+            setIngredientSelectError("Please select a valid ingredient");
+            return;
+        }
         if (
             confirm(
                 `Are you sure you want to permanently delete the ingredient ${deletedIngredient.name} from your list?`,
             )
         ) {
             deleteIngredient(selectedIngredientId);
+            setSelectedIngredientId("")
         }
     }
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
     const shouldFocusInputRef = useRef(false);
 
-    function handleValueChange(value) {
+    function handleIngredientSelectValueChange(value) {
         shouldFocusInputRef.current = true;
         setSelectedIngredientId(value);
+        setIngredientSelectError("");
     }
-    function handleSelectOpenChange(open) {
+    function handleIngredientSelectOpenChange(open) {
         if (!open && shouldFocusInputRef.current) {
             shouldFocusInputRef.current = false;
             setTimeout(() => {
@@ -122,96 +144,22 @@ function AddEntryPanel({
             }, 0);
         }
     }
-    function handlePopoverClick() {
-        const selectedIngredientToEdit = ingredients.find((ingredient) => {
-            return ingredient.ingredientId === selectedIngredientId;
-        });
-        setSelectedingredient(selectedIngredientToEdit);
-    }
+
+    const selectedIngredientToEdit = ingredients.find((ingredient) => {
+        return ingredient.ingredientId === selectedIngredientId;
+    });
+
     return (
         <Panel title="Add Entry" className={className}>
             <form action={handleSaveEntryClick}>
                 <FieldGroup>
-                    <Field>
-                        <FieldLabel>Select An Ingredient:</FieldLabel>
-                        <Select
-                            name="ingredientId"
-                            required
-                            value={selectedIngredientId}
-                            onValueChange={handleValueChange}
-                            onOpenChange={handleSelectOpenChange}
-                        >
-                            <SelectTrigger className="bg-muted/40 shadow-inner/10">
-                                <SelectValue placeholder="PLease choose an ingredient..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {defaultIngredientCategories.map(
-                                    (category, index) => {
-                                        return (
-                                            <div
-                                                key={
-                                                    category.ingredientCategoryId
-                                                }
-                                            >
-                                                <SelectGroup>
-                                                    <SelectLabel>
-                                                        {
-                                                            category.ingredientCategoryName
-                                                        }
-                                                    </SelectLabel>
-                                                    {sortedIngredients
-                                                        .filter(
-                                                            (ingredient) => {
-                                                                return (
-                                                                    ingredient.ingredientCategoryId ===
-                                                                    category.ingredientCategoryId
-                                                                );
-                                                            },
-                                                        )
-                                                        .map(
-                                                            ({
-                                                                name,
-                                                                caloriesPer100g,
-                                                                proteinPer100g,
-                                                                ingredientId,
-                                                            }) => {
-                                                                const proteinEfficiency =
-                                                                    getProteinEfficiency(
-                                                                        caloriesPer100g,
-                                                                        proteinPer100g,
-                                                                    ).toFixed(
-                                                                        2,
-                                                                    );
-                                                                const ingredientDisplayString = `${name} ${proteinEfficiency}g protein/100kcal`;
-                                                                return (
-                                                                    <SelectItem
-                                                                        key={
-                                                                            ingredientId
-                                                                        }
-                                                                        value={
-                                                                            ingredientId
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            ingredientDisplayString
-                                                                        }
-                                                                    </SelectItem>
-                                                                );
-                                                            },
-                                                        )}
-                                                </SelectGroup>
-                                                {index !==
-                                                    defaultIngredientCategories.length -
-                                                        1 && (
-                                                    <SelectSeparator />
-                                                )}
-                                            </div>
-                                        );
-                                    },
-                                )}
-                            </SelectContent>
-                        </Select>
-                    </Field>
+                    <IngredientSelectField
+                        ingredients={sortedIngredients}
+                        onChange={handleIngredientSelectValueChange}
+                        onOpenChange={handleIngredientSelectOpenChange}
+                        selectedIngredientId={selectedIngredientId}
+                        ingredientSelectError={ingredientSelectError}
+                    />
                     <Field>
                         <FieldLabel htmlFor="ingredient-weight-input">
                             Enter The Weight (g):
@@ -221,39 +169,21 @@ function AddEntryPanel({
                             ref={inputRef}
                             name="weight"
                             value={ingredientWeight}
-                            onChange={(e) =>
-                                setIngredientWeight(e.target.value)
-                            }
+                            onChange={(e) => {
+                                setIngredientWeight(e.target.value);
+                                setWeightInputError("");
+                            }}
                         />
 
                         {weightInputError && (
                             <FieldError>{weightInputError}</FieldError>
                         )}
                     </Field>
-                    <Field>
-                        <FieldLabel>Select Meal:</FieldLabel>
-                        <Select
-                            name="select-meal-id"
-                            value={selectedMealId}
-                            onValueChange={setSelectedMealId}
-                        >
-                            <SelectTrigger className="bg-muted/40 shadow-inner/10">
-                                <SelectValue  placeholder="choose a meal"/>
-                            </SelectTrigger>
-                            <SelectContent>
-                                {meals && meals.map((meal) => {
-                                    return (
-                                        <SelectItem
-                                            value={meal.mealId}
-                                            key={meal.mealId}
-                                        >
-                                            {meal.name}
-                                        </SelectItem>
-                                    );
-                                })}
-                            </SelectContent>
-                        </Select>
-                    </Field>
+                    <MealSelectField
+                        onChange={setSelectedMealId}
+                        selectedMealId={selectedMealId}
+                        meals={meals}
+                    />
                     <div className="grid grid-cols-2 gap-4 ">
                         <Button type="submit" className="rounded-full">
                             {" "}
@@ -264,6 +194,7 @@ function AddEntryPanel({
                             onSave={onCreateMealClick}
                         />
                         <Button
+                            disabled={!selectedIngredientId}
                             className="w-fit mx-auto rounded-full"
                             type="button"
                             variant="destructive"
@@ -272,8 +203,7 @@ function AddEntryPanel({
                             Delete Ingredient
                         </Button>
                         <EditIngredientPopover
-                            onClick={handlePopoverClick}
-                            selectedIngredient={selectedIngredient}
+                            selectedIngredient={selectedIngredientToEdit}
                             onEditIngredient={onEditIngredient}
                         />
                     </div>

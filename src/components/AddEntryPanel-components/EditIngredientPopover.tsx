@@ -13,7 +13,6 @@ import { useState } from "react";
 
 function EditIngredientPopover({
     selectedIngredient,
-    onClick,
     onEditIngredient,
 }: EditIngredientPopoverProps) {
     const [popoverOpen, setPopoverOpen] = useState(false);
@@ -23,15 +22,11 @@ function EditIngredientPopover({
         setPopoverOpen(false);
     }
 
-    function handlePopoverClick() {
-        onClick();
-        setPopoverOpen(true);
-    }
-
     return (
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-            <PopoverTrigger onClick={handlePopoverClick} asChild>
+            <PopoverTrigger asChild>
                 <Button
+                    disabled={!selectedIngredient}
                     className="w-fit mx-auto rounded-full"
                     variant="outline"
                 >
@@ -42,13 +37,15 @@ function EditIngredientPopover({
                 <PopoverHeader>
                     <PopoverTitle>Edit Ingredient</PopoverTitle>
                     <PopoverDescription>
-                        Description text here.
+                        Update details for this ingredient.
                     </PopoverDescription>
                 </PopoverHeader>
-                <IngredientDetailsForm
-                    existingIngredient={selectedIngredient}
-                    onSave={handleEditIngredient}
-                />
+                {selectedIngredient && (
+                    <IngredientDetailsForm
+                        existingIngredient={selectedIngredient}
+                        onSave={handleEditIngredient}
+                    />
+                )}
             </PopoverContent>
         </Popover>
     );
