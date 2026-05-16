@@ -16,8 +16,10 @@ import {
     saveIngredient,
     deleteIngredient,
     editIngredient,
+    saveMeal,
+    fetchMeals,
 } from "@/lib/storageCrudHelpers";
-import { FoodEntry, Ingredient } from "@/types";
+import { FoodEntry, Ingredient, Meal } from "@/types";
 import EntriesPanel from "@/components/EntriesPanel";
 import { getToday } from "@/lib/getToday";
 
@@ -26,7 +28,7 @@ function App() {
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>(getToday);
     const [calorieLimit, setCalorieLimit] = useState<number>(fetchCalorieLimit);
-    const [meals, setMeals] = useState();
+    const [meals, setMeals] = useState<Meal[]>();
     const [proteinTarget, setProteinTarget] =
         useState<number>(fetchProteinTarget);
 
@@ -50,12 +52,14 @@ function App() {
     }, []);
 
     useEffect(() => {
-        function loadEntries() {
-            const entriesToDisplay = fetchEntries(selectedDate);
-            setEntries(entriesToDisplay);
-        }
-        loadEntries();
+        const entriesToDisplay = fetchEntries(selectedDate);
+        setEntries(entriesToDisplay);
     }, [selectedDate]);
+
+    useEffect(() => {
+        const mealsToDisplay = fetchMeals(selectedDate)
+        setMeals(mealsToDisplay);        
+    },[selectedDate]);
 
     useEffect(() => {
         updateCaloreLimit(calorieLimit);
@@ -81,7 +85,7 @@ function App() {
             updatedIngredient,
         ];
         setIngredients(updatedIngredients);
-        editIngredient(updatedIngredient)
+        editIngredient(updatedIngredient);
     }
 
     function handleDeleteIngredient(ingredientId: string): void {
@@ -89,10 +93,12 @@ function App() {
             return ingredient.ingredientId !== ingredientId;
         });
         setIngredients(updatedIngredients);
-        deleteIngredient(ingredientId)
+        deleteIngredient(ingredientId);
     }
 
     function addEntry(newEntry: FoodEntry): void {
+        console.log(newEntry);
+        
         const newEntries = [newEntry, ...entries];
         setEntries(newEntries);
         saveEntry(newEntry);
@@ -115,6 +121,12 @@ function App() {
 
     function handleSelectedDateChange(date: string): void {
         setSelectedDate(date);
+    }
+
+    function handleCreateMealClick(newMeal: Meal): void {
+        const updatedMeals = [...meals, newMeal]
+        setMeals(updatedMeals)
+        saveMeal(newMeal);
     }
 
     return (
@@ -141,6 +153,9 @@ function App() {
                         deleteIngredient={handleDeleteIngredient}
                         selectedDate={selectedDate}
                         onEditIngredient={handleEditIngredient}
+                        onCreateMealClick={handleCreateMealClick}
+                        meals={meals}
+
                     />
                     <AddIngredientPanel onAddIngredient={handleAddIngredient} />
                 </div>

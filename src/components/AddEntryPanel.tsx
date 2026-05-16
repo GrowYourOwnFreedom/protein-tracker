@@ -28,6 +28,7 @@ import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { AddEntryPanelProps, Ingredient } from "@/types";
 import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
 import EditIngredientPopover from "@/components/AddEntryPanel-components/EditIngredientPopover";
+import CreateMeal from "@/components/AddEntryPanel-components/CreateMeal";
 
 function AddEntryPanel({
     ingredients,
@@ -36,13 +37,17 @@ function AddEntryPanel({
     selectedDate,
     className = "",
     onEditIngredient,
+    onCreateMealClick,
+    meals,
 }: AddEntryPanelProps) {
-    const [selectedIngredientId, setSelectedIngredientId] = useState("");
+    const [selectedIngredientId, setSelectedIngredientId] =
+        useState<string>("");
     const [selectedIngredient, setSelectedingredient] =
         useState<Ingredient>(null);
-    const [ingredientWeight, setIngredientWeight] = useState("");
-    const [weightInputError, setWeightInputError] = useState("");
+    const [ingredientWeight, setIngredientWeight] = useState<string>("");
+    const [weightInputError, setWeightInputError] = useState<string>("");
     const inputRef = useRef(null);
+    const [selectedMealId, setSelectedMealId] = useState<string>("");
 
     async function handleSaveEntryClick(saveEntryFormData) {
         const ingredientID = selectedIngredientId;
@@ -73,6 +78,7 @@ function AddEntryPanel({
         const userId = user.userId;
         const name = ingredient.name;
         const ingredientId = ingredient.ingredientId;
+        const mealId = selectedMealId
         const newEntry = {
             name,
             weight,
@@ -83,6 +89,7 @@ function AddEntryPanel({
             foodEntryId,
             userId,
             ingredientId,
+            mealId
         };
         addEntry(newEntry);
         setIngredientWeight("");
@@ -223,12 +230,39 @@ function AddEntryPanel({
                             <FieldError>{weightInputError}</FieldError>
                         )}
                     </Field>
-                    <FieldSeparator />
-                    <Button type="submit" className="rounded-full">
-                        {" "}
-                        Save Entry
-                    </Button>
+                    <Field>
+                        <FieldLabel>Select Meal:</FieldLabel>
+                        <Select
+                            name="select-meal-id"
+                            value={selectedMealId}
+                            onValueChange={setSelectedMealId}
+                        >
+                            <SelectTrigger className="bg-muted/40 shadow-inner/10">
+                                <SelectValue  placeholder="choose a meal"/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                {meals && meals.map((meal) => {
+                                    return (
+                                        <SelectItem
+                                            value={meal.mealId}
+                                            key={meal.mealId}
+                                        >
+                                            {meal.name}
+                                        </SelectItem>
+                                    );
+                                })}
+                            </SelectContent>
+                        </Select>
+                    </Field>
                     <div className="grid grid-cols-2 gap-4 ">
+                        <Button type="submit" className="rounded-full">
+                            {" "}
+                            Save Entry
+                        </Button>
+                        <CreateMeal
+                            selectedDate={selectedDate}
+                            onSave={onCreateMealClick}
+                        />
                         <Button
                             className="w-fit mx-auto rounded-full"
                             type="button"

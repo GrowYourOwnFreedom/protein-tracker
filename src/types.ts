@@ -44,14 +44,13 @@ export type FoodEntry = {
     date: string;
     createdAt: string;
     mealId?: string;
-    ingredientId?: string ;
+    ingredientId?: string;
 };
-
-
-
-
-
-
+export type Meal = {
+    name: string;
+    mealId: string;
+    date: string;
+};
 
 export type AddEntryPanelProps = {
     ingredients: Ingredient[];
@@ -60,6 +59,8 @@ export type AddEntryPanelProps = {
     className?: string;
     selectedDate: string;
     onEditIngredient: (updatedIngredient: Ingredient) => void;
+    onCreateMealClick: (newMeal: Meal) => void;
+    meals: Meal[];
 };
 
 export type AddIngredientPanelProps = {
@@ -103,6 +104,11 @@ export type IngredientDetailsFormProps = {
     onSave: (newIngredient: Ingredient) => void;
     existingIngredient?: Ingredient;
     className?: string;
+};
+
+export type CreateMealProps = {
+    onSave: (newMeal: Meal) => void;
+    selectedDate: string;
 };
 
 export type FoodEntryCardProps = {

@@ -1,6 +1,6 @@
 import { dummyUser } from "@/data/dummyUser";
 import { getToday } from "@/lib/getToday";
-import { FoodEntry, Ingredient, OldIngredient, User } from "@/types";
+import { FoodEntry, Ingredient, Meal, OldIngredient, User } from "@/types";
 import { defaultIngredients } from "@/data/defaultIngredients";
 // Ingredient data functions
 
@@ -187,6 +187,31 @@ async function fetchDummyUser(): Promise<User> {
     return dummyUser;
 }
 
+function saveLocalMeal(newMeal: Meal): void {
+    const existingMealsJSON = localStorage.getItem(
+        "proteinTrackerMeals",
+    );
+    let existingMeals: Meal[] = [];
+    if (existingMealsJSON) {
+        existingMeals = JSON.parse(existingMealsJSON);
+    } else {
+        existingMeals = [];
+    }
+    existingMeals.push(newMeal);
+    const updatedMealsString = JSON.stringify(existingMeals);
+    localStorage.setItem("proteinTrackerMeals", updatedMealsString);
+}
+
+function fetchLocalMeals(selectedDate: string): Meal[] {
+    const savedMealsJSON = localStorage.getItem("proteinTrackerMeals");
+    if (savedMealsJSON === null) return [];
+    const savedMeals = JSON.parse(savedMealsJSON);
+    const selectedMeals = savedMeals.filter(
+        (meal: Meal): boolean => meal.date === selectedDate,
+    );
+    return selectedMeals;
+}
+
 export {
     fetchLocalEntries as fetchEntries,
     saveLocalEntry as saveEntry,
@@ -202,4 +227,6 @@ export {
     fetchLocalProteinTarget as fetchProteinTarget,
     fetchDummyUser as getCurrentUser,
     normaliseIngredients,
+    saveLocalMeal as saveMeal,
+    fetchLocalMeals as fetchMeals
 };
