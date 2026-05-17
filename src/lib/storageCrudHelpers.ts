@@ -25,7 +25,7 @@ function fetchLocalIngredients(userId: string): Ingredient[] {
     if (!savedIngredientsJSON) return setDefaultIngredients();
     const savedIngredients = JSON.parse(savedIngredientsJSON);
     if (!Array.isArray(savedIngredients) || savedIngredients.length === 0)
-        setDefaultIngredients();
+       return setDefaultIngredients();
     const normalisedSavedIngredients = normaliseIngredients(
         savedIngredients,
         userId,
@@ -61,7 +61,7 @@ function normaliseIngredients(
     return cleanIngredients;
 }
 
-function updateLocalIngredients(ingredients: Ingredient[]): void {
+function replaceLocalIngredients(ingredients: Ingredient[]): void {
     const proteinTrackerIngredients = JSON.stringify(ingredients);
     localStorage.setItem(
         "proteinTrackerIngredients",
@@ -69,7 +69,7 @@ function updateLocalIngredients(ingredients: Ingredient[]): void {
     );
 }
 
-function saveLocalIngredient(newIngredient: Ingredient): void {
+function createLocalIngredient(newIngredient: Ingredient): void {
     const existingIngredientJSON = localStorage.getItem(
         "proteinTrackerIngredients",
     );
@@ -101,7 +101,7 @@ function deleteLocalIngredient(ingredientId: string): void {
     localStorage.setItem("proteinTrackerIngredients", filteredIngredientsString);
 }
 
-function editLocalIngredient(updatedIngredient:Ingredient) {
+function updateLocalIngredient(updatedIngredient:Ingredient) {
     const existingIngredientJSON = localStorage.getItem("proteinTrackerIngredients");
     let existingIngredients: Ingredient[] = [];
 
@@ -110,10 +110,12 @@ function editLocalIngredient(updatedIngredient:Ingredient) {
     } else {
         return;
     }
-    const filteredIngredients = existingIngredients.filter((ingredient) => {
-        return ingredient.ingredientId !== updatedIngredient.ingredientId;
+    const updatedIngredients = existingIngredients.map((ingredient) => {
+        if( ingredient.ingredientId === updatedIngredient.ingredientId){
+            return updatedIngredient
+        }
+        return ingredient
     });
-     const updatedIngredients = [...filteredIngredients, updatedIngredient]
      const updatedIngredientsString = JSON.stringify(updatedIngredients);
     localStorage.setItem("proteinTrackerIngredients", updatedIngredientsString);
 
@@ -123,7 +125,7 @@ function editLocalIngredient(updatedIngredient:Ingredient) {
 
 // FoodEntry data functions
 
-function fetchLocalEntries(selectedDate: string): FoodEntry[] {
+function fetchLocalFoodEntries(selectedDate: string): FoodEntry[] {
     const savedEntriesJSON = localStorage.getItem("proteinTrackerEntries");
     if (savedEntriesJSON === null) return [];
     const savedEntries = JSON.parse(savedEntriesJSON);
@@ -133,7 +135,7 @@ function fetchLocalEntries(selectedDate: string): FoodEntry[] {
     return selectedEntries;
 }
 
-function saveLocalEntry(newEntry: FoodEntry): void {
+function createLocalFoodEntry(newEntry: FoodEntry): void {
     const existingEntriesJSON = localStorage.getItem("proteinTrackerEntries");
     let existingEntries: FoodEntry[] = [];
     if (existingEntriesJSON) {
@@ -146,7 +148,7 @@ function saveLocalEntry(newEntry: FoodEntry): void {
     localStorage.setItem("proteinTrackerEntries", updatedEntriesString);
 }
 
-function deleteLocalEntry(entryId: string): void {
+function deleteLocalFoodEntry(entryId: string): void {
     const existingEntriesJSON = localStorage.getItem("proteinTrackerEntries");
     let existingEntries: FoodEntry[] = [];
 
@@ -187,7 +189,7 @@ async function fetchDummyUser(): Promise<User> {
     return dummyUser;
 }
 
-function saveLocalMeal(newMeal: Meal): void {
+function createLocalMeal(newMeal: Meal): void {
     const existingMealsJSON = localStorage.getItem(
         "proteinTrackerMeals",
     );
@@ -213,20 +215,22 @@ function fetchLocalMeals(selectedDate: string): Meal[] {
 }
 
 export {
-    fetchLocalEntries as fetchEntries,
-    saveLocalEntry as saveEntry,
-    deleteLocalEntry as removeEntry,
-    fetchLocalIngredients as fetchIngredients,
-    saveLocalIngredient as saveIngredient,
-    deleteLocalIngredient as deleteIngredient,
-    editLocalIngredient as editIngredient,
-    updateLocalIngredients as updateIngredients,
-    fetchLocalCalorieLimit as fetchCalorieLimit,
-    updateLocalCalorieLimit as updateCaloreLimit,
-    updateLocalProteinTarget as updateProteinTarget,
-    fetchLocalProteinTarget as fetchProteinTarget,
+    fetchLocalFoodEntries as fetchStoredFoodEntries,
+    createLocalFoodEntry as createStoredFoodEntry,
+    deleteLocalFoodEntry as deleteStoredFoodEntry,
+
+    createLocalIngredient as createStoredIngredient,
+    fetchLocalIngredients as fetchStoredIngredients,
+    updateLocalIngredient as updateStoredIngredient,
+    deleteLocalIngredient as deleteStoredIngredient,
+    replaceLocalIngredients as replaceStoredIngredients,
+
+    fetchLocalCalorieLimit as fetchStoredCalorieLimit,
+    updateLocalCalorieLimit as updateStoredCalorieLimit,
+    fetchLocalProteinTarget as fetchStoredProteinTarget,
+    updateLocalProteinTarget as updateStoredProteinTarget,
     fetchDummyUser as getCurrentUser,
     normaliseIngredients,
-    saveLocalMeal as saveMeal,
-    fetchLocalMeals as fetchMeals
+    createLocalMeal as createStoredMeal,
+    fetchLocalMeals as fetchStoredMeals
 };
