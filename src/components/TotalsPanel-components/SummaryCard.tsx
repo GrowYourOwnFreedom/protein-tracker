@@ -56,7 +56,7 @@ function SummaryCard({
                         <h3>Efficiency Target:</h3>
                     </CardTitle>
                     <p className="ml-auto inline-block text-lg">
-                        {proteinEfficiencyTarget} g/100kcal
+                        {proteinEfficiencyTarget.toFixed(1)} g/100kcal
                     </p>
                 </div>
                 <CardDescription>
