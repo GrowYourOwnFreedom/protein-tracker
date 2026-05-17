@@ -51,8 +51,8 @@ export type Meal = {
     name: string;
     mealId: string;
     date: string;
-    createdAt:string;
-    userId:string;
+    createdAt: string;
+    userId: string;
 };
 
 export type AddEntryPanelProps = {
@@ -80,7 +80,7 @@ export type EntriesPanelProps = {
     selectedDate: string;
     calorieLimit: number;
     proteinTarget: number;
-    meals:Meal[];
+    meals: Meal[];
 
     className?: string;
 };
@@ -139,6 +139,7 @@ export type FoodEntryCardProps = {
     proteinTarget: number;
     onDeleteEntry: (foodEntryId: string) => void;
     className?: string;
+    size?: "default" | "sm"
 };
 
 export type TargetCardProps = {
@@ -160,18 +161,19 @@ export type SummaryCardProps = {
 };
 
 export type MealCardProps = {
-    meal:Meal
-    entries:FoodEntry[]
-    calories:number
-    protein:number
-    calorieLimit:number
-    proteinTarget:number
+    meal: Meal;
+    entries: FoodEntry[];
+    calories: number;
+    protein: number;
+    calorieLimit: number;
+    proteinTarget: number;
     onDeleteEntry: (foodEntryId: string) => void;
-}
+    weight: number;
+};
 export type MealSelectFieldProps = {
     meals: Meal[];
     selectedMealId: string;
     onChange: (mealId: string) => void;
 
-    className?:string
+    className?: string;
 };

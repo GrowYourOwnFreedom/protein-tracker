@@ -14,7 +14,8 @@ function EntryCard({
     calorieLimit,
     proteinTarget,
     onDeleteEntry: deleteEntry,
-    className
+    className,
+    size
 }: FoodEntryCardProps) {
     const { weight, calories, protein, name, foodEntryId } = entry;
     const percentOfCalorieLimit =
@@ -22,7 +23,7 @@ function EntryCard({
     const percentOfProteinTarget =
         proteinTarget > 0 ? (protein / proteinTarget) * 100 : 0;
     return (
-        <Card className={cn("w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0",className)}>
+        <Card size={size} className={cn("w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0",className)}>
             <CardHeader>
                 <CardTitle>
                     <div className="flex gap-3">

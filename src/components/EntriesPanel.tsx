@@ -50,6 +50,7 @@ function EntriesPanel({
         entries: FoodEntry[];
         calories: number;
         protein: number;
+        weight:number;
     };
 
     type DisplayItem = EntryDisplayItem | MealDisplayItem;
@@ -67,12 +68,16 @@ function EntriesPanel({
             const calories = entriesForMeal.reduce((total, entry) => {
                 return total + entry.calories;
             }, 0);
+            const weight = entriesForMeal.reduce((total, entry) => {
+                return total + entry.weight;
+            }, 0);
             return {
                 type: "meal",
                 createdAt: meal.createdAt,
                 meal,
                 protein,
                 calories,
+                weight,
                 entries: entriesForMeal,
             };
         })
@@ -139,6 +144,7 @@ function EntriesPanel({
                             calories,
                             protein,
                             meal,
+                            weight
                         } = item;
                         return (
                             <MealCard
@@ -150,6 +156,7 @@ function EntriesPanel({
                                 calorieLimit={calorieLimit}
                                 proteinTarget={proteinTarget}
                                 onDeleteEntry={deleteEntry}
+                                weight={weight}
                             />
                         );
                     }
