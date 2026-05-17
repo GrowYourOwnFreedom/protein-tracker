@@ -20,12 +20,12 @@ import MealSelectField from "@/components/AddEntryPanel-components/MealSelectFie
 
 function AddEntryPanel({
     ingredients,
-    addEntry,
-    deleteIngredient,
+    onAddEntry,
+    onDeleteIngredient,
     selectedDate,
     className = "",
     onEditIngredient,
-    onCreateMealClick,
+    onCreateMeal:createMeal,
     meals,
 }: AddEntryPanelProps) {
     const [selectedIngredientId, setSelectedIngredientId] =
@@ -37,7 +37,10 @@ function AddEntryPanel({
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [selectedMealId, setSelectedMealId] = useState<string>("");
 
-    async function handleSaveEntryClick() {
+    async function handleCreateEntrySubmit(
+        event: React.SubmitEvent<HTMLFormElement>,
+    ): Promise<void> {
+        event.preventDefault();
         const ingredient = ingredients.find((ingredient) => {
             return ingredient.ingredientId === selectedIngredientId;
         });
@@ -101,15 +104,14 @@ function AddEntryPanel({
             });
             if (selectedMeal) {
                 newEntry.mealId = selectedMealId;
-                newEntry.mealName = selectedMeal.name;
             }
         }
 
-        addEntry(newEntry);
+        onAddEntry(newEntry);
         setIngredientWeight("");
         setWeightInputError("");
         setIngredientSelectError("");
-        setSelectedMealId("")
+        setSelectedMealId("");
     }
 
     function handleDeleteIngredientClick() {
@@ -125,19 +127,19 @@ function AddEntryPanel({
                 `Are you sure you want to permanently delete the ingredient ${deletedIngredient.name} from your list?`,
             )
         ) {
-            deleteIngredient(selectedIngredientId);
-            setSelectedIngredientId("")
+            onDeleteIngredient(selectedIngredientId);
+            setSelectedIngredientId("");
         }
     }
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
     const shouldFocusInputRef = useRef(false);
 
-    function handleIngredientSelectValueChange(value) {
+    function handleIngredientSelectValueChange(value: string): void {
         shouldFocusInputRef.current = true;
         setSelectedIngredientId(value);
         setIngredientSelectError("");
     }
-    function handleIngredientSelectOpenChange(open) {
+    function handleIngredientSelectOpenChange(open: boolean): void {
         if (!open && shouldFocusInputRef.current) {
             shouldFocusInputRef.current = false;
             setTimeout(() => {
@@ -150,13 +152,12 @@ function AddEntryPanel({
         return ingredient.ingredientId === selectedIngredientId;
     });
 
-    function handleMealSelect(mealId:string):void {
-        setSelectedMealId(mealId)
-    }
+    
+
 
     return (
         <Panel title="Add Entry" className={className}>
-            <form action={handleSaveEntryClick}>
+            <form onSubmit={handleCreateEntrySubmit}>
                 <FieldGroup>
                     <IngredientSelectField
                         ingredients={sortedIngredients}
@@ -185,18 +186,17 @@ function AddEntryPanel({
                         )}
                     </Field>
                     <MealSelectField
-                        onChange={handleMealSelect}
+                        onChange={setSelectedMealId}
                         selectedMealId={selectedMealId}
                         meals={meals}
                     />
                     <div className="grid grid-cols-2 gap-4 ">
                         <Button type="submit" className="rounded-full">
-                            {" "}
                             Save Entry
                         </Button>
                         <CreateMealPopover
                             selectedDate={selectedDate}
-                            onSave={onCreateMealClick}
+                            onCreateMeal={createMeal}
                         />
                         <Button
                             disabled={!selectedIngredientId}
@@ -207,10 +207,12 @@ function AddEntryPanel({
                         >
                             Delete Ingredient
                         </Button>
-                        <EditIngredientPopover
-                            selectedIngredient={selectedIngredientToEdit}
-                            onEditIngredient={onEditIngredient}
-                        />
+                        {selectedIngredientToEdit && (
+                            <EditIngredientPopover
+                                selectedIngredient={selectedIngredientToEdit}
+                                onEditIngredient={onEditIngredient}
+                            />
+                        )}
                     </div>
                 </FieldGroup>
             </form>

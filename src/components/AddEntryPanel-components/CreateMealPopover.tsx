@@ -10,15 +10,23 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import createNewId from "@/lib/createNewId";
-import { CreateMealPopoverProps } from "@/types";
+import { getCurrentUser } from "@/lib/storageCrudHelpers";
+import { CreateMealPopoverProps, Meal } from "@/types";
 import { useState } from "react";
 
-function CreateMealPopover({ onSave, selectedDate }: CreateMealPopoverProps) {
+function CreateMealPopover({
+    onCreateMeal: createMeal,
+    selectedDate,
+}: CreateMealPopoverProps) {
     const [mealName, setMealName] = useState<string>("");
     const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
     const [inputError, setInputError] = useState<string>("");
 
-    function handleSave() {
+    async function handleCreateMealSubmit(
+        event: React.SubmitEvent<HTMLFormElement>,
+    ): Promise<void> {
+        event.preventDefault();
+        event.stopPropagation()
         if (mealName.trim() === "") {
             setInputError("Please enter a meal name");
             return;
@@ -26,13 +34,19 @@ function CreateMealPopover({ onSave, selectedDate }: CreateMealPopoverProps) {
         setInputError("");
         const mealId = createNewId();
         const date = selectedDate;
-        const newMeal = {
+        const user =await getCurrentUser()
+        const newMeal: Meal = {
             name: mealName.trim(),
             mealId,
             date,
+            createdAt: new Date().toISOString(),
+            userId: user.userId,
         };
-        onSave(newMeal);
+        createMeal(newMeal);
+        setMealName("");
+        setInputError("");
         setPopoverOpen(false);
+        
     }
 
     return (
@@ -55,13 +69,19 @@ function CreateMealPopover({ onSave, selectedDate }: CreateMealPopoverProps) {
                 <PopoverHeader>
                     <PopoverTitle>Create Meal:</PopoverTitle>
                     <PopoverDescription>
-                        A meal can group ingredients to display the subtotals
+                        A meal can group entries to display their subtotals
                     </PopoverDescription>
                 </PopoverHeader>
-                <form className="flex flex-col gap-3" action={handleSave}>
+                <form
+                    className="flex flex-col gap-3"
+                    onSubmit={handleCreateMealSubmit}
+                >
                     <Field>
-                        <FieldLabel>Meal Name:</FieldLabel>
+                        <FieldLabel htmlFor="meal-name-input">
+                            Meal Name:
+                        </FieldLabel>
                         <Input
+                            id="meal-name-input"
                             value={mealName}
                             onChange={({ target: { value } }) => {
                                 setMealName(value);

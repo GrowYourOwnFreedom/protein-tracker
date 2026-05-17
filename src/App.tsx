@@ -26,26 +26,19 @@ import { getToday } from "@/lib/getToday";
 function App() {
     const [entries, setEntries] = useState<FoodEntry[]>([]);
     const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-    const [selectedDate, setSelectedDate] = useState<string>(getToday);
-    const [calorieLimit, setCalorieLimit] = useState<number>(fetchStoredCalorieLimit);
+    const [selectedDate, setSelectedDate] = useState<string>(() => getToday());
+    const [calorieLimit, setCalorieLimit] = useState<number>(() =>
+        fetchStoredCalorieLimit(),
+    );
     const [meals, setMeals] = useState<Meal[]>([]);
-    const [proteinTarget, setProteinTarget] =
-        useState<number>(fetchStoredProteinTarget);
+    const [proteinTarget, setProteinTarget] = useState<number>(() =>
+        fetchStoredProteinTarget(),
+    );
 
     useEffect(() => {
         async function loadIngredients() {
             const user = await getCurrentUser();
             const fetchedIngredients = fetchStoredIngredients(user.userId);
-            const dataVersion = localStorage.getItem("dataVersion");
-
-            if (dataVersion !== "2") {
-                localStorage.setItem(
-                    "ingredientsMigrationBackup",
-                    JSON.stringify(fetchedIngredients),
-                );
-                localStorage.setItem("dataVersion", "2");
-                console.log("Migrating ingredients to version 2");
-            }
             setIngredients(fetchedIngredients);
         }
         loadIngredients();
@@ -76,14 +69,13 @@ function App() {
     }
 
     function updateIngredient(updatedIngredient: Ingredient) {
-        const updatedIngredients = [
-            ...ingredients.filter((ingredient) => {
-                return (
-                    ingredient.ingredientId !== updatedIngredient.ingredientId
-                );
-            }),
-            updatedIngredient,
-        ];
+        const updatedIngredients = ingredients.map((ingredient) => {
+            if (ingredient.ingredientId === updatedIngredient.ingredientId) {
+                return updatedIngredient;
+            }
+            return ingredient;
+        });
+
         setIngredients(updatedIngredients);
         updateStoredIngredient(updatedIngredient);
     }
@@ -97,8 +89,6 @@ function App() {
     }
 
     function addEntry(newEntry: FoodEntry): void {
-        console.log(newEntry);
-
         const newEntries = [newEntry, ...entries];
         setEntries(newEntries);
         createStoredFoodEntry(newEntry);
@@ -115,8 +105,8 @@ function App() {
     function updateCalorieLimit(newCalorieLimit: number): void {
         setCalorieLimit(newCalorieLimit);
     }
-    function updateProteinTarget(newPoteinLimit: number): void {
-        setProteinTarget(newPoteinLimit);
+    function updateProteinTarget(newProteinTarget: number): void {
+        setProteinTarget(newProteinTarget);
     }
 
     function updateSelectedDate(date: string): void {
@@ -126,6 +116,8 @@ function App() {
     function createMeal(newMeal: Meal): void {
         const updatedMeals = [...meals, newMeal];
         setMeals(updatedMeals);
+        console.log(updatedMeals);
+        
         createStoredMeal(newMeal);
     }
 
@@ -149,11 +141,11 @@ function App() {
                 <div className=" flex flex-col gap-4 h-screen lg:h-auto lg:min-h-0">
                     <AddEntryPanel
                         ingredients={ingredients}
-                        addEntry={addEntry}
-                        deleteIngredient={deleteIngredient}
+                        onAddEntry={addEntry}
+                        onDeleteIngredient={deleteIngredient}
                         selectedDate={selectedDate}
                         onEditIngredient={updateIngredient}
-                        onCreateMealClick={createMeal}
+                        onCreateMeal={createMeal}
                         meals={meals}
                     />
                     <AddIngredientPanel onAddIngredient={addIngredient} />
@@ -161,11 +153,12 @@ function App() {
                 <EntriesPanel
                     className="h-screen lg:h-auto lg:min-h-0"
                     entries={entries}
-                    deleteEntry={deleteEntry}
+                    onDeleteEntry={deleteEntry}
                     calorieLimit={calorieLimit}
                     proteinTarget={proteinTarget}
                     onSelectedDateChange={updateSelectedDate}
                     selectedDate={selectedDate}
+                    meals={meals}
                 />
             </main>
         </div>

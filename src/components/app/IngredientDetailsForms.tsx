@@ -64,7 +64,9 @@ function IngredientDetailsForm({
         }
     }
 
-    async function handleSaveIngredientClick() {
+    async function handleSaveIngredientClick(event:React.SubmitEvent<HTMLFormElement>):Promise<void> {
+        event.preventDefault()
+        event.stopPropagation()
         const newIngredientCalories = Number(addIngredientCalories);
         const newIngredientProtein = Number(addIngredientProtein);
 
@@ -152,7 +154,7 @@ function IngredientDetailsForm({
     }
 
     return (
-        <form className={className} action={handleSaveIngredientClick}>
+        <form className={className} onSubmit={handleSaveIngredientClick}>
             <FieldGroup>
                 <Field>
                     <FieldLabel htmlFor="ingredient-name">

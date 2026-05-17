@@ -3,12 +3,14 @@ import TargetCard from "@/components/TotalsPanel-components/TargetCard";
 import Panel from "@/components/app/Panel";
 import {
     Field,
+    FieldError,
     FieldGroup,
     FieldLabel,
     FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { TotalsPanelProps } from "@/types";
+import { useState } from "react";
 
 function TotalsPanel({
     entries,
@@ -19,6 +21,8 @@ function TotalsPanel({
     selectedDate,
     className,
 }: TotalsPanelProps) {
+    const [proteinError, setProteinError] = useState<string>("");
+    const [calorieError, setCalorieError] = useState<string>("");
     const totals = {
         weight: 0,
         calories: 0,
@@ -33,6 +37,29 @@ function TotalsPanel({
 
     const { weight, calories, protein } = totals;
 
+    function handleUdateProteinTarget(event) {
+        const proteinNumber = Number(event.target.value);
+        if (Number.isNaN(proteinNumber)) {
+            setProteinError("please enter a valid number");
+            return;
+        }else {
+
+            onProteinTargetChange(proteinNumber) ;
+            setProteinError("")
+        }
+    }
+     function handleUdateCalorieLimit(event) {
+        const calorieNumber = Number(event.target.value);
+        if (Number.isNaN(calorieNumber)) {
+            setCalorieError("please enter a valid number");
+            return;
+        }else{
+            onCalorieLimitChange(calorieNumber) ;
+            setCalorieError("")
+
+        }
+    }
+
     return (
         <Panel title="Totals" className={className}>
             <p className="text-center">Food Eaten: {weight.toFixed(0)} g</p>
@@ -45,10 +72,9 @@ function TotalsPanel({
                         <Input
                             id="calorie-limit"
                             value={calorieLimit}
-                            onChange={(e) =>
-                                onCalorieLimitChange(Number(e.target.value))
-                            }
+                            onChange={handleUdateCalorieLimit}
                         />
+                        {calorieError && <FieldError>{calorieError}</FieldError>}
                     </Field>
                     <Field>
                         <FieldLabel htmlFor="protein-target">
@@ -57,10 +83,9 @@ function TotalsPanel({
                         <Input
                             id="protein-target"
                             value={proteinTarget}
-                            onChange={(e) =>
-                                onProteinTargetChange(Number(e.target.value))
-                            }
+                            onChange={handleUdateProteinTarget}
                         />
+                        {proteinError && <FieldError>{proteinError}</FieldError>}
                     </Field>
                 </div>
             </FieldGroup>

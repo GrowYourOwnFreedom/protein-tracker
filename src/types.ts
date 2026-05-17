@@ -1,4 +1,3 @@
-import { Progress as ProgressPrimitive } from "radix-ui";
 import { ReactNode } from "react";
 
 export type User = {
@@ -47,21 +46,22 @@ export type FoodEntry = {
     ingredientId: string;
 
     mealId?: string;
-    mealName?;
 };
 export type Meal = {
     name: string;
     mealId: string;
     date: string;
+    createdAt:string;
+    userId:string;
 };
 
 export type AddEntryPanelProps = {
     ingredients: Ingredient[];
-    addEntry: (newEntry: FoodEntry) => void;
-    deleteIngredient: (ingredientId: string) => void;
+    onAddEntry: (newEntry: FoodEntry) => void;
+    onDeleteIngredient: (ingredientId: string) => void;
     selectedDate: string;
     onEditIngredient: (updatedIngredient: Ingredient) => void;
-    onCreateMealClick: (newMeal: Meal) => void;
+    onCreateMeal: (newMeal: Meal) => void;
     meals: Meal[];
 
     className?: string;
@@ -75,12 +75,14 @@ export type AddIngredientPanelProps = {
 
 export type EntriesPanelProps = {
     entries: FoodEntry[];
-    deleteEntry: (foodEntryId: string) => void;
+    onDeleteEntry: (foodEntryId: string) => void;
     onSelectedDateChange: (date: string) => void;
     selectedDate: string;
     calorieLimit: number;
     proteinTarget: number;
-    className: string;
+    meals:Meal[];
+
+    className?: string;
 };
 
 export type TotalsPanelProps = {
@@ -88,20 +90,24 @@ export type TotalsPanelProps = {
     calorieLimit: number;
     onCalorieLimitChange: (newCalorieLimit: number) => void;
     proteinTarget: number;
-    onProteinTargetChange: (newPoteinLimit: number) => void;
+    onProteinTargetChange: (newProteinTarget: number) => void;
     selectedDate: string;
-    className: string;
+
+    className?: string;
 };
 
 export type PanelProps = {
     title: string;
     children: ReactNode;
-    className: string;
+
+    className?: string;
 };
 
 export type EditIngredientPopoverProps = {
     onEditIngredient: (updatedIngredient: Ingredient) => void;
     selectedIngredient: Ingredient;
+
+    className?: string;
 };
 
 export type IngredientDetailsFormProps = {
@@ -112,8 +118,10 @@ export type IngredientDetailsFormProps = {
 };
 
 export type CreateMealPopoverProps = {
-    onSave: (newMeal: Meal) => void;
+    onCreateMeal: (newMeal: Meal) => void;
     selectedDate: string;
+
+    className?: string;
 };
 export type IngredientSelectFieldProps = {
     ingredients: Ingredient[];
@@ -121,14 +129,16 @@ export type IngredientSelectFieldProps = {
     onChange: (value: string) => void;
     onOpenChange: (open: boolean) => void;
     ingredientSelectError: string;
+
+    className?: string;
 };
 
 export type FoodEntryCardProps = {
     entry: FoodEntry;
     calorieLimit: number;
     proteinTarget: number;
-    onDeleteEntryClick: (foodEntryId: string) => void;
-    foodEntryId: string;
+    onDeleteEntry: (foodEntryId: string) => void;
+    className?: string;
 };
 
 export type TargetCardProps = {
@@ -137,15 +147,31 @@ export type TargetCardProps = {
     target: number;
     unit: string;
     type: string;
+
+    className?: string;
 };
 export type SummaryCardProps = {
     currentCaloriesTotal: number;
     currentProteinTotal: number;
     proteinTarget: number;
     calorieLimit: number;
+
+    className?: string;
 };
+
+export type MealCardProps = {
+    meal:Meal
+    entries:FoodEntry[]
+    calories:number
+    protein:number
+    calorieLimit:number
+    proteinTarget:number
+    onDeleteEntry: (foodEntryId: string) => void;
+}
 export type MealSelectFieldProps = {
-    meals:Meal[]
-     selectedMealId:string;
-      onChange:(mealId:string)=>void
-     }
+    meals: Meal[];
+    selectedMealId: string;
+    onChange: (mealId: string) => void;
+
+    className?:string
+};
