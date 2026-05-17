@@ -14,7 +14,7 @@ import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { AddEntryPanelProps, FoodEntry } from "@/types";
 import EditIngredientPopover from "@/components/AddEntryPanel-components/EditIngredientPopover";
-import CreateMeal from "@/components/AddEntryPanel-components/CreateMeal";
+import CreateMealPopover from "@/components/AddEntryPanel-components/CreateMealPopover";
 import IngredientSelectField from "@/components/AddEntryPanel-components/IngredientSelectField";
 import MealSelectField from "@/components/AddEntryPanel-components/MealSelectField";
 
@@ -189,7 +189,7 @@ function AddEntryPanel({
                             {" "}
                             Save Entry
                         </Button>
-                        <CreateMeal
+                        <CreateMealPopover
                             selectedDate={selectedDate}
                             onSave={onCreateMealClick}
                         />

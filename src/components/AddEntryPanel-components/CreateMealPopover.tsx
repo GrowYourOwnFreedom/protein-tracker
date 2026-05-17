@@ -10,10 +10,10 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import createNewId from "@/lib/createNewId";
-import { CreateMealProps } from "@/types";
+import { CreateMealPopoverProps } from "@/types";
 import { useState } from "react";
 
-function CreateMeal({ onSave, selectedDate }: CreateMealProps) {
+function CreateMealPopover({ onSave, selectedDate }: CreateMealPopoverProps) {
     const [mealName, setMealName] = useState<string>("");
     const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
     const [inputError, setInputError] = useState<string>("");
@@ -58,7 +58,7 @@ function CreateMeal({ onSave, selectedDate }: CreateMealProps) {
                         A meal can group ingredients to display the subtotals
                     </PopoverDescription>
                 </PopoverHeader>
-                <form action={handleSave}>
+                <form className="flex flex-col gap-3" action={handleSave}>
                     <Field>
                         <FieldLabel>Meal Name:</FieldLabel>
                         <Input
@@ -79,4 +79,4 @@ function CreateMeal({ onSave, selectedDate }: CreateMealProps) {
     );
 }
 
-export default CreateMeal;
+export default CreateMealPopover;

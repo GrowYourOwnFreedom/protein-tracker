@@ -111,7 +111,7 @@ export type IngredientDetailsFormProps = {
     className?: string;
 };
 
-export type CreateMealProps = {
+export type CreateMealPopoverProps = {
     onSave: (newMeal: Meal) => void;
     selectedDate: string;
 };
