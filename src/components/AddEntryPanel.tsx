@@ -149,6 +149,10 @@ function AddEntryPanel({
         return ingredient.ingredientId === selectedIngredientId;
     });
 
+    function handleMealSelect(mealId:string):void {
+        setSelectedMealId(mealId)
+    }
+
     return (
         <Panel title="Add Entry" className={className}>
             <form action={handleSaveEntryClick}>
@@ -180,7 +184,7 @@ function AddEntryPanel({
                         )}
                     </Field>
                     <MealSelectField
-                        onChange={setSelectedMealId}
+                        onChange={handleMealSelect}
                         selectedMealId={selectedMealId}
                         meals={meals}
                     />

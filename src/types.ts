@@ -144,3 +144,8 @@ export type SummaryCardProps = {
     proteinTarget: number;
     calorieLimit: number;
 };
+export type MealSelectFieldProps = {
+    meals:Meal[]
+     selectedMealId:string;
+      onChange:(mealId:string)=>void
+     }

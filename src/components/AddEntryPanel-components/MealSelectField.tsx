@@ -1,7 +1,8 @@
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MealSelectFieldProps } from "@/types";
 
-export default function MealSelectField({meals, selectedMealId, onChange }) {
+export default function MealSelectField({meals, selectedMealId, onChange }:MealSelectFieldProps) {
     return (
          <Field>
                         <FieldLabel>Select Meal:</FieldLabel>
