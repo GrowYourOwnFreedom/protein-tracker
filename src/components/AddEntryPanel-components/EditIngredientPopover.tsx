@@ -8,10 +8,17 @@ import {
     PopoverTitle,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { EditIngredientPopoverProps, Ingredient } from "@/types";
+import { Ingredient } from "@/types";
 import { useState } from "react";
 
-function EditIngredientPopover({
+type EditIngredientPopoverProps = {
+    onEditIngredient: (updatedIngredient: Ingredient) => void;
+    selectedIngredient: Ingredient;
+
+    className?: string;
+};
+
+export default function EditIngredientPopover({
     selectedIngredient,
     onEditIngredient,
 }: EditIngredientPopoverProps) {
@@ -50,4 +57,3 @@ function EditIngredientPopover({
         </Popover>
     );
 }
-export default EditIngredientPopover;

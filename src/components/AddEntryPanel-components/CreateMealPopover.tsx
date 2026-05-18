@@ -11,10 +11,17 @@ import {
 } from "@/components/ui/popover";
 import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { CreateMealPopoverProps, Meal } from "@/types";
+import { Meal } from "@/types";
 import { useState } from "react";
 
-function CreateMealPopover({
+type CreateMealPopoverProps = {
+    onCreateMeal: (newMeal: Meal) => void;
+    selectedDate: string;
+
+    className?: string;
+};
+
+export default function CreateMealPopover({
     onCreateMeal: createMeal,
     selectedDate,
 }: CreateMealPopoverProps) {
@@ -99,4 +106,3 @@ function CreateMealPopover({
     );
 }
 
-export default CreateMealPopover;

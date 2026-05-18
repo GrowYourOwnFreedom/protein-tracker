@@ -7,9 +7,16 @@ import {
 } from "@/components/ui/card";
 import { formatNumber } from "@/lib/formatNumber";
 import { getProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
-import { SummaryCardProps } from "@/types";
 
-function SummaryCard({
+ type SummaryCardProps = {
+    currentCaloriesTotal: number;
+    currentProteinTotal: number;
+    proteinTarget: number;
+    calorieLimit: number;
+
+    className?: string;
+};
+export default function SummaryCard({
     currentCaloriesTotal,
     currentProteinTotal,
     proteinTarget,
@@ -90,4 +97,3 @@ function SummaryCard({
         </Card>
     );
 }
-export default SummaryCard;

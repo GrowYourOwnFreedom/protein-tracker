@@ -8,9 +8,19 @@ import {
 } from "@/components/ui/card";
 import { formatNumber } from "@/lib/formatNumber";
 import { cn } from "@/lib/utils";
-import { FoodEntryCardProps } from "@/types";
+import { FoodEntry } from "@/types";
 
-function EntryCard({
+
+ type FoodEntryCardProps = {
+    entry: FoodEntry;
+    calorieLimit: number;
+    proteinTarget: number;
+    onDeleteEntry: (foodEntryId: string) => void;
+    className?: string;
+    size?: "default" | "sm";
+};
+
+export default function FoodEntryCard({
     entry,
     calorieLimit,
     proteinTarget,
@@ -65,4 +75,3 @@ function EntryCard({
         </Card>
     );
 }
-export default EntryCard;

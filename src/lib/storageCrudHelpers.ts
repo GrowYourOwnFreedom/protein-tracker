@@ -124,7 +124,7 @@ function deleteLocalIngredient(ingredientId: string): void {
     );
 }
 
-function updateLocalIngredient(updatedIngredient: Ingredient) {
+function updateLocalIngredient(updatedIngredient: Ingredient):void {
     const existingIngredients = getArrayFromStorage<Ingredient>(
         INGREDIENTS_STORAGE_KEY,
     );
@@ -170,8 +170,12 @@ function fetchLocalCalorieLimit(): number {
     if (savedCalorielLimit === null) {
         return DEFAULT_CALORIE_LIMIT;
     }
+    const parsedCalorieLimit = Number(savedCalorielLimit);
+    if (Number.isNaN(parsedCalorieLimit)) {
+        return DEFAULT_CALORIE_LIMIT;
+    }
 
-    return Number(savedCalorielLimit);
+    return parsedCalorieLimit;
 }
 
 function fetchLocalProteinTarget(): number {
@@ -179,8 +183,11 @@ function fetchLocalProteinTarget(): number {
     if (savedProteinTarget === null) {
         return DEFAULT_PROTEIN_TARGET;
     }
-
-    return Number(savedProteinTarget);
+    const parsedProteinTarget = Number(savedProteinTarget);
+    if (Number.isNaN(parsedProteinTarget)) {
+        return DEFAULT_PROTEIN_TARGET;
+    }
+    return parsedProteinTarget;
 }
 
 function updateLocalProteinTarget(proteinTarget: number): void {

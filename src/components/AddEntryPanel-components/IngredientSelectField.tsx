@@ -11,9 +11,19 @@ import {
 } from "@/components/ui/select";
 import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
 import { getProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
-import { IngredientSelectFieldProps } from "@/types";
+import { Ingredient } from "@/types";
 
-function IngredientSelectField({ingredients, selectedIngredientId, onChange, onOpenChange, ingredientSelectError}:IngredientSelectFieldProps) {
+type IngredientSelectFieldProps = {
+    ingredients: Ingredient[];
+    selectedIngredientId: string;
+    onChange: (value: string) => void;
+    onOpenChange: (open: boolean) => void;
+    ingredientSelectError: string;
+
+    className?: string;
+};
+
+export default function IngredientSelectField({ingredients, selectedIngredientId, onChange, onOpenChange, ingredientSelectError}:IngredientSelectFieldProps) {
     return (
         <Field>
             <FieldLabel>Select An Ingredient:</FieldLabel>
@@ -82,4 +92,3 @@ function IngredientSelectField({ingredients, selectedIngredientId, onChange, onO
     );
 }
 
-export default IngredientSelectField;

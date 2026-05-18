@@ -1,5 +1,12 @@
 import { cn } from "@/lib/utils";
-import { PanelProps } from "@/types";
+import { ReactNode } from "react";
+
+export type PanelProps = {
+    title: string;
+    children: ReactNode;
+
+    className?: string;
+};
 
 function Panel({ title, children, className }:PanelProps) {
     return (

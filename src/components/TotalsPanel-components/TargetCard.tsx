@@ -4,14 +4,21 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
-    CardAction,
 } from "@/components/ui/card";
-import { TargetCardProps } from "@/types";
 
-function TargetCard({ title, current, target, unit, type }: TargetCardProps) {
+ type TargetCardProps = {
+    title: string;
+    current: number;
+    target: number;
+    unit: string;
+    type: "limit" | "goal";
+
+    className?: string;
+};
+
+export default function TargetCard({ title, current, target, unit, type }: TargetCardProps) {
     const remaining = target - current;
     const formattedRemaining = Number(formatNumber(remaining));
     let statusText = `${remaining} ${unit} remaining`;
@@ -94,4 +101,3 @@ function TargetCard({ title, current, target, unit, type }: TargetCardProps) {
     );
 }
 
-export default TargetCard;

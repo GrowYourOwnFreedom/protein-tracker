@@ -12,13 +12,25 @@ import { Input } from "@/components/ui/input";
 
 import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { AddEntryPanelProps, FoodEntry } from "@/types";
+import { FoodEntry, Ingredient, Meal } from "@/types";
 import EditIngredientPopover from "@/components/AddEntryPanel-components/EditIngredientPopover";
 import CreateMealPopover from "@/components/AddEntryPanel-components/CreateMealPopover";
 import IngredientSelectField from "@/components/AddEntryPanel-components/IngredientSelectField";
 import MealSelectField from "@/components/AddEntryPanel-components/MealSelectField";
 
-function AddEntryPanel({
+type AddEntryPanelProps = {
+    ingredients: Ingredient[];
+    onAddEntry: (newEntry: FoodEntry) => void;
+    onDeleteIngredient: (ingredientId: string) => void;
+    selectedDate: string;
+    onEditIngredient: (updatedIngredient: Ingredient) => void;
+    onCreateMeal: (newMeal: Meal) => void;
+    meals: Meal[];
+
+    className?: string;
+};
+
+export default function AddEntryPanel({
     ingredients,
     onAddEntry,
     onDeleteIngredient,
@@ -220,4 +232,3 @@ function AddEntryPanel({
     );
 }
 
-export default AddEntryPanel;

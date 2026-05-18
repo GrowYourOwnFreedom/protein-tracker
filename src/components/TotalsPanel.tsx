@@ -9,10 +9,21 @@ import {
     FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { TotalsPanelProps } from "@/types";
+import { FoodEntry } from "@/types";
 import { useState } from "react";
 
-function TotalsPanel({
+export type TotalsPanelProps = {
+    entries: FoodEntry[];
+    calorieLimit: number;
+    onCalorieLimitChange: (newCalorieLimit: number) => void;
+    proteinTarget: number;
+    onProteinTargetChange: (newProteinTarget: number) => void;
+    selectedDate: string;
+
+    className?: string;
+};
+
+export default function TotalsPanel({
     entries,
     calorieLimit,
     onCalorieLimitChange,
@@ -115,4 +126,3 @@ function TotalsPanel({
     );
 }
 
-export default TotalsPanel;

@@ -5,6 +5,11 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { useState } from "react";
 
+type DatePickerProps = {
+    selectedDate:string;
+    onSelectedDateChange:(date:string)=> void
+}
+
 function makeDateObject(selectedDate: string): Date {
         const [year, month, day] = selectedDate.split("-").map(Number);
         const dateObject = new Date(year, month - 1, day);

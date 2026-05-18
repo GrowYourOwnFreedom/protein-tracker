@@ -115,9 +115,7 @@ function App() {
 
     function createMeal(newMeal: Meal): void {
         const updatedMeals = [...meals, newMeal];
-        setMeals(updatedMeals);
-        console.log(updatedMeals);
-        
+        setMeals(updatedMeals);        
         createStoredMeal(newMeal);
     }
 
@@ -130,7 +128,7 @@ function App() {
             </header>
             <main className="grid grid-cols-1 gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr]">
                 <TotalsPanel
-                    className=" lg:h-auto lg:min-h-0 "
+                    className="lg:h-auto lg:min-h-0 "
                     entries={entries}
                     calorieLimit={calorieLimit}
                     onCalorieLimitChange={updateCalorieLimit}
@@ -138,7 +136,7 @@ function App() {
                     onProteinTargetChange={updateProteinTarget}
                     selectedDate={selectedDate}
                 />
-                <div className=" flex flex-col gap-4  lg:h-auto lg:min-h-0">
+                <div className="flex flex-col gap-4  lg:h-auto lg:min-h-0">
                     <AddEntryPanel
                         ingredients={ingredients}
                         onAddEntry={addEntry}

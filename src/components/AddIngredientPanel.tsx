@@ -1,8 +1,14 @@
 import Panel from "@/components/app/Panel";
-import { AddIngredientPanelProps } from "@/types";
 import IngredientDetailsForm from "@/components/app/IngredientDetailsForms";
+import { Ingredient } from "@/types";
 
-function AddIngredientPanel({
+type AddIngredientPanelProps = {
+    onAddIngredient: (newIngredient: Ingredient) => void;
+
+    className?: string;
+};
+
+export default function AddIngredientPanel({
     onAddIngredient,
     className = "",
 }: AddIngredientPanelProps) {
@@ -12,4 +18,3 @@ function AddIngredientPanel({
         </Panel>
     );
 }
-export default AddIngredientPanel;

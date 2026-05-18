@@ -18,13 +18,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRef, useState } from "react";
 import { defaultIngredientCategories } from "@/data/defaultIngredientCategories";
-import { IngredientCategory, IngredientDetailsFormProps } from "@/types";
+import { Ingredient, IngredientCategory } from "@/types";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { getToday } from "@/lib/getToday";
 import createNewId from "@/lib/createNewId";
 
-function IngredientDetailsForm({
+type IngredientDetailsFormProps = {
+    onSave: (newIngredient: Ingredient) => void;
+
+    existingIngredient?: Ingredient;
+    className?: string;
+};
+
+export default function IngredientDetailsForm({
     existingIngredient,
     onSave,
     className,
@@ -255,4 +262,3 @@ function IngredientDetailsForm({
         </form>
     );
 }
-export default IngredientDetailsForm;

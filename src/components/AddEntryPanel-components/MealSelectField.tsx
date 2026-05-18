@@ -6,7 +6,16 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { MealSelectFieldProps } from "@/types";
+import { Meal } from "@/types";
+
+
+type MealSelectFieldProps = {
+    meals: Meal[];
+    selectedMealId: string;
+    onChange: (mealId: string) => void;
+
+    className?: string;
+};
 
 export default function MealSelectField({
     meals,

@@ -1,4 +1,4 @@
-import EntryCard from "@/components/EntriesPanel-components/EntryCard";
+import FoodEntryCard from "@/components/EntriesPanel-components/FoodEntryCard";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -13,8 +13,21 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { formatNumber } from "@/lib/formatNumber";
-import { MealCardProps } from "@/types";
+import { FoodEntry, Meal } from "@/types";
 import { useState } from "react";
+
+type MealCardProps = {
+    meal: Meal;
+    entries: FoodEntry[];
+    calories: number;
+    protein: number;
+    calorieLimit: number;
+    proteinTarget: number;
+    onDeleteEntry: (foodEntryId: string) => void;
+    weight: number;
+
+    className?: string;
+};
 
 export default function MealCard({
     meal,
@@ -70,7 +83,7 @@ export default function MealCard({
                     <CollapsibleContent className="mt-4 flex flex-col gap-y-3 pl-3">
                         {entries.map((entry) => {
                             return (
-                                <EntryCard
+                                <FoodEntryCard
                                     size="sm"
                                     className="bg-muted/40 shadow-none border-none"
                                     key={entry.foodEntryId}
