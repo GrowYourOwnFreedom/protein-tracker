@@ -37,7 +37,7 @@ export default function AddEntryPanel({
     selectedDate,
     className = "",
     onEditIngredient,
-    onCreateMeal:createMeal,
+    onCreateMeal: createMeal,
     meals,
 }: AddEntryPanelProps) {
     const [selectedIngredientId, setSelectedIngredientId] =
@@ -164,9 +164,6 @@ export default function AddEntryPanel({
         return ingredient.ingredientId === selectedIngredientId;
     });
 
-    
-
-
     return (
         <Panel title="Add Entry" className={className}>
             <form onSubmit={handleCreateEntrySubmit}>
@@ -206,10 +203,6 @@ export default function AddEntryPanel({
                         <Button type="submit" className="rounded-full">
                             Save Entry
                         </Button>
-                        <CreateMealPopover
-                            selectedDate={selectedDate}
-                            onCreateMeal={createMeal}
-                        />
                         <Button
                             disabled={!selectedIngredientId}
                             className="w-fit mx-auto rounded-full"
@@ -219,16 +212,20 @@ export default function AddEntryPanel({
                         >
                             Delete Ingredient
                         </Button>
-                        {selectedIngredientToEdit && (
-                            <EditIngredientPopover
-                                selectedIngredient={selectedIngredientToEdit}
-                                onEditIngredient={onEditIngredient}
-                            />
-                        )}
                     </div>
                 </FieldGroup>
             </form>
+            <div className="grid grid-cols-2 gap-4 ">
+                <CreateMealPopover
+                    selectedDate={selectedDate}
+                    onCreateMeal={createMeal}
+                />
+
+                <EditIngredientPopover
+                    selectedIngredient={selectedIngredientToEdit}
+                    onEditIngredient={onEditIngredient}
+                />
+            </div>
         </Panel>
     );
 }
-

@@ -33,7 +33,6 @@ export default function CreateMealPopover({
         event: React.SubmitEvent<HTMLFormElement>,
     ): Promise<void> {
         event.preventDefault();
-        event.stopPropagation()
         if (mealName.trim() === "") {
             setInputError("Please enter a meal name");
             return;

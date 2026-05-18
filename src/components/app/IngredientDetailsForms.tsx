@@ -57,12 +57,12 @@ export default function IngredientDetailsForm({
     const inputRef = useRef<HTMLInputElement | null>(null);
     const shouldFocusInputRef = useRef(false);
 
-    function handleValueChange(value) {
+    function handleValueChange(value:string):void {
         shouldFocusInputRef.current = true;
         setSelectedIngredientCategoryId(value);
         setIngredientCategorySelectError("");
     }
-    function handleSelectOpenChange(open) {
+    function handleSelectOpenChange(open:boolean):void {
         if (!open && shouldFocusInputRef.current) {
             shouldFocusInputRef.current = false;
             setTimeout(() => {
@@ -71,9 +71,8 @@ export default function IngredientDetailsForm({
         }
     }
 
-    async function handleSaveIngredientClick(event:React.SubmitEvent<HTMLFormElement>):Promise<void> {
+    async function handleSaveIngredientSubmit(event:React.SubmitEvent<HTMLFormElement>):Promise<void> {
         event.preventDefault()
-        event.stopPropagation()
         const newIngredientCalories = Number(addIngredientCalories);
         const newIngredientProtein = Number(addIngredientProtein);
 
@@ -105,7 +104,7 @@ export default function IngredientDetailsForm({
             caloriesError = "Please enter a valid number";
             setAddIngredientCaloriesError(caloriesError);
         } else if (newIngredientCalories <= 0) {
-            caloriesError = "Calories must be a postive number";
+            caloriesError = "Calories must be a positive number";
             setAddIngredientCaloriesError(caloriesError);
         } else {
             caloriesError = "";
@@ -139,7 +138,7 @@ export default function IngredientDetailsForm({
         const dateCreated = existingIngredient?.dateCreated ?? getToday();
         const ingredientCategoryId = selectedIngredientCategoryId;
 
-        const ingredientObj = {
+        const ingredientObj:Ingredient = {
             ingredientId,
             name,
             caloriesPer100g,
@@ -161,7 +160,7 @@ export default function IngredientDetailsForm({
     }
 
     return (
-        <form className={className} onSubmit={handleSaveIngredientClick}>
+        <form className={className} onSubmit={handleSaveIngredientSubmit}>
             <FieldGroup>
                 <Field>
                     <FieldLabel htmlFor="ingredient-name">
@@ -181,15 +180,15 @@ export default function IngredientDetailsForm({
                     )}
                 </Field>
                 <Field>
-                    <FieldLabel>Ingredient Category:</FieldLabel>
+                    <FieldLabel htmlFor="ingredient-category-id">Ingredient Category:</FieldLabel>
                     <Select
                         value={selectedIngredientCategoryId}
                         name="ingredient-category-id"
                         onValueChange={handleValueChange}
                         onOpenChange={handleSelectOpenChange}
                     >
-                        <SelectTrigger className="bg-muted/40 shadow-inner/10">
-                            <SelectValue placeholder="PLease choose a category..." />
+                        <SelectTrigger id="ingredient-category-id" className="bg-muted/40 shadow-inner/10">
+                            <SelectValue placeholder="Please choose a category..." />
                         </SelectTrigger>
                         <SelectContent position="popper">
                             <SelectGroup>

@@ -1,11 +1,11 @@
 import Panel from "@/components/app/Panel";
-import FoodEntryCard from "./EntriesPanel-components/FoodEntryCard";
-import MealCard from "@/components/EntriesPanel-components/MealCard";
-import DatePicker from "@/components/EntriesPanel-components/DatePicker";
+import FoodEntryCard from "./ViewEntriesPanel-components/FoodEntryCard";
+import MealCard from "@/components/ViewEntriesPanel-components/MealCard";
+import DatePicker from "@/components/ViewEntriesPanel-components/DatePicker";
 import createEntryDisplayItems from "@/lib/createEntryDisplayItems";
 import { FoodEntry, Meal } from "@/types";
 
-type EntriesPanelProps = {
+type ViewEntriesPanelProps = {
     entries: FoodEntry[];
     onDeleteEntry: (foodEntryId: string) => void;
     onSelectedDateChange: (date: string) => void;
@@ -17,7 +17,7 @@ type EntriesPanelProps = {
     className?: string;
 };
 
-export default function EntriesPanel({
+export default function ViewEntriesPanel({
     entries,
     onDeleteEntry: deleteEntry,
     calorieLimit,
@@ -26,7 +26,7 @@ export default function EntriesPanel({
     selectedDate,
     className,
     meals,
-}: EntriesPanelProps) {
+}: ViewEntriesPanelProps) {
     const displayItems = createEntryDisplayItems(entries, meals);
 
     return (

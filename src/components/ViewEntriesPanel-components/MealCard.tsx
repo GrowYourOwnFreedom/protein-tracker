@@ -1,4 +1,4 @@
-import FoodEntryCard from "@/components/EntriesPanel-components/FoodEntryCard";
+import FoodEntryCard from "@/components/ViewEntriesPanel-components/FoodEntryCard";
 import { Button } from "@/components/ui/button";
 import {
     Card,

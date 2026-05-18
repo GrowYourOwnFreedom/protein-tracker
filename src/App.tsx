@@ -20,7 +20,7 @@ import {
     createStoredMeal,
 } from "@/lib/storageCrudHelpers";
 import { FoodEntry, Ingredient, Meal } from "@/types";
-import EntriesPanel from "@/components/EntriesPanel";
+import ViewEntriesPanel from "@/components/ViewEntriesPanel";
 import { getToday } from "@/lib/getToday";
 
 function App() {
@@ -148,7 +148,7 @@ function App() {
                     />
                     <AddIngredientPanel onAddIngredient={addIngredient} />
                 </div>
-                <EntriesPanel
+                <ViewEntriesPanel
                     className="lg:h-auto lg:min-h-0"
                     entries={entries}
                     onDeleteEntry={deleteEntry}
