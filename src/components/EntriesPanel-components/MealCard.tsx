@@ -34,13 +34,15 @@ export default function MealCard({
     const percentOfProteinTarget =
         proteinTarget > 0 ? (protein / proteinTarget) * 100 : 0;
     const triggerMessage = collapsibleOpen
-        ? `Show ${entries.length} entries`
-        : "Hide entries";
+        ? "Hide entries"
+        : `Show ${entries.length} entries`;
 
-    
     return (
         <Card className="w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0">
-            <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen}>
+            <Collapsible
+                open={collapsibleOpen}
+                onOpenChange={setCollapsibleOpen}
+            >
                 <CardHeader>
                     <CardTitle>
                         <div className="flex gap-3">
