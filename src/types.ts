@@ -139,7 +139,7 @@ export type FoodEntryCardProps = {
     proteinTarget: number;
     onDeleteEntry: (foodEntryId: string) => void;
     className?: string;
-    size?: "default" | "sm"
+    size?: "default" | "sm";
 };
 
 export type TargetCardProps = {
@@ -147,7 +147,7 @@ export type TargetCardProps = {
     current: number;
     target: number;
     unit: string;
-    type: string;
+    type: "calories" | "protein";
 
     className?: string;
 };
@@ -169,6 +169,8 @@ export type MealCardProps = {
     proteinTarget: number;
     onDeleteEntry: (foodEntryId: string) => void;
     weight: number;
+
+    className?: string;
 };
 export type MealSelectFieldProps = {
     meals: Meal[];

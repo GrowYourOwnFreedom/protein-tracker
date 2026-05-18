@@ -6,6 +6,7 @@ import {
     CardTitle,
     CardAction,
 } from "@/components/ui/card";
+import { formatNumber } from "@/lib/formatNumber";
 import { cn } from "@/lib/utils";
 import { FoodEntryCardProps } from "@/types";
 
@@ -15,7 +16,7 @@ function EntryCard({
     proteinTarget,
     onDeleteEntry: deleteEntry,
     className,
-    size
+    size = "default",
 }: FoodEntryCardProps) {
     const { weight, calories, protein, name, foodEntryId } = entry;
     const percentOfCalorieLimit =
@@ -23,12 +24,18 @@ function EntryCard({
     const percentOfProteinTarget =
         proteinTarget > 0 ? (protein / proteinTarget) * 100 : 0;
     return (
-        <Card size={size} className={cn("w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0",className)}>
+        <Card
+            size={size}
+            className={cn(
+                "w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0",
+                className,
+            )}
+        >
             <CardHeader>
                 <CardTitle>
                     <div className="flex gap-3">
                         <p>{name}</p>
-                        <p>{weight}g</p>
+                        <p>{formatNumber(weight)}g</p>
                     </div>
                 </CardTitle>
                 <CardAction>
@@ -47,12 +54,12 @@ function EntryCard({
             </CardHeader>
             <CardContent>
                 <p>
-                    Energy: {calories.toFixed(0)}kcal (
-                    {percentOfCalorieLimit.toFixed(1)}%)
+                    Energy: {formatNumber(calories)} kcal (
+                    {formatNumber(percentOfCalorieLimit)}%)
                 </p>
                 <p>
-                    Protein: {protein.toFixed(1)}g (
-                    {percentOfProteinTarget.toFixed(1)}%)
+                    Protein: {formatNumber(protein)}g (
+                    {formatNumber(percentOfProteinTarget)}%)
                 </p>
             </CardContent>
         </Card>
