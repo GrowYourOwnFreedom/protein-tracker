@@ -12,6 +12,7 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { formatNumber } from "@/lib/formatNumber";
 import { MealCardProps } from "@/types";
 import { useState } from "react";
 
@@ -26,37 +27,25 @@ export default function MealCard({
     weight,
 }: MealCardProps) {
     const [collapsibleOpen, setCollapsibleOpen] = useState(false);
-    const [triggerMessage, setTriggerMessage] = useState(
-        `Show ${entries.length} entries`,
-    );
     const { name } = meal;
 
     const percentOfCalorieLimit =
         calorieLimit > 0 ? (calories / calorieLimit) * 100 : 0;
     const percentOfProteinTarget =
         proteinTarget > 0 ? (protein / proteinTarget) * 100 : 0;
+    const triggerMessage = collapsibleOpen
+        ? `Show ${entries.length} entries`
+        : "Hide entries";
 
-    function handleOpenChange(open) {
-        if (!open) {
-            console.log("closed");
-
-            setTriggerMessage(`Show ${entries.length} entries`);
-            setCollapsibleOpen(open);
-            return;
-        }
-        console.log("open");
-        setTriggerMessage("Hide entries");
-
-        setCollapsibleOpen(open);
-    }
+    
     return (
         <Card className="w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0">
-            <Collapsible open={collapsibleOpen} onOpenChange={handleOpenChange}>
+            <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen}>
                 <CardHeader>
                     <CardTitle>
                         <div className="flex gap-3">
                             <p>{name}</p>
-                            <p>{weight}g</p>
+                            <p>{formatNumber(weight)}g</p>
                         </div>
                     </CardTitle>
                     <CardAction>
@@ -69,14 +58,14 @@ export default function MealCard({
                 </CardHeader>
                 <CardContent>
                     <p>
-                        Energy: {calories.toFixed(0)}kcal (
-                        {percentOfCalorieLimit.toFixed(1)}%)
+                        Energy: {formatNumber(calories)} kcal (
+                        {formatNumber(percentOfCalorieLimit)}%)
                     </p>
                     <p>
-                        Protein: {protein.toFixed(1)}g (
-                        {percentOfProteinTarget.toFixed(1)}%)
+                        Protein: {formatNumber(protein)}g (
+                        {formatNumber(percentOfProteinTarget)}%)
                     </p>
-                    <CollapsibleContent className=" mt-4 flex flex-col gap-y-3 pl-3">
+                    <CollapsibleContent className="mt-4 flex flex-col gap-y-3 pl-3">
                         {entries.map((entry) => {
                             return (
                                 <EntryCard

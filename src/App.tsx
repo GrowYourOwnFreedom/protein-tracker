@@ -122,7 +122,7 @@ function App() {
     }
 
     return (
-        <div className="h-screen lg:h-screen lg:flex lg:flex-col">
+        <div className="lg:h-screen lg:flex lg:flex-col">
             <header className="lg:shrink-0 p-4">
                 <h1 className="text-3xl text-center font-bold">
                     Protein And Calorie Tracker
@@ -130,7 +130,7 @@ function App() {
             </header>
             <main className="grid grid-cols-1 gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr]">
                 <TotalsPanel
-                    className="h-screen lg:h-auto lg:min-h-0 "
+                    className=" lg:h-auto lg:min-h-0 "
                     entries={entries}
                     calorieLimit={calorieLimit}
                     onCalorieLimitChange={updateCalorieLimit}
@@ -138,7 +138,7 @@ function App() {
                     onProteinTargetChange={updateProteinTarget}
                     selectedDate={selectedDate}
                 />
-                <div className=" flex flex-col gap-4 h-screen lg:h-auto lg:min-h-0">
+                <div className=" flex flex-col gap-4  lg:h-auto lg:min-h-0">
                     <AddEntryPanel
                         ingredients={ingredients}
                         onAddEntry={addEntry}
@@ -151,7 +151,7 @@ function App() {
                     <AddIngredientPanel onAddIngredient={addIngredient} />
                 </div>
                 <EntriesPanel
-                    className="h-screen lg:h-auto lg:min-h-0"
+                    className="lg:h-auto lg:min-h-0"
                     entries={entries}
                     onDeleteEntry={deleteEntry}
                     calorieLimit={calorieLimit}
