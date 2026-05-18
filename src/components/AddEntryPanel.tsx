@@ -31,16 +31,11 @@ export default function AddEntryPanel({
 }: AddEntryPanelProps) {
     const [selectedIngredientId, setSelectedIngredientId] =
         useState<string>("");
-    const [deleteIngredientError, setDeleteIngredientError] = useState("");
 
     function handleDeleteIngredientClick() {
         const deletedIngredient = ingredients.find((ingredient) => {
             return ingredient.ingredientId === selectedIngredientId;
         });
-        if (!deletedIngredient) {
-            setDeleteIngredientError("Please select a valid ingredient");
-            return;
-        }
         if (
             confirm(
                 `Are you sure you want to permanently delete the ingredient ${deletedIngredient.name} from your list?`,
@@ -62,13 +57,13 @@ export default function AddEntryPanel({
                 meals={meals}
                 selectedIngredientId={selectedIngredientId}
                 onAddEntry={onAddEntry}
-                setSelectedIngredientId={setSelectedIngredientId}
+                onIngredientChange={setSelectedIngredientId}
                 selectedDate={selectedDate}
             />
-            <div className="grid grid-cols-3 gap-4 ">
+            <div className="grid  grid-cols-1 md:grid-cols-3 gap-4 ">
                 <Button
                     disabled={!selectedIngredientId}
-                    className="w-fit mx-auto rounded-full"
+                    className="rounded-full"
                     type="button"
                     variant="destructive"
                     onClick={handleDeleteIngredientClick}
@@ -80,10 +75,11 @@ export default function AddEntryPanel({
                     onCreateMeal={createMeal}
                 />
 
-                <EditIngredientPopover
-                    selectedIngredient={selectedIngredientToEdit}
-                    onEditIngredient={onEditIngredient}
-                />
+                
+                    <EditIngredientPopover
+                        selectedIngredient={selectedIngredientToEdit}
+                        onEditIngredient={onEditIngredient}
+                    />
             </div>
         </Panel>
     );

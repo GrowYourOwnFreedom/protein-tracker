@@ -14,14 +14,14 @@ import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { FoodEntry, Ingredient, Meal } from "@/types";
 import { useRef, useState } from "react";
 
-type AddEntryFormProps ={
-    ingredients:Ingredient[];
-    selectedIngredientId:string
-    onAddEntry:(entry:FoodEntry)=>void
-    selectedDate:string;
-    meals:Meal[]
-    setSelectedIngredientId:(value:string)=>void
-}
+type AddEntryFormProps = {
+    ingredients: Ingredient[];
+    selectedIngredientId: string;
+    onAddEntry: (entry: FoodEntry) => void;
+    selectedDate: string;
+    meals: Meal[];
+    onIngredientChange: (value: string) => void;
+};
 
 export default function AddEntryForm({
     ingredients,
@@ -29,11 +29,12 @@ export default function AddEntryForm({
     onAddEntry,
     selectedDate,
     meals,
-    setSelectedIngredientId,
-}:AddEntryFormProps) {
+    onIngredientChange,
+}: AddEntryFormProps) {
     const [ingredientWeight, setIngredientWeight] = useState<string>("");
     const [weightInputError, setWeightInputError] = useState<string>("");
     const [selectedMealId, setSelectedMealId] = useState<string>("");
+    const shouldFocusInputRef = useRef(false);
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [ingredientSelectError, setIngredientSelectError] =
         useState<string>("");
@@ -117,7 +118,7 @@ export default function AddEntryForm({
 
     function handleIngredientSelectValueChange(value: string): void {
         shouldFocusInputRef.current = true;
-        setSelectedIngredientId(value);
+        onIngredientChange(value);
         setIngredientSelectError("");
     }
     function handleIngredientSelectOpenChange(open: boolean): void {
@@ -129,7 +130,6 @@ export default function AddEntryForm({
         }
     }
     const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
-    const shouldFocusInputRef = useRef(false);
     return (
         <form onSubmit={handleCreateEntrySubmit}>
             <FieldGroup>

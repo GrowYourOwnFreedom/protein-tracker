@@ -34,7 +34,7 @@ export default function EditIngredientPopover({
             <PopoverTrigger asChild>
                 <Button
                     disabled={!selectedIngredient}
-                    className="w-fit mx-auto rounded-full"
+                    className="rounded-full"
                     variant="outline"
                 >
                     Edit Ingredient
