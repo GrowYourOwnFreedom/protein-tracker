@@ -1,5 +1,5 @@
 import Panel from "@/components/app/Panel";
-import IngredientDetailsForm from "@/components/app/IngredientDetailsForms";
+import IngredientDetailsForm from "@/components/app/IngredientDetailsForm";
 import { Ingredient } from "@/types";
 
 type AddIngredientPanelProps = {

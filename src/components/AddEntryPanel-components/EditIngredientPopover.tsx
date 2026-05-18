@@ -1,4 +1,4 @@
-import IngredientDetailsForm from "@/components/app/IngredientDetailsForms";
+import IngredientDetailsForm from "@/components/app/IngredientDetailsForm";
 import { Button } from "@/components/ui/button";
 import {
     Popover,
@@ -13,8 +13,8 @@ import { useState } from "react";
 
 type EditIngredientPopoverProps = {
     onEditIngredient: (updatedIngredient: Ingredient) => void;
-    selectedIngredient: Ingredient;
 
+    selectedIngredient?: Ingredient;
     className?: string;
 };
 
