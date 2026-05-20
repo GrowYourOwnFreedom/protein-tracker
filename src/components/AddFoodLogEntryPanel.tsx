@@ -51,7 +51,7 @@ export default function AddFoodLogEntryPanel({
     });
 
     return (
-        <Panel title="Add Entry" className={className}>
+        <Panel title="Add Food Log Entry" className={className}>
             <AddFoodLogEntryForm
                 foodItems={foodItems}
                 meals={meals}

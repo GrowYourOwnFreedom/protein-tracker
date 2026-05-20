@@ -71,7 +71,7 @@ export default function NutritionSummaryPanel({
     }
 
     return (
-        <Panel title="Totals" className={className}>
+        <Panel title="Nutrition Summary" className={className}>
             <p className="text-center">Food Eaten: {weight.toFixed(0)} g</p>
             <FieldGroup>
                 <div className="grid grid-cols-2 gap-4">
