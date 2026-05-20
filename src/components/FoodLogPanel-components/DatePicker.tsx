@@ -16,7 +16,7 @@ function makeDateObject(selectedDate: string): Date {
         return dateObject;
     }
 
-export default function DatePicker({selectedDate, onSelectedDateChange}) {
+export default function DatePicker({selectedDate, onSelectedDateChange}:DatePickerProps) {
         const [datePickerOpen, setDatePickerOpen] = useState<boolean>(false);
 
 

@@ -1,39 +1,39 @@
-import { OldIngredient } from "@/types";
+import { OldFoodItem } from "@/types";
 
-export const defaultIngredients: OldIngredient[] = [
+export const defaultFoodItems: OldFoodItem[] = [
     {
-        ingredientId: "1",
+        foodItemId: "1",
         name: "Rolled oats, dry",
         caloriesPer100g: 389,
         proteinPer100g: 13.5,
-        ingredientCategoryId: "store-cupboard",
+        foodItemCategoryId: "store-cupboard",
     },
     {
-        ingredientId: "2",
+        foodItemId: "2",
         name: "Lentils, dry",
         caloriesPer100g: 352,
         proteinPer100g: 24.6,
-        ingredientCategoryId: "store-cupboard",
+        foodItemCategoryId: "store-cupboard",
     },
     {
-        ingredientId: "3",
+        foodItemId: "3",
         name: "Broccoli, raw",
         caloriesPer100g: 34,
         proteinPer100g: 2.82,
-        ingredientCategoryId: "fresh-produce",
+        foodItemCategoryId: "fresh-produce",
     },
     {
-        ingredientId: "4",
+        foodItemId: "4",
         name: "Cauliflower, raw",
         caloriesPer100g: 25,
         proteinPer100g: 1.92,
-        ingredientCategoryId: "fresh-produce",
+        foodItemCategoryId: "fresh-produce",
     },
     {
-        ingredientId: "5",
+        foodItemId: "5",
         name: "Tempeh",
         caloriesPer100g: 195,
         proteinPer100g: 19.9,
-        ingredientCategoryId: "products"
+        foodItemCategoryId: "products"
     },
 ];

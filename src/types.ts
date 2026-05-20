@@ -4,49 +4,67 @@ export type User = {
     userId: string;
     name: string;
 };
-
-export type IngredientCategory = {
-    ingredientCategoryId: string;
-    ingredientCategoryName: string;
+export type FoodItemCategory = {
+    foodItemCategoryId: string;
+    foodItemCategoryName: string;
 };
 
-export type Ingredient = {
-    ingredientId: string;
+export type FoodItem = {
+    foodItemId: string;
     name: string;
     caloriesPer100g: number;
     proteinPer100g: number;
     userId: string;
     dateCreated: string;
-    ingredientCategoryId: string;
+    foodItemCategoryId: string;
 };
 
-export type OldIngredient = {
+export type OldFoodItem = {
     name: string;
     caloriesPer100g: number;
     proteinPer100g: number;
 
+    foodItemCategoryId?: string;
+    ingredientCategoryId?: string;
+    foodItemId?: string;
     ingredientId?: string;
     id?: string;
     userId?: string;
     createdAt?: string;
     ingredientCategory?: string;
-    ingredientCategoryId?: string;
     dateCreated?: string;
 };
 
-export type FoodEntry = {
+export type FoodLogEntry = {
     name: string;
     weight: number;
     protein: number;
     calories: number;
-    foodEntryId: string;
+    foodLogEntryId: string;
     userId: string;
     date: string;
     createdAt: string;
-    ingredientId: string;
+    foodItemId: string;
 
     mealId?: string;
 };
+
+export type OldFoodLogEntry = {
+    name: string;
+    weight: number;
+    protein: number;
+    calories: number;
+    userId: string;
+    date: string;
+    createdAt: string;
+
+    mealId?: string;
+    foodItemId?: string;
+    ingredientId?: string;
+    foodLogEntryId?: string;
+    foodEntryId?: string;
+};
+
 export type Meal = {
     name: string;
     mealId: string;

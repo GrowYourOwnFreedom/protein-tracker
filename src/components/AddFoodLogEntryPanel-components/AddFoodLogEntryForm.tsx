@@ -1,5 +1,5 @@
-import IngredientSelectField from "@/components/AddEntryPanel-components/IngredientSelectField";
-import MealSelectField from "@/components/AddEntryPanel-components/MealSelectField";
+import FoodItemSelectField from "@/components/AddFoodLogEntryPanel-components/FoodItemSelectField";
+import MealSelectField from "@/components/AddFoodLogEntryPanel-components/MealSelectField";
 import { Button } from "@/components/ui/button";
 import {
     Field,
@@ -9,48 +9,48 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import createNewId from "@/lib/createNewId";
-import { sortIngredientsByProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
+import { sortFoodItemsByProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { FoodEntry, Ingredient, Meal } from "@/types";
+import {FoodLogEntry, FoodItem, Meal } from "@/types";
 import { useRef, useState } from "react";
 
-type AddEntryFormProps = {
-    ingredients: Ingredient[];
-    selectedIngredientId: string;
-    onAddEntry: (entry: FoodEntry) => void;
+type AddfoodLogEntryFormProps = {
+    foodItems: FoodItem[];
+    selectedFoodItemId: string;
+    onAddFoodLogEntry: (entry: FoodLogEntry) => void;
     selectedDate: string;
     meals: Meal[];
-    onIngredientChange: (value: string) => void;
+    onfoodItemChange: (value: string) => void;
 };
 
-export default function AddEntryForm({
-    ingredients,
-    selectedIngredientId,
-    onAddEntry,
+export default function AddFoodLogEntryForm({
+    foodItems,
+    selectedFoodItemId,
+    onAddFoodLogEntry,
     selectedDate,
     meals,
-    onIngredientChange,
-}: AddEntryFormProps) {
-    const [ingredientWeight, setIngredientWeight] = useState<string>("");
+    onfoodItemChange,
+}: AddfoodLogEntryFormProps) {
+    const [foodItemWeight, setFoodItemWeight] = useState<string>("");
     const [weightInputError, setWeightInputError] = useState<string>("");
     const [selectedMealId, setSelectedMealId] = useState<string>("");
     const shouldFocusInputRef = useRef(false);
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [ingredientSelectError, setIngredientSelectError] =
+    const [foodItemSelectError, setFoodItemSelectError] =
         useState<string>("");
 
-    async function handleCreateEntrySubmit(
+    async function handleCreateFoodLogEntrySubmit(
         event: React.SubmitEvent<HTMLFormElement>,
     ): Promise<void> {
         event.preventDefault();
-        const ingredient = ingredients.find((ingredient) => {
-            return ingredient.ingredientId === selectedIngredientId;
+        const foodItem = foodItems.find((foodItem) => {
+            return foodItem.foodItemId === selectedFoodItemId;
         });
-        const weight = Number(ingredientWeight);
+        const weight = Number(foodItemWeight);
         let inputError = false;
         let selectError = false;
 
-        if (ingredientWeight === "") {
+        if (foodItemWeight === "") {
             inputError = true;
             setWeightInputError("Please enter a weight");
         } else if (Number.isNaN(weight)) {
@@ -64,64 +64,64 @@ export default function AddEntryForm({
             setWeightInputError("");
         }
 
-        if (!selectedIngredientId) {
+        if (!selectedFoodItemId) {
             selectError = true;
-            setIngredientSelectError("Please select an ingredient");
+            setFoodItemSelectError("Please select an food item");
         } else {
             selectError = false;
-            setIngredientSelectError("");
+            setFoodItemSelectError("");
         }
 
         if (inputError || selectError) {
             return;
         }
-        if (!ingredient) {
-            setIngredientSelectError("Please select a valid ingredient");
+        if (!foodItem) {
+            setFoodItemSelectError("Please select a valid food item");
             return;
         }
 
-        const protein = (weight / 100) * ingredient.proteinPer100g;
-        const calories = (weight / 100) * ingredient.caloriesPer100g;
+        const protein = (weight / 100) * foodItem.proteinPer100g;
+        const calories = (weight / 100) * foodItem.caloriesPer100g;
         const date = selectedDate;
         const createdAt = new Date().toISOString();
-        const foodEntryId = createNewId();
+        const foodLogEntryId = createNewId();
         const user = await getCurrentUser();
         const userId = user.userId;
-        const name = ingredient.name;
-        const ingredientId = ingredient.ingredientId;
-        const newEntry: FoodEntry = {
+        const name = foodItem.name;
+        const foodItemId = foodItem.foodItemId;
+        const newFoodLogEntry: FoodLogEntry = {
             name,
             weight,
             calories,
             protein,
             date,
             createdAt,
-            foodEntryId,
+            foodLogEntryId,
             userId,
-            ingredientId,
+            foodItemId,
         };
         if (selectedMealId) {
             const selectedMeal = meals.find((meal) => {
                 return meal.mealId === selectedMealId;
             });
             if (selectedMeal) {
-                newEntry.mealId = selectedMealId;
+                newFoodLogEntry.mealId = selectedMealId;
             }
         }
 
-        onAddEntry(newEntry);
-        setIngredientWeight("");
+        onAddFoodLogEntry(newFoodLogEntry);
+        setFoodItemWeight("");
         setWeightInputError("");
-        setIngredientSelectError("");
+        setFoodItemSelectError("");
         setSelectedMealId("");
     }
 
-    function handleIngredientSelectValueChange(value: string): void {
+    function handleFoodItemSelectValueChange(value: string): void {
         shouldFocusInputRef.current = true;
-        onIngredientChange(value);
-        setIngredientSelectError("");
+        onfoodItemChange(value);
+        setFoodItemSelectError("");
     }
-    function handleIngredientSelectOpenChange(open: boolean): void {
+    function handleFoodItemSelectOpenChange(open: boolean): void {
         if (!open && shouldFocusInputRef.current) {
             shouldFocusInputRef.current = false;
             setTimeout(() => {
@@ -129,28 +129,28 @@ export default function AddEntryForm({
             }, 0);
         }
     }
-    const sortedIngredients = sortIngredientsByProteinEfficiency(ingredients);
+    const sortedFoodItems = sortFoodItemsByProteinEfficiency(foodItems);
     return (
-        <form onSubmit={handleCreateEntrySubmit}>
+        <form onSubmit={handleCreateFoodLogEntrySubmit}>
             <FieldGroup>
-                <IngredientSelectField
-                    ingredients={sortedIngredients}
-                    onChange={handleIngredientSelectValueChange}
-                    onOpenChange={handleIngredientSelectOpenChange}
-                    selectedIngredientId={selectedIngredientId}
-                    ingredientSelectError={ingredientSelectError}
+                <FoodItemSelectField
+                    foodItems={sortedFoodItems}
+                    onChange={handleFoodItemSelectValueChange}
+                    onOpenChange={handleFoodItemSelectOpenChange}
+                    selectedFoodItemId={selectedFoodItemId}
+                    foodItemSelectError={foodItemSelectError}
                 />
                 <Field>
-                    <FieldLabel htmlFor="ingredient-weight-input">
+                    <FieldLabel htmlFor="food-item-weight-input">
                         Enter The Weight (g):
                     </FieldLabel>
                     <Input
-                        id="ingredient-weight-input"
+                        id="food-item-weight-input"
                         ref={inputRef}
                         name="weight"
-                        value={ingredientWeight}
+                        value={foodItemWeight}
                         onChange={(e) => {
-                            setIngredientWeight(e.target.value);
+                            setFoodItemWeight(e.target.value);
                             setWeightInputError("");
                         }}
                     />

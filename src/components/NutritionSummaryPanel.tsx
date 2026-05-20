@@ -1,19 +1,18 @@
-import SummaryCard from "@/components/TotalsPanel-components/SummaryCard";
-import TargetCard from "@/components/TotalsPanel-components/TargetCard";
+import SummaryCard from "@/components/NutritionSummaryPanel-components/SummaryCard";
+import TargetCard from "@/components/NutritionSummaryPanel-components/TargetCard";
 import Panel from "@/components/app/Panel";
 import {
     Field,
     FieldError,
     FieldGroup,
     FieldLabel,
-    FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { FoodEntry } from "@/types";
+import { FoodLogEntry } from "@/types";
 import { useState } from "react";
 
-export type TotalsPanelProps = {
-    entries: FoodEntry[];
+export type NutritionSummaryPanelProps = {
+    foodLogEntries: FoodLogEntry[];
     calorieLimit: number;
     onCalorieLimitChange: (newCalorieLimit: number) => void;
     proteinTarget: number;
@@ -23,15 +22,15 @@ export type TotalsPanelProps = {
     className?: string;
 };
 
-export default function TotalsPanel({
-    entries,
+export default function NutritionSummaryPanel({
+    foodLogEntries,
     calorieLimit,
     onCalorieLimitChange,
     proteinTarget,
     onProteinTargetChange,
     selectedDate,
     className,
-}: TotalsPanelProps) {
+}: NutritionSummaryPanelProps) {
     const [proteinError, setProteinError] = useState<string>("");
     const [calorieError, setCalorieError] = useState<string>("");
     const totals = {
@@ -40,10 +39,10 @@ export default function TotalsPanel({
         protein: 0,
     };
 
-    entries.forEach((entry) => {
-        totals.calories = totals.calories + entry.calories;
-        totals.protein = totals.protein + entry.protein;
-        totals.weight = totals.weight + entry.weight;
+    foodLogEntries.forEach((foodLogEntry) => {
+        totals.calories = totals.calories + foodLogEntry.calories;
+        totals.protein = totals.protein + foodLogEntry.protein;
+        totals.weight = totals.weight + foodLogEntry.weight;
     });
 
     const { weight, calories, protein } = totals;

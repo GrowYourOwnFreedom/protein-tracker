@@ -1,4 +1,4 @@
-import FoodEntryCard from "@/components/ViewEntriesPanel-components/FoodEntryCard";
+import FoodLogEntryCard from "@/components/FoodLogPanel-components/FoodLogEntryCard";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -13,17 +13,17 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { formatNumber } from "@/lib/formatNumber";
-import { FoodEntry, Meal } from "@/types";
+import { FoodLogEntry, Meal } from "@/types";
 import { useState } from "react";
 
 type MealCardProps = {
     meal: Meal;
-    entries: FoodEntry[];
+    foodLogEntries: FoodLogEntry[];
     calories: number;
     protein: number;
     calorieLimit: number;
     proteinTarget: number;
-    onDeleteEntry: (foodEntryId: string) => void;
+    onDeleteEntry: (foodLogEntryId: string) => void;
     weight: number;
 
     className?: string;
@@ -31,7 +31,7 @@ type MealCardProps = {
 
 export default function MealCard({
     meal,
-    entries,
+    foodLogEntries,
     calories,
     protein,
     calorieLimit,
@@ -48,7 +48,7 @@ export default function MealCard({
         proteinTarget > 0 ? (protein / proteinTarget) * 100 : 0;
     const triggerMessage = collapsibleOpen
         ? "Hide entries"
-        : `Show ${entries.length} entries`;
+        : `Show ${foodLogEntries.length} entries`;
 
     return (
         <Card className="w-full bg-card ring-1 ring-foreground/10 max-w-md rounded-lg gap-6 shadow-sm shrink-0">
@@ -81,14 +81,14 @@ export default function MealCard({
                         {formatNumber(percentOfProteinTarget)}%)
                     </p>
                     <CollapsibleContent className="mt-4 flex flex-col gap-y-3 pl-3">
-                        {entries.map((entry) => {
+                        {foodLogEntries.map((foodLogEntry) => {
                             return (
-                                <FoodEntryCard
+                                <FoodLogEntryCard
                                     size="sm"
                                     className="bg-muted/40 shadow-none border-none"
-                                    key={entry.foodEntryId}
+                                    key={foodLogEntry.foodLogEntryId}
                                     proteinTarget={proteinTarget}
-                                    entry={entry}
+                                    entry={foodLogEntry}
                                     calorieLimit={calorieLimit}
                                     onDeleteEntry={deleteEntry}
                                 />

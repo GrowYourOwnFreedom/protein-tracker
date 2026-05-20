@@ -1,8 +1,8 @@
 import "./App.css";
-import TotalsPanel from "@/components/TotalsPanel";
+import NutritionSummaryPanel from "@/components/NutritionSummaryPanel";
 import { useState, useEffect } from "react";
-import AddEntryPanel from "@/components/AddEntryPanel";
-import AddIngredientPanel from "@/components/AddIngredientPanel";
+import AddFoodLogEntryPanel from "@/components/AddFoodLogEntryPanel";
+import AddFoodItemPanel from "@/components/AddFoodItemPanel";
 import {
     createStoredIngredient,
     fetchStoredIngredients,
@@ -19,13 +19,13 @@ import {
     deleteStoredFoodEntry,
     createStoredMeal,
 } from "@/lib/storageCrudHelpers";
-import { FoodEntry, Ingredient, Meal } from "@/types";
-import ViewEntriesPanel from "@/components/ViewEntriesPanel";
+import { FoodItem, FoodLogEntry, Meal } from "@/types";
+import FoodLogPanel from "@/components/FoodLogPanel";
 import { getToday } from "@/lib/getToday";
 
 function App() {
-    const [entries, setEntries] = useState<FoodEntry[]>([]);
-    const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+    const [foodLogEntries, setFoodLogEntries] = useState<FoodLogEntry[]>([]);
+    const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>(() => getToday());
     const [calorieLimit, setCalorieLimit] = useState<number>(() =>
         fetchStoredCalorieLimit(),
@@ -36,17 +36,17 @@ function App() {
     );
 
     useEffect(() => {
-        async function loadIngredients() {
+        async function loadFoodItems() {
             const user = await getCurrentUser();
-            const fetchedIngredients = fetchStoredIngredients(user.userId);
-            setIngredients(fetchedIngredients);
+            const fetchedFoodItems = fetchStoredIngredients(user.userId);
+            setFoodItems(fetchedFoodItems);
         }
-        loadIngredients();
+        loadFoodItems();
     }, []);
 
     useEffect(() => {
-        const entriesToDisplay = fetchStoredFoodEntries(selectedDate);
-        setEntries(entriesToDisplay);
+        const foodLogEntriesToDisplay = fetchStoredFoodEntries(selectedDate);
+        setFoodLogEntries(foodLogEntriesToDisplay);
     }, [selectedDate]);
 
     useEffect(() => {
@@ -62,44 +62,44 @@ function App() {
         updateStoredProteinTarget(proteinTarget);
     }, [proteinTarget]);
 
-    function addIngredient(newIngredient: Ingredient): void {
-        const newIngredients = [...ingredients, newIngredient];
-        setIngredients(newIngredients);
-        createStoredIngredient(newIngredient);
+    function addFoodItem(newFoodItem: FoodItem): void {
+        const newFoodItems = [...foodItems, newFoodItem];
+        setFoodItems(newFoodItems);
+        createStoredIngredient(newFoodItem);
     }
 
-    function updateIngredient(updatedIngredient: Ingredient) {
-        const updatedIngredients = ingredients.map((ingredient) => {
-            if (ingredient.ingredientId === updatedIngredient.ingredientId) {
-                return updatedIngredient;
+    function updateFoodItem(updatedFoodItem: FoodItem) {
+        const updatedFoodItems = foodItems.map((foodItem) => {
+            if (foodItem.foodItemId === updatedFoodItem.foodItemId) {
+                return updatedFoodItem;
             }
-            return ingredient;
+            return foodItem;
         });
 
-        setIngredients(updatedIngredients);
-        updateStoredIngredient(updatedIngredient);
+        setFoodItems(updatedFoodItems);
+        updateStoredIngredient(updatedFoodItem);
     }
 
-    function deleteIngredient(ingredientId: string): void {
-        const updatedIngredients = ingredients.filter((ingredient) => {
-            return ingredient.ingredientId !== ingredientId;
+    function deleteFoodItem(foodItemId: string): void {
+        const updatedFoodItems = foodItems.filter((foodItem) => {
+            return foodItem.foodItemId !== foodItemId;
         });
-        setIngredients(updatedIngredients);
-        deleteStoredIngredient(ingredientId);
+        setFoodItems(updatedFoodItems);
+        deleteStoredIngredient(foodItemId);
     }
 
-    function addEntry(newEntry: FoodEntry): void {
-        const newEntries = [newEntry, ...entries];
-        setEntries(newEntries);
-        createStoredFoodEntry(newEntry);
+    function addFoodLogEntry(newFoodLogEntry: FoodLogEntry): void {
+        const newEntries = [newFoodLogEntry, ...foodLogEntries];
+        setFoodLogEntries(newEntries);
+        createStoredFoodEntry(newFoodLogEntry);
     }
 
-    function deleteEntry(foodEntryId: string): void {
-        const filteredEntries = entries.filter((entry) => {
-            return entry.foodEntryId !== foodEntryId;
+    function deleteEntry(foodLogEntryId: string): void {
+        const filteredEntries = foodLogEntries.filter((entry) => {
+            return entry.foodLogEntryId !== foodLogEntryId;
         });
-        setEntries(filteredEntries);
-        deleteStoredFoodEntry(foodEntryId);
+        setFoodLogEntries(filteredEntries);
+        deleteStoredFoodEntry(foodLogEntryId);
     }
 
     function updateCalorieLimit(newCalorieLimit: number): void {
@@ -127,9 +127,9 @@ function App() {
                 </h1>
             </header>
             <main className="grid grid-cols-1 gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr]">
-                <TotalsPanel
+                <NutritionSummaryPanel
                     className="lg:h-auto lg:min-h-0 "
-                    entries={entries}
+                    foodLogEntries={foodLogEntries}
                     calorieLimit={calorieLimit}
                     onCalorieLimitChange={updateCalorieLimit}
                     proteinTarget={proteinTarget}
@@ -137,21 +137,21 @@ function App() {
                     selectedDate={selectedDate}
                 />
                 <div className="flex flex-col gap-4  lg:h-auto lg:min-h-0">
-                    <AddEntryPanel
-                        ingredients={ingredients}
-                        onAddEntry={addEntry}
-                        onDeleteIngredient={deleteIngredient}
+                    <AddFoodLogEntryPanel
+                        foodItems={foodItems}
+                        onAddFoodLogEntry={addFoodLogEntry}
+                        onDeleteFoodItem={deleteFoodItem}
                         selectedDate={selectedDate}
-                        onEditIngredient={updateIngredient}
+                        onEditFoodItem={updateFoodItem}
                         onCreateMeal={createMeal}
                         meals={meals}
                     />
-                    <AddIngredientPanel onAddIngredient={addIngredient} />
+                    <AddFoodItemPanel onAddFoodItem={addFoodItem} />
                 </div>
-                <ViewEntriesPanel
+                <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"
-                    entries={entries}
-                    onDeleteEntry={deleteEntry}
+                    foodLogEntries={foodLogEntries}
+                    onDeleteFoodLogEntry={deleteEntry}
                     calorieLimit={calorieLimit}
                     proteinTarget={proteinTarget}
                     onSelectedDateChange={updateSelectedDate}

@@ -8,27 +8,27 @@ import {
 } from "@/components/ui/card";
 import { formatNumber } from "@/lib/formatNumber";
 import { cn } from "@/lib/utils";
-import { FoodEntry } from "@/types";
+import { FoodLogEntry } from "@/types";
 
 
- type FoodEntryCardProps = {
-    entry: FoodEntry;
+ type FoodLogEntryCardProps = {
+    entry: FoodLogEntry;
     calorieLimit: number;
     proteinTarget: number;
-    onDeleteEntry: (foodEntryId: string) => void;
+    onDeleteEntry: (foodLogEntryId: string) => void;
     className?: string;
     size?: "default" | "sm";
 };
 
-export default function FoodEntryCard({
+export default function FoodLogEntryCard({
     entry,
     calorieLimit,
     proteinTarget,
     onDeleteEntry: deleteEntry,
     className,
     size = "default",
-}: FoodEntryCardProps) {
-    const { weight, calories, protein, name, foodEntryId } = entry;
+}: FoodLogEntryCardProps) {
+    const { weight, calories, protein, name, foodLogEntryId } = entry;
     const percentOfCalorieLimit =
         calorieLimit > 0 ? (calories / calorieLimit) * 100 : 0;
     const percentOfProteinTarget =
@@ -55,7 +55,7 @@ export default function FoodEntryCard({
                         size="icon"
                         variant="destructive"
                         onClick={() => {
-                            deleteEntry(foodEntryId);
+                            deleteEntry(foodLogEntryId);
                         }}
                     >
                         X

@@ -1,16 +1,26 @@
 import { dummyUser } from "@/data/dummyUser";
 import { getToday } from "@/lib/getToday";
-import { FoodEntry, Ingredient, Meal, OldIngredient, User } from "@/types";
-import { defaultIngredients } from "@/data/defaultIngredients";
+import {
+    FoodItem,
+    FoodLogEntry,
+    Meal,
+    OldFoodItem,
+    OldFoodLogEntry,
+    User,
+} from "@/types";
+import { defaultFoodItems } from "@/data/defaultFoodItems";
 
-const INGREDIENTS_STORAGE_KEY = "proteinTrackerIngredients";
-const ENTRIES_STORAGE_KEY = "proteinTrackerEntries";
+const FOOD_ITEMS_STORAGE_KEY = "proteinTrackerIngredients";
+const FOOD_LOG_ENTRIES_STORAGE_KEY = "proteinTrackerEntries";
 const MEALS_STORAGE_KEY = "proteinTrackerMeals";
 const CALORIE_LIMIT_STORAGE_KEY = "proteinTrackerCalorieLimit";
 const PROTEIN_TARGET_STORAGE_KEY = "proteinTrackerProteinTarget";
-const INGREDIENTS_BACKUP_KEY = "ingredientsMigrationBackup";
+const FOOD_IETMS_BACKUP_KEY = "ingredientsMigrationBackup";
+const FOOD_ENTRY_LOG_BACKUP_KEY = "foodLogEntriesBackup";
 const DEFAULT_CALORIE_LIMIT = 2000;
 const DEFAULT_PROTEIN_TARGET = 100;
+const DATA_VERSION = "4";
+const DATA_VERSION_STORAGE_KEY = "dataVersion";
 
 function getArrayFromStorage<T>(storageKey: string): T[] {
     const savedArrayJSON = localStorage.getItem(storageKey);
@@ -36,129 +46,176 @@ function saveArrayToStorage<T>(storageKey: string, items: T[]): void {
     const itemsJSON = JSON.stringify(items);
     localStorage.setItem(storageKey, itemsJSON);
 }
-// Ingredient data functions
+// FoodItems data functions
 
-function setDefaultIngredients(userId: string): Ingredient[] {
-    const normalisedBaseIngredients = normaliseIngredients(
-        defaultIngredients,
-        userId,
-    );
-    saveArrayToStorage<Ingredient>(
-        INGREDIENTS_STORAGE_KEY,
-        normalisedBaseIngredients,
-    );
-    return normalisedBaseIngredients;
-}
-
-function normaliseIngredient(
-    oldIngredient: OldIngredient,
-    userId: string,
-): Ingredient {
+function normaliseFoodItem(oldFoodItem: OldFoodItem, userId: string): FoodItem {
     return {
-        ingredientId: oldIngredient.ingredientId ?? oldIngredient.id,
-        name: oldIngredient.name,
-        caloriesPer100g: oldIngredient.caloriesPer100g,
-        proteinPer100g: oldIngredient.proteinPer100g,
-        userId: oldIngredient.userId ?? userId,
+        foodItemId:
+            oldFoodItem.foodItemId ||
+            oldFoodItem.ingredientId ||
+            oldFoodItem.id,
+        name: oldFoodItem.name,
+        caloriesPer100g: oldFoodItem.caloriesPer100g,
+        proteinPer100g: oldFoodItem.proteinPer100g,
+        userId: oldFoodItem.userId ?? userId,
         dateCreated:
-            (oldIngredient.createdAt || oldIngredient.dateCreated) ??
-            getToday(),
-        ingredientCategoryId: oldIngredient.ingredientCategoryId ?? "other",
+            (oldFoodItem.createdAt || oldFoodItem.dateCreated) ?? getToday(),
+        foodItemCategoryId:
+            oldFoodItem.foodItemCategoryId ||
+            oldFoodItem.ingredientCategoryId ||
+            "other",
     };
 }
 
-function normaliseIngredients(
-    oldIngredients: OldIngredient[],
+function normaliseFoodItems(
+    oldFoodItems: OldFoodItem[],
     userId: string,
-): Ingredient[] {
-    const cleanIngredients = oldIngredients.map((oldIngredient) =>
-        normaliseIngredient(oldIngredient, userId),
+): FoodItem[] {
+    const cleanFoodItem = oldFoodItems.map((oldFoodItem) =>
+        normaliseFoodItem(oldFoodItem, userId),
     );
-    return cleanIngredients;
+    return cleanFoodItem;
 }
 
-function fetchLocalIngredients(userId: string): Ingredient[] {
-    const savedIngredients = getArrayFromStorage<OldIngredient>(
-        INGREDIENTS_STORAGE_KEY,
-    );
-    if (!Array.isArray(savedIngredients) || savedIngredients.length === 0)
-        return setDefaultIngredients(userId);
-
-    const dataVersion = localStorage.getItem("dataVersion");
-    const normalisedSavedIngredients = normaliseIngredients(
-        savedIngredients,
+function setDefaultFoodItems(userId: string): FoodItem[] {
+    const normalisedBaseFoodItems = normaliseFoodItems(
+        defaultFoodItems,
         userId,
     );
+    saveArrayToStorage<FoodItem>(
+        FOOD_ITEMS_STORAGE_KEY,
+        normalisedBaseFoodItems,
+    );
+    return normalisedBaseFoodItems;
+}
 
-    if (dataVersion !== "2") {
-        saveArrayToStorage(INGREDIENTS_BACKUP_KEY, savedIngredients);
-        console.log("Migrating ingredients to version 2");
-        replaceLocalIngredients(normalisedSavedIngredients);
-        localStorage.setItem("dataVersion", "2");
+function replaceLocalFoodItems(foodItems: FoodItem[]): void {
+    saveArrayToStorage<FoodItem>(FOOD_ITEMS_STORAGE_KEY, foodItems);
+}
+
+function fetchLocalFoodItems(userId: string): FoodItem[] {
+    const savedFoodItems = getArrayFromStorage<OldFoodItem>(
+        FOOD_ITEMS_STORAGE_KEY,
+    );
+    if (!Array.isArray(savedFoodItems) || savedFoodItems.length === 0)
+        return setDefaultFoodItems(userId);
+
+    const dataVersion = localStorage.getItem(DATA_VERSION_STORAGE_KEY);
+    const normalisedSavedFoodItems = normaliseFoodItems(savedFoodItems, userId);
+
+    if (dataVersion !== DATA_VERSION) {
+        saveArrayToStorage(FOOD_IETMS_BACKUP_KEY, savedFoodItems);
+        console.log(`Migrating FoodItems to version ${DATA_VERSION}`);
+        replaceLocalFoodItems(normalisedSavedFoodItems);
+        localStorage.setItem(DATA_VERSION_STORAGE_KEY, DATA_VERSION);
     }
-    return normalisedSavedIngredients;
+    return normalisedSavedFoodItems;
 }
 
-function replaceLocalIngredients(ingredients: Ingredient[]): void {
-    saveArrayToStorage<Ingredient>(INGREDIENTS_STORAGE_KEY, ingredients);
+function createLocalFoodItem(newFoodItem: FoodItem): void {
+    const FoodItems = getArrayFromStorage<FoodItem>(FOOD_ITEMS_STORAGE_KEY);
+    const updatedFoodItems = [...FoodItems, newFoodItem];
+    saveArrayToStorage<FoodItem>(FOOD_ITEMS_STORAGE_KEY, updatedFoodItems);
 }
 
-function createLocalIngredient(newIngredient: Ingredient): void {
-    const ingredients = getArrayFromStorage<Ingredient>(
-        INGREDIENTS_STORAGE_KEY,
+function deleteLocalFoodItem(FoodItemId: string): void {
+    const existingFoodItems = getArrayFromStorage<FoodItem>(
+        FOOD_ITEMS_STORAGE_KEY,
     );
-    const updatedIngredients = [...ingredients, newIngredient];
-    saveArrayToStorage<Ingredient>(INGREDIENTS_STORAGE_KEY, updatedIngredients);
-}
-
-function deleteLocalIngredient(ingredientId: string): void {
-    const existingIngredients = getArrayFromStorage<Ingredient>(
-        INGREDIENTS_STORAGE_KEY,
-    );
-    const filteredIngredients = existingIngredients.filter((ingredient) => {
-        return ingredient.ingredientId !== ingredientId;
+    const filteredFoodItems = existingFoodItems.filter((FoodItem) => {
+        return FoodItem.foodItemId !== FoodItemId;
     });
-    saveArrayToStorage<Ingredient>(
-        INGREDIENTS_STORAGE_KEY,
-        filteredIngredients,
-    );
+    saveArrayToStorage<FoodItem>(FOOD_ITEMS_STORAGE_KEY, filteredFoodItems);
 }
 
-function updateLocalIngredient(updatedIngredient: Ingredient):void {
-    const existingIngredients = getArrayFromStorage<Ingredient>(
-        INGREDIENTS_STORAGE_KEY,
+function updateLocalFoodItem(updatedFoodItem: FoodItem): void {
+    const existingFoodItems = getArrayFromStorage<FoodItem>(
+        FOOD_ITEMS_STORAGE_KEY,
     );
-    const updatedIngredients = existingIngredients.map((ingredient) => {
-        if (ingredient.ingredientId === updatedIngredient.ingredientId) {
-            return updatedIngredient;
+    const updatedFoodItems = existingFoodItems.map((FoodItem) => {
+        if (FoodItem.foodItemId === updatedFoodItem.foodItemId) {
+            return updatedFoodItem;
         }
-        return ingredient;
+        return FoodItem;
     });
-    saveArrayToStorage<Ingredient>(INGREDIENTS_STORAGE_KEY, updatedIngredients);
+    saveArrayToStorage<FoodItem>(FOOD_ITEMS_STORAGE_KEY, updatedFoodItems);
 }
 
 // FoodEntry data functions
-
-function fetchLocalFoodEntries(selectedDate: string): FoodEntry[] {
-    const savedEntries = getArrayFromStorage<FoodEntry>(ENTRIES_STORAGE_KEY);
-    const selectedEntries = savedEntries.filter(
-        (entry: FoodEntry): boolean => entry.date === selectedDate,
+function replaceLocalFoodLogEntries(foodLogEntry: FoodLogEntry[]): void {
+    saveArrayToStorage<FoodLogEntry>(
+        FOOD_LOG_ENTRIES_STORAGE_KEY,
+        foodLogEntry,
     );
-    return selectedEntries;
+}
+function normaliseFoodLogEntry(foodLogEntry: OldFoodLogEntry): FoodLogEntry {
+    return {
+        name: foodLogEntry.name,
+        weight: foodLogEntry.weight,
+        protein: foodLogEntry.protein,
+        calories: foodLogEntry.calories,
+        userId: foodLogEntry.userId,
+        date: foodLogEntry.date,
+        createdAt: foodLogEntry.createdAt,
+        foodLogEntryId: foodLogEntry.foodLogEntryId ?? foodLogEntry.foodEntryId,
+        foodItemId: foodLogEntry.foodItemId ?? foodLogEntry.ingredientId,
+        mealId: foodLogEntry.mealId || undefined,
+    };
 }
 
-function createLocalFoodEntry(newEntry: FoodEntry): void {
-    const existingEntries = getArrayFromStorage<FoodEntry>(ENTRIES_STORAGE_KEY);
-    const updatedEntries = [...existingEntries, newEntry];
-    saveArrayToStorage<FoodEntry>(ENTRIES_STORAGE_KEY, updatedEntries);
-}
-
-function deleteLocalFoodEntry(entryId: string): void {
-    const existingEntries = getArrayFromStorage<FoodEntry>(ENTRIES_STORAGE_KEY);
-    const filteredEntries = existingEntries.filter((entry) => {
-        return entry.foodEntryId !== entryId;
+function normaliseFoodLogEntries(
+    foodLogEntries: OldFoodLogEntry[],
+): FoodLogEntry[] {
+    const normalisedFoodEntries = foodLogEntries.map((foodLogEntry) => {
+        return normaliseFoodLogEntry(foodLogEntry);
     });
-    saveArrayToStorage<FoodEntry>(ENTRIES_STORAGE_KEY, filteredEntries);
+    return normalisedFoodEntries;
+}
+
+function fetchLocalFoodLogEntries(selectedDate: string): FoodLogEntry[] {
+    const savedFoodLogEntries = getArrayFromStorage<FoodLogEntry>(
+        FOOD_LOG_ENTRIES_STORAGE_KEY,
+    );
+    const dataVersion = localStorage.getItem(DATA_VERSION_STORAGE_KEY);
+    const normalisedFoodEntries = normaliseFoodLogEntries(savedFoodLogEntries);
+    if (dataVersion !== DATA_VERSION) {
+        saveArrayToStorage(FOOD_ENTRY_LOG_BACKUP_KEY, savedFoodLogEntries);
+        console.log(`Migrating FoodLogEntries to version ${DATA_VERSION}`);
+        replaceLocalFoodLogEntries(normalisedFoodEntries);
+        localStorage.setItem(DATA_VERSION_STORAGE_KEY, DATA_VERSION);
+    }
+
+    const selectedFoodLogEntries = savedFoodLogEntries.filter(
+        (foodLogentry: FoodLogEntry): boolean =>
+            foodLogentry.date === selectedDate,
+    );
+    return selectedFoodLogEntries;
+}
+
+function createLocalFoodLogEntry(newFoodLogEntry: FoodLogEntry): void {
+    const existingFoodLogEntries = getArrayFromStorage<FoodLogEntry>(
+        FOOD_LOG_ENTRIES_STORAGE_KEY,
+    );
+    const updatedFoodLogEntries = [...existingFoodLogEntries, newFoodLogEntry];
+    saveArrayToStorage<FoodLogEntry>(
+        FOOD_LOG_ENTRIES_STORAGE_KEY,
+        updatedFoodLogEntries,
+    );
+}
+
+function deleteLocalFoodEntry(FoodLogEntryId: string): void {
+    const existingFoodLogEntries = getArrayFromStorage<FoodLogEntry>(
+        FOOD_LOG_ENTRIES_STORAGE_KEY,
+    );
+    const filteredFoodLogEntries = existingFoodLogEntries.filter(
+        (foodLogEntry) => {
+            return foodLogEntry.foodLogEntryId !== FoodLogEntryId;
+        },
+    );
+    saveArrayToStorage<FoodLogEntry>(
+        FOOD_LOG_ENTRIES_STORAGE_KEY,
+        filteredFoodLogEntries,
+    );
 }
 
 function updateLocalCalorieLimit(calories: number): void {
@@ -213,20 +270,20 @@ function fetchLocalMeals(selectedDate: string): Meal[] {
 }
 
 export {
-    fetchLocalFoodEntries as fetchStoredFoodEntries,
-    createLocalFoodEntry as createStoredFoodEntry,
+    fetchLocalFoodLogEntries as fetchStoredFoodEntries,
+    createLocalFoodLogEntry as createStoredFoodEntry,
     deleteLocalFoodEntry as deleteStoredFoodEntry,
-    createLocalIngredient as createStoredIngredient,
-    fetchLocalIngredients as fetchStoredIngredients,
-    updateLocalIngredient as updateStoredIngredient,
-    deleteLocalIngredient as deleteStoredIngredient,
-    replaceLocalIngredients as replaceStoredIngredients,
+    createLocalFoodItem as createStoredIngredient,
+    fetchLocalFoodItems as fetchStoredIngredients,
+    updateLocalFoodItem as updateStoredIngredient,
+    deleteLocalFoodItem as deleteStoredIngredient,
+    replaceLocalFoodItems as replaceStoredIngredients,
     fetchLocalCalorieLimit as fetchStoredCalorieLimit,
     updateLocalCalorieLimit as updateStoredCalorieLimit,
     fetchLocalProteinTarget as fetchStoredProteinTarget,
     updateLocalProteinTarget as updateStoredProteinTarget,
     fetchDummyUser as getCurrentUser,
-    normaliseIngredients,
+    normaliseFoodItems,
     createLocalMeal as createStoredMeal,
     fetchLocalMeals as fetchStoredMeals,
 };

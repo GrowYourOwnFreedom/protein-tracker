@@ -1,13 +1,13 @@
 import Panel from "@/components/app/Panel";
-import FoodEntryCard from "./ViewEntriesPanel-components/FoodEntryCard";
-import MealCard from "@/components/ViewEntriesPanel-components/MealCard";
-import DatePicker from "@/components/ViewEntriesPanel-components/DatePicker";
+import FoodLogEntryCard from "./FoodLogPanel-components/FoodLogEntryCard";
+import MealCard from "@/components/FoodLogPanel-components/MealCard";
+import DatePicker from "@/components/FoodLogPanel-components/DatePicker";
 import createEntryDisplayItems from "@/lib/createEntryDisplayItems";
-import { FoodEntry, Meal } from "@/types";
+import { FoodLogEntry, Meal } from "@/types";
 
-type ViewEntriesPanelProps = {
-    entries: FoodEntry[];
-    onDeleteEntry: (foodEntryId: string) => void;
+type FoodLogPanelProps = {
+    foodLogEntries: FoodLogEntry[];
+    onDeleteFoodLogEntry: (foodLogEntryId: string) => void;
     onSelectedDateChange: (date: string) => void;
     selectedDate: string;
     calorieLimit: number;
@@ -17,17 +17,17 @@ type ViewEntriesPanelProps = {
     className?: string;
 };
 
-export default function ViewEntriesPanel({
-    entries,
-    onDeleteEntry: deleteEntry,
+export default function FoodLogPanel({
+    foodLogEntries,
+    onDeleteFoodLogEntry: deleteFoodLogEntry,
     calorieLimit,
     proteinTarget,
     onSelectedDateChange,
     selectedDate,
     className,
     meals,
-}: ViewEntriesPanelProps) {
-    const displayItems = createEntryDisplayItems(entries, meals);
+}: FoodLogPanelProps) {
+    const displayItems = createEntryDisplayItems(foodLogEntries, meals);
 
     return (
         <Panel title="Food Entries" className={className}>
@@ -42,24 +42,24 @@ export default function ViewEntriesPanel({
                             <MealCard
                                 key={item.meal.mealId}
                                 meal={item.meal}
-                                entries={item.entries}
+                                foodLogEntries={item.foodLogEntries}
                                 calories={item.calories}
                                 protein={item.protein}
                                 calorieLimit={calorieLimit}
                                 proteinTarget={proteinTarget}
-                                onDeleteEntry={deleteEntry}
+                                onDeleteEntry={deleteFoodLogEntry}
                                 weight={item.weight}
                             />
                         );
                     }
 
                     return (
-                        <FoodEntryCard
-                            key={item.entry.foodEntryId}
+                        <FoodLogEntryCard
+                            key={item.foodLogEntry.foodLogEntryId}
                             proteinTarget={proteinTarget}
-                            entry={item.entry}
+                            entry={item.foodLogEntry}
                             calorieLimit={calorieLimit}
-                            onDeleteEntry={deleteEntry}
+                            onDeleteEntry={deleteFoodLogEntry}
                         />
                     );
                 })}

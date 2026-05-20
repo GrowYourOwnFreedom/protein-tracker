@@ -1,4 +1,4 @@
-import { Ingredient } from "@/types";
+import { FoodItem } from "@/types";
 
 function getProteinEfficiency(calories:number, protein:number):number {
     if (!calories || !protein || calories<=0 || protein <=0) {
@@ -7,8 +7,8 @@ function getProteinEfficiency(calories:number, protein:number):number {
     return (protein / calories) * 100;
 }
 
-function sortIngredientsByProteinEfficiency(ingredients:Ingredient[]):Ingredient[] {
-    return ingredients.sort((a, b) => {
+function sortFoodItemsByProteinEfficiency(foodItem:FoodItem[]):FoodItem[] {
+    return foodItem.sort((a, b) => {
         const efficiencyA = getProteinEfficiency(
             a.caloriesPer100g,
             a.proteinPer100g,
@@ -20,4 +20,4 @@ function sortIngredientsByProteinEfficiency(ingredients:Ingredient[]):Ingredient
         return efficiencyB - efficiencyA;
     });
 }
-export { getProteinEfficiency, sortIngredientsByProteinEfficiency };
+export { getProteinEfficiency, sortFoodItemsByProteinEfficiency };

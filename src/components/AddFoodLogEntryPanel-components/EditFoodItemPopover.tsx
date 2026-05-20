@@ -1,4 +1,4 @@
-import IngredientDetailsForm from "@/components/app/IngredientDetailsForm";
+import FoodItemDetailsForm from "@/components/app/FoodItemDetailsForm";
 import { Button } from "@/components/ui/button";
 import {
     Popover,
@@ -8,24 +8,24 @@ import {
     PopoverTitle,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { Ingredient } from "@/types";
+import { FoodItem } from "@/types";
 import { useState } from "react";
 
-type EditIngredientPopoverProps = {
-    onEditIngredient: (updatedIngredient: Ingredient) => void;
+type EditFoodItemPopoverProps = {
+    onEditFoodItem: (updatedFoodItem: FoodItem) => void;
 
-    selectedIngredient?: Ingredient;
+    selectedFoodItem?: FoodItem;
     className?: string;
 };
 
-export default function EditIngredientPopover({
-    selectedIngredient,
-    onEditIngredient,
-}: EditIngredientPopoverProps) {
+export default function EditFoodItemPopover({
+    selectedFoodItem,
+    onEditFoodItem,
+}: EditFoodItemPopoverProps) {
     const [popoverOpen, setPopoverOpen] = useState(false);
 
-    function handleEditIngredient(ingredient: Ingredient): void {
-        onEditIngredient(ingredient);
+    function handleEditFoodItem(foodItem: FoodItem): void {
+        onEditFoodItem(foodItem);
         setPopoverOpen(false);
     }
 
@@ -33,24 +33,24 @@ export default function EditIngredientPopover({
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    disabled={!selectedIngredient}
+                    disabled={!selectedFoodItem}
                     className="rounded-full"
                     variant="outline"
                 >
-                    Edit Ingredient
+                    Edit Food Item
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="end">
                 <PopoverHeader>
-                    <PopoverTitle>Edit Ingredient</PopoverTitle>
+                    <PopoverTitle>Edit Food Item</PopoverTitle>
                     <PopoverDescription>
-                        Update details for this ingredient.
+                        Update details for this food item.
                     </PopoverDescription>
                 </PopoverHeader>
-                {selectedIngredient && (
-                    <IngredientDetailsForm
-                        existingIngredient={selectedIngredient}
-                        onSave={handleEditIngredient}
+                {selectedFoodItem && (
+                    <FoodItemDetailsForm
+                        existingFoodItem={selectedFoodItem}
+                        onSave={handleEditFoodItem}
                     />
                 )}
             </PopoverContent>

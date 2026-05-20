@@ -1,15 +1,15 @@
-import { FoodEntry, Meal } from "@/types";
+import { FoodLogEntry, Meal } from "@/types";
 type EntryDisplayItem = {
-    type: "entry";
+    type: "foodLogEntry";
     createdAt: string;
-    entry: FoodEntry;
+    foodLogEntry: FoodLogEntry;
 };
 
 type MealDisplayItem = {
     type: "meal";
     createdAt: string;
     meal: Meal;
-    entries: FoodEntry[];
+    foodLogEntries: FoodLogEntry[];
     calories: number;
     protein: number;
     weight: number;
@@ -23,13 +23,13 @@ type EntryTotals = {
     weight: number;
 };
 
-function calculateEntriesTotals(entries: FoodEntry[]):EntryTotals {
-    return entries.reduce(
-        (totalsObj, entry) => {
+function calculateEntriesTotals(foodLogEntries: FoodLogEntry[]):EntryTotals {
+    return foodLogEntries.reduce(
+        (totalsObj, foodLogEntry) => {
             return {
-                protein: totalsObj.protein + entry.protein,
-                calories: totalsObj.calories + entry.calories,
-                weight: totalsObj.weight + entry.weight,
+                protein: totalsObj.protein + foodLogEntry.protein,
+                calories: totalsObj.calories + foodLogEntry.calories,
+                weight: totalsObj.weight + foodLogEntry.weight,
             };
         },
         { protein: 0, calories: 0, weight: 0 },
@@ -37,17 +37,17 @@ function calculateEntriesTotals(entries: FoodEntry[]):EntryTotals {
 }
 
 export default function createEntryDisplayItems(
-    entries: FoodEntry[],
+    foodLogEntries: FoodLogEntry[],
     meals: Meal[],
 ): DisplayItem[] {
     const mealDisplayItems: MealDisplayItem[] = meals
         .map((meal): MealDisplayItem => {
-            const entriesForMeal = entries.filter((entry) => {
-                return entry.mealId === meal.mealId;
+            const foodLogEntriesForMeal = foodLogEntries.filter((foodLogEntry) => {
+                return foodLogEntry.mealId === meal.mealId;
             });
 
             const { protein, calories, weight } =
-                calculateEntriesTotals(entriesForMeal);
+                calculateEntriesTotals(foodLogEntriesForMeal);
             return {
                 type: "meal",
                 createdAt: meal.createdAt,
@@ -55,22 +55,22 @@ export default function createEntryDisplayItems(
                 protein,
                 calories,
                 weight,
-                entries: entriesForMeal,
+                foodLogEntries: foodLogEntriesForMeal,
             };
         })
         .filter((item) => {
-            return item.entries.length > 0;
+            return item.foodLogEntries.length > 0;
         });
 
-    const looseEntryDisplayItems: EntryDisplayItem[] = entries
-        .filter((entry) => {
-            return !entry.mealId;
+    const looseEntryDisplayItems: EntryDisplayItem[] = foodLogEntries
+        .filter((foodLogEntry) => {
+            return !foodLogEntry.mealId;
         })
-        .map((entry): EntryDisplayItem => {
+        .map((foodLogEntry): EntryDisplayItem => {
             return {
-                type: "entry",
-                entry,
-                createdAt: entry.createdAt,
+                type: "foodLogEntry",
+                foodLogEntry,
+                createdAt: foodLogEntry.createdAt,
             };
         });
 
