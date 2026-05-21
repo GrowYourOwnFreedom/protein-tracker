@@ -2,7 +2,6 @@ import "./App.css";
 import NutritionSummaryPanel from "@/components/NutritionSummaryPanel";
 import { useState, useEffect } from "react";
 import AddFoodLogEntryPanel from "@/components/AddFoodLogEntryPanel";
-import AddFoodItemPanel from "@/components/AddFoodItemPanel";
 import {
     getCurrentUser,
     createStoredFoodItem,
@@ -136,8 +135,8 @@ function App() {
                     onProteinTargetChange={updateProteinTarget}
                     selectedDate={selectedDate}
                 />
-                <div className="flex flex-col gap-4  lg:h-auto lg:min-h-0">
                     <AddFoodLogEntryPanel
+                    className="h-fit"
                         foodItems={foodItems}
                         onAddFoodLogEntry={addFoodLogEntry}
                         onDeleteFoodItem={deleteFoodItem}
@@ -145,9 +144,8 @@ function App() {
                         onEditFoodItem={updateFoodItem}
                         onCreateMeal={createMeal}
                         meals={meals}
+                        onAddFoodItem={addFoodItem}
                     />
-                    <AddFoodItemPanel onAddFoodItem={addFoodItem} />
-                </div>
                 <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"
                     foodLogEntries={foodLogEntries}

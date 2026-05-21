@@ -25,7 +25,8 @@ import { getToday } from "@/lib/getToday";
 import createNewId from "@/lib/createNewId";
 
 type FoodItemDetailsFormProps = {
-    onSave: (newFoodItem: FoodItem) => void;
+    onSubmit: (newFoodItem: FoodItem) => void;
+    isEdit:boolean;
 
     existingFoodItem?: FoodItem;
     className?: string;
@@ -33,8 +34,9 @@ type FoodItemDetailsFormProps = {
 
 export default function FoodItemDetailsForm({
     existingFoodItem,
-    onSave,
+    onSubmit,
     className,
+    isEdit
 }: FoodItemDetailsFormProps) {
     const [addFoodItemName, setAddFoodItemName] = useState(
         existingFoodItem?.name ?? "",
@@ -151,7 +153,7 @@ export default function FoodItemDetailsForm({
             type
         };
 
-        onSave(foodItemObj);
+        onSubmit(foodItemObj);
         setAddFoodItemName("");
         setAddFoodItemCalories("");
         setAddFoodItemProtein("");
@@ -161,6 +163,8 @@ export default function FoodItemDetailsForm({
         setFoodItemNameError("");
         setSelectedFoodItemCategoryId("");
     }
+
+    const submitButtonText = isEdit ?  "Save Food Item" : "Add Food Item" 
 
     return (
         <form className={className} onSubmit={handleSaveFoodItemSubmit}>
@@ -261,7 +265,7 @@ export default function FoodItemDetailsForm({
                 </div>
                 <FieldSeparator />
                 <Button className="w-full rounded-full" type="submit">
-                    Save Food Item
+                    {submitButtonText}
                 </Button>
             </FieldGroup>
         </form>

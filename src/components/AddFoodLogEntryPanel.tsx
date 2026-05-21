@@ -2,10 +2,10 @@ import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
 
 import { FoodItem, FoodLogEntry, Meal } from "@/types";
-import EditFoodItemPopover from "@/components/AddFoodLogEntryPanel-components/EditFoodItemPopover";
 import CreateMealPopover from "@/components/AddFoodLogEntryPanel-components/CreateMealPopover";
 import AddFoodLogEntryForm from "@/components/AddFoodLogEntryPanel-components/AddFoodLogEntryForm";
 import { useState } from "react";
+import FoodItemFormPopover from "@/components/AddFoodLogEntryPanel-components/FoodItemFormPopover";
 
 type AddFoodLogEntryPanelProps = {
     foodItems: FoodItem[];
@@ -15,6 +15,7 @@ type AddFoodLogEntryPanelProps = {
     onEditFoodItem: (updatedFoodItem: FoodItem) => void;
     onCreateMeal: (newMeal: Meal) => void;
     meals: Meal[];
+    onAddFoodItem: (foodItem: FoodItem) => void;
 
     className?: string;
 };
@@ -28,9 +29,9 @@ export default function AddFoodLogEntryPanel({
     onEditFoodItem,
     onCreateMeal: createMeal,
     meals,
+    onAddFoodItem,
 }: AddFoodLogEntryPanelProps) {
-    const [selectedFoodItemId, setSelectedFoodItemId] =
-        useState<string>("");
+    const [selectedFoodItemId, setSelectedFoodItemId] = useState<string>("");
 
     function handleDeleteFoodItemClick() {
         const deletedFoodItem = foodItems.find((foodItem) => {
@@ -60,7 +61,7 @@ export default function AddFoodLogEntryPanel({
                 onFoodItemChange={setSelectedFoodItemId}
                 selectedDate={selectedDate}
             />
-            <div className="grid  grid-cols-1 md:grid-cols-3 gap-4 ">
+            <div className="grid  grid-cols-2 gap-4 ">
                 <Button
                     disabled={!selectedFoodItemId}
                     className="rounded-full"
@@ -74,12 +75,12 @@ export default function AddFoodLogEntryPanel({
                     selectedDate={selectedDate}
                     onCreateMeal={createMeal}
                 />
-
-                
-                    <EditFoodItemPopover
-                        selectedFoodItem={selectedFoodItemToEdit}
-                        onEditFoodItem={onEditFoodItem}
-                    />
+                <FoodItemFormPopover isEdit={false} onSubmit={onAddFoodItem} />
+                <FoodItemFormPopover
+                    isEdit={true}
+                    onSubmit={onEditFoodItem}
+                    selectedFoodItem={selectedFoodItemToEdit}
+                />
             </div>
         </Panel>
     );

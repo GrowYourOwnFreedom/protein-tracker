@@ -11,21 +11,28 @@ import {
 import { FoodItem } from "@/types";
 import { useState } from "react";
 
-type EditFoodItemPopoverProps = {
-    onEditFoodItem: (updatedFoodItem: FoodItem) => void;
+type FoodItemFormPopoverProps = {
+    onSubmit: (updatedFoodItem: FoodItem) => void;
+    isEdit: boolean;
 
     selectedFoodItem?: FoodItem;
     className?: string;
 };
 
-export default function EditFoodItemPopover({
+export default function FoodItemFormPopover({
+    onSubmit,
     selectedFoodItem,
-    onEditFoodItem,
-}: EditFoodItemPopoverProps) {
+    isEdit,
+}: FoodItemFormPopoverProps) {
     const [popoverOpen, setPopoverOpen] = useState(false);
 
-    function handleEditFoodItem(foodItem: FoodItem): void {
-        onEditFoodItem(foodItem);
+    const triggerAndTitleText = isEdit ? "Edit Food Item" : "Add Food Item";
+    const descriptionText = isEdit
+        ? "Update details for this food item."
+        : "Add a missing food item.";
+    const isDisabled = isEdit ? !selectedFoodItem : false;
+    function handleSubmitFoodItem(foodItem: FoodItem): void {
+        onSubmit(foodItem);
         setPopoverOpen(false);
     }
 
@@ -33,26 +40,24 @@ export default function EditFoodItemPopover({
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    disabled={!selectedFoodItem}
+                    disabled={isDisabled}
                     className="rounded-full"
                     variant="outline"
                 >
-                    Edit Food Item
+                    {triggerAndTitleText}
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="end">
                 <PopoverHeader>
-                    <PopoverTitle>Edit Food Item</PopoverTitle>
-                    <PopoverDescription>
-                        Update details for this food item.
-                    </PopoverDescription>
+                    <PopoverTitle>{triggerAndTitleText}</PopoverTitle>
+                    <PopoverDescription>{descriptionText}</PopoverDescription>
                 </PopoverHeader>
-                {selectedFoodItem && (
-                    <FoodItemDetailsForm
-                        existingFoodItem={selectedFoodItem}
-                        onSave={handleEditFoodItem}
-                    />
-                )}
+
+                <FoodItemDetailsForm
+                    isEdit={isEdit}
+                    onSubmit={handleSubmitFoodItem}
+                    existingFoodItem={selectedFoodItem}
+                />
             </PopoverContent>
         </Popover>
     );
