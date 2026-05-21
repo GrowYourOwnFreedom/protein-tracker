@@ -17,6 +17,7 @@ export type FoodItem = {
     userId: string;
     dateCreated: string;
     foodItemCategoryId: string;
+    type: "simple" | "composite";
 };
 
 export type OldFoodItem = {
@@ -33,6 +34,7 @@ export type OldFoodItem = {
     createdAt?: string;
     ingredientCategory?: string;
     dateCreated?: string;
+    type?: "simple" | "composite";
 };
 
 export type FoodLogEntry = {

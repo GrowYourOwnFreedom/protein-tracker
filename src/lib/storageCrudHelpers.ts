@@ -64,6 +64,7 @@ function normaliseFoodItem(oldFoodItem: OldFoodItem, userId: string): FoodItem {
             oldFoodItem.foodItemCategoryId ||
             oldFoodItem.ingredientCategoryId ||
             "other",
+        type:oldFoodItem.type || "simple"
     };
 }
 
@@ -74,6 +75,8 @@ function normaliseFoodItems(
     const cleanFoodItem = oldFoodItems.map((oldFoodItem) =>
         normaliseFoodItem(oldFoodItem, userId),
     );
+    console.log(cleanFoodItem);
+    
     return cleanFoodItem;
 }
 
@@ -270,14 +273,14 @@ function fetchLocalMeals(selectedDate: string): Meal[] {
 }
 
 export {
-    fetchLocalFoodLogEntries as fetchStoredFoodEntries,
-    createLocalFoodLogEntry as createStoredFoodEntry,
-    deleteLocalFoodEntry as deleteStoredFoodEntry,
-    createLocalFoodItem as createStoredIngredient,
-    fetchLocalFoodItems as fetchStoredIngredients,
-    updateLocalFoodItem as updateStoredIngredient,
-    deleteLocalFoodItem as deleteStoredIngredient,
-    replaceLocalFoodItems as replaceStoredIngredients,
+    fetchLocalFoodLogEntries as fetchStoredFoodLogEntries,
+    createLocalFoodLogEntry as createStoredFoodLogEntry,
+    deleteLocalFoodEntry as deleteStoredFoodLogEntry,
+    createLocalFoodItem as createStoredFoodItem,
+    fetchLocalFoodItems as fetchStoredFoodItems,
+    updateLocalFoodItem as updateStoredFoodItem,
+    deleteLocalFoodItem as deleteStoredFoodItem,
+    replaceLocalFoodItems as replaceStoredFoodItems,
     fetchLocalCalorieLimit as fetchStoredCalorieLimit,
     updateLocalCalorieLimit as updateStoredCalorieLimit,
     fetchLocalProteinTarget as fetchStoredProteinTarget,

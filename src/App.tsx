@@ -4,20 +4,20 @@ import { useState, useEffect } from "react";
 import AddFoodLogEntryPanel from "@/components/AddFoodLogEntryPanel";
 import AddFoodItemPanel from "@/components/AddFoodItemPanel";
 import {
-    createStoredIngredient,
-    fetchStoredIngredients,
-    updateStoredIngredient,
-    deleteStoredIngredient,
     getCurrentUser,
-    fetchStoredCalorieLimit,
-    fetchStoredProteinTarget,
-    fetchStoredFoodEntries,
-    updateStoredCalorieLimit,
-    updateStoredProteinTarget,
-    fetchStoredMeals,
-    createStoredFoodEntry,
-    deleteStoredFoodEntry,
+    createStoredFoodItem,
+    fetchStoredFoodItems,
+    updateStoredFoodItem,
+    deleteStoredFoodItem,
+    createStoredFoodLogEntry,
+    fetchStoredFoodLogEntries,
+    deleteStoredFoodLogEntry,
     createStoredMeal,
+    fetchStoredMeals,
+    fetchStoredCalorieLimit,
+    updateStoredCalorieLimit,
+    fetchStoredProteinTarget,
+    updateStoredProteinTarget,
 } from "@/lib/storageCrudHelpers";
 import { FoodItem, FoodLogEntry, Meal } from "@/types";
 import FoodLogPanel from "@/components/FoodLogPanel";
@@ -38,14 +38,14 @@ function App() {
     useEffect(() => {
         async function loadFoodItems() {
             const user = await getCurrentUser();
-            const fetchedFoodItems = fetchStoredIngredients(user.userId);
+            const fetchedFoodItems = fetchStoredFoodItems(user.userId);
             setFoodItems(fetchedFoodItems);
         }
         loadFoodItems();
     }, []);
 
     useEffect(() => {
-        const foodLogEntriesToDisplay = fetchStoredFoodEntries(selectedDate);
+        const foodLogEntriesToDisplay = fetchStoredFoodLogEntries(selectedDate);
         setFoodLogEntries(foodLogEntriesToDisplay);
     }, [selectedDate]);
 
@@ -65,7 +65,7 @@ function App() {
     function addFoodItem(newFoodItem: FoodItem): void {
         const newFoodItems = [...foodItems, newFoodItem];
         setFoodItems(newFoodItems);
-        createStoredIngredient(newFoodItem);
+        createStoredFoodItem(newFoodItem);
     }
 
     function updateFoodItem(updatedFoodItem: FoodItem) {
@@ -77,7 +77,7 @@ function App() {
         });
 
         setFoodItems(updatedFoodItems);
-        updateStoredIngredient(updatedFoodItem);
+        updateStoredFoodItem(updatedFoodItem);
     }
 
     function deleteFoodItem(foodItemId: string): void {
@@ -85,13 +85,13 @@ function App() {
             return foodItem.foodItemId !== foodItemId;
         });
         setFoodItems(updatedFoodItems);
-        deleteStoredIngredient(foodItemId);
+        deleteStoredFoodItem(foodItemId);
     }
 
     function addFoodLogEntry(newFoodLogEntry: FoodLogEntry): void {
         const newEntries = [newFoodLogEntry, ...foodLogEntries];
         setFoodLogEntries(newEntries);
-        createStoredFoodEntry(newFoodLogEntry);
+        createStoredFoodLogEntry(newFoodLogEntry);
     }
 
     function deleteEntry(foodLogEntryId: string): void {
@@ -99,7 +99,7 @@ function App() {
             return entry.foodLogEntryId !== foodLogEntryId;
         });
         setFoodLogEntries(filteredEntries);
-        deleteStoredFoodEntry(foodLogEntryId);
+        deleteStoredFoodLogEntry(foodLogEntryId);
     }
 
     function updateCalorieLimit(newCalorieLimit: number): void {
