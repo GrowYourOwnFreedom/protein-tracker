@@ -1,5 +1,5 @@
 import { FoodLogEntry, Meal } from "@/types";
-type EntryDisplayItem = {
+type FoodLogEntryDisplayItem = {
     type: "foodLogEntry";
     createdAt: string;
     foodLogEntry: FoodLogEntry;
@@ -15,15 +15,15 @@ type MealDisplayItem = {
     weight: number;
 };
 
-type DisplayItem = EntryDisplayItem | MealDisplayItem;
+type DisplayItem = FoodLogEntryDisplayItem | MealDisplayItem;
 
-type EntryTotals = {
+type FoodLogEntryTotals = {
     protein: number;
     calories: number;
     weight: number;
 };
 
-function calculateEntriesTotals(foodLogEntries: FoodLogEntry[]):EntryTotals {
+function calculateFoodLogEntriesTotals(foodLogEntries: FoodLogEntry[]):FoodLogEntryTotals {
     return foodLogEntries.reduce(
         (totalsObj, foodLogEntry) => {
             return {
@@ -36,7 +36,7 @@ function calculateEntriesTotals(foodLogEntries: FoodLogEntry[]):EntryTotals {
     );
 }
 
-export default function createEntryDisplayItems(
+export default function createFoodLogEntryDisplayItems(
     foodLogEntries: FoodLogEntry[],
     meals: Meal[],
 ): DisplayItem[] {
@@ -47,7 +47,7 @@ export default function createEntryDisplayItems(
             });
 
             const { protein, calories, weight } =
-                calculateEntriesTotals(foodLogEntriesForMeal);
+                calculateFoodLogEntriesTotals(foodLogEntriesForMeal);
             return {
                 type: "meal",
                 createdAt: meal.createdAt,
@@ -62,11 +62,11 @@ export default function createEntryDisplayItems(
             return item.foodLogEntries.length > 0;
         });
 
-    const looseEntryDisplayItems: EntryDisplayItem[] = foodLogEntries
+    const looseFoodLogEntryDisplayItems: FoodLogEntryDisplayItem[] = foodLogEntries
         .filter((foodLogEntry) => {
             return !foodLogEntry.mealId;
         })
-        .map((foodLogEntry): EntryDisplayItem => {
+        .map((foodLogEntry): FoodLogEntryDisplayItem => {
             return {
                 type: "foodLogEntry",
                 foodLogEntry,
@@ -76,7 +76,7 @@ export default function createEntryDisplayItems(
 
     const displayItems: DisplayItem[] = [
         ...mealDisplayItems,
-        ...looseEntryDisplayItems,
+        ...looseFoodLogEntryDisplayItems,
     ].sort((a, b) => {
         return (
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()

@@ -74,9 +74,7 @@ function normaliseFoodItems(
 ): FoodItem[] {
     const cleanFoodItem = oldFoodItems.map((oldFoodItem) =>
         normaliseFoodItem(oldFoodItem, userId),
-    );
-    console.log(cleanFoodItem);
-    
+    );    
     return cleanFoodItem;
 }
 

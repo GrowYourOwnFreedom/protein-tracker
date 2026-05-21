@@ -2,7 +2,7 @@ import Panel from "@/components/app/Panel";
 import FoodLogEntryCard from "./FoodLogPanel-components/FoodLogEntryCard";
 import MealCard from "@/components/FoodLogPanel-components/MealCard";
 import DatePicker from "@/components/FoodLogPanel-components/DatePicker";
-import createEntryDisplayItems from "@/lib/createEntryDisplayItems";
+import createFoodLogEntryDisplayItems from "@/lib/createFoodLogEntryDisplayItems";
 import { FoodLogEntry, Meal } from "@/types";
 
 type FoodLogPanelProps = {
@@ -27,7 +27,7 @@ export default function FoodLogPanel({
     className,
     meals,
 }: FoodLogPanelProps) {
-    const displayItems = createEntryDisplayItems(foodLogEntries, meals);
+    const displayItems = createFoodLogEntryDisplayItems(foodLogEntries, meals);
 
     return (
         <Panel title="Food Entries" className={className}>
