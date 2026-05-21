@@ -57,7 +57,7 @@ export default function AddFoodLogEntryPanel({
                 meals={meals}
                 selectedFoodItemId={selectedFoodItemId}
                 onAddFoodLogEntry={onAddFoodLogEntry}
-                onfoodItemChange={setSelectedFoodItemId}
+                onFoodItemChange={setSelectedFoodItemId}
                 selectedDate={selectedDate}
             />
             <div className="grid  grid-cols-1 md:grid-cols-3 gap-4 ">

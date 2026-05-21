@@ -138,6 +138,7 @@ export default function FoodItemDetailsForm({
         const userId = user.userId;
         const dateCreated = existingFoodItem?.dateCreated ?? getToday();
         const foodItemCategoryId = selectedFoodItemCategoryId;
+        const type = existingFoodItem?.type ?? "simple"
 
         const foodItemObj: FoodItem = {
             foodItemId,
@@ -147,6 +148,7 @@ export default function FoodItemDetailsForm({
             userId,
             dateCreated,
             foodItemCategoryId,
+            type
         };
 
         onSave(foodItemObj);

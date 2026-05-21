@@ -1,26 +1,21 @@
-import FoodItemSelectField from "@/components/AddFoodLogEntryPanel-components/FoodItemSelectField";
 import MealSelectField from "@/components/AddFoodLogEntryPanel-components/MealSelectField";
+import FoodItemAmountSelectorFields from "@/components/app/FoodItemAmountSelectorFields";
 import { Button } from "@/components/ui/button";
-import {
-    Field,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-} from "@/components/ui/field";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { FieldGroup } from "@/components/ui/field";
+
 import createNewId from "@/lib/createNewId";
 import { sortFoodItemsByProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import {FoodLogEntry, FoodItem, Meal } from "@/types";
+import { FoodLogEntry, FoodItem, Meal } from "@/types";
 import { useRef, useState } from "react";
 
-type AddfoodLogEntryFormProps = {
+type AddFoodLogEntryFormProps = {
     foodItems: FoodItem[];
     selectedFoodItemId: string;
     onAddFoodLogEntry: (entry: FoodLogEntry) => void;
     selectedDate: string;
     meals: Meal[];
-    onfoodItemChange: (value: string) => void;
+    onFoodItemChange: (value: string) => void;
 };
 
 export default function AddFoodLogEntryForm({
@@ -29,15 +24,14 @@ export default function AddFoodLogEntryForm({
     onAddFoodLogEntry,
     selectedDate,
     meals,
-    onfoodItemChange,
-}: AddfoodLogEntryFormProps) {
-    const [foodItemWeight, setFoodItemWeight] = useState<string>("");
-    const [weightInputError, setWeightInputError] = useState<string>("");
+    onFoodItemChange,
+}: AddFoodLogEntryFormProps) {
+    const [amountText, setAmountText] = useState<string>("");
+    const [amountError, setAmountError] = useState<string>("");
     const [selectedMealId, setSelectedMealId] = useState<string>("");
-    const shouldFocusInputRef = useRef(false);
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const [foodItemSelectError, setFoodItemSelectError] =
-        useState<string>("");
+    const shouldFocusInputRef = useRef(false);
+    const [foodItemSelectError, setFoodItemSelectError] = useState<string>("");
 
     async function handleCreateFoodLogEntrySubmit(
         event: React.SubmitEvent<HTMLFormElement>,
@@ -46,27 +40,27 @@ export default function AddFoodLogEntryForm({
         const foodItem = foodItems.find((foodItem) => {
             return foodItem.foodItemId === selectedFoodItemId;
         });
-        const weight = Number(foodItemWeight);
+        const weight = Number(amountText);
         let inputError = false;
         let selectError = false;
 
-        if (foodItemWeight === "") {
+        if (amountText === "") {
             inputError = true;
-            setWeightInputError("Please enter a weight");
+            setAmountError("Please enter a weight");
         } else if (Number.isNaN(weight)) {
             inputError = true;
-            setWeightInputError("Please enter a valid number");
+            setAmountError("Please enter a valid number");
         } else if (weight <= 0) {
             inputError = true;
-            setWeightInputError("Weight must be above 0g");
+            setAmountError("Weight must be above 0g");
         } else {
             inputError = false;
-            setWeightInputError("");
+            setAmountError("");
         }
 
         if (!selectedFoodItemId) {
             selectError = true;
-            setFoodItemSelectError("Please select an food item");
+            setFoodItemSelectError("Please select a food item");
         } else {
             selectError = false;
             setFoodItemSelectError("");
@@ -100,25 +94,21 @@ export default function AddFoodLogEntryForm({
             userId,
             foodItemId,
         };
+
         if (selectedMealId) {
-            const selectedMeal = meals.find((meal) => {
-                return meal.mealId === selectedMealId;
-            });
-            if (selectedMeal) {
-                newFoodLogEntry.mealId = selectedMealId;
-            }
+            newFoodLogEntry.mealId = selectedMealId;
         }
 
         onAddFoodLogEntry(newFoodLogEntry);
-        setFoodItemWeight("");
-        setWeightInputError("");
+        setAmountText("");
+        setAmountError("");
         setFoodItemSelectError("");
         setSelectedMealId("");
     }
 
     function handleFoodItemSelectValueChange(value: string): void {
         shouldFocusInputRef.current = true;
-        onfoodItemChange(value);
+        onFoodItemChange(value);
         setFoodItemSelectError("");
     }
     function handleFoodItemSelectOpenChange(open: boolean): void {
@@ -130,39 +120,31 @@ export default function AddFoodLogEntryForm({
         }
     }
     const sortedFoodItems = sortFoodItemsByProteinEfficiency(foodItems);
+
+    function handleAmountChange(
+        event: React.ChangeEvent<HTMLInputElement | null>,
+    ) {
+        setAmountText(event.target.value);
+        setAmountError("")
+    }
     return (
         <form onSubmit={handleCreateFoodLogEntrySubmit}>
             <FieldGroup>
-                <FoodItemSelectField
-                    foodItems={sortedFoodItems}
-                    onChange={handleFoodItemSelectValueChange}
-                    onOpenChange={handleFoodItemSelectOpenChange}
-                    selectedFoodItemId={selectedFoodItemId}
+                <FoodItemAmountSelectorFields
                     foodItemSelectError={foodItemSelectError}
+                    amountText={amountText}
+                    onFoodItemSelectOpenChange={
+                        handleFoodItemSelectOpenChange
+                    }
+                    onFoodItemSelectValueChange={
+                        handleFoodItemSelectValueChange
+                    }
+                    inputRef={inputRef}
+                    amountError={amountError}
+                    foodItems={sortedFoodItems}
+                    selectedFoodItemId={selectedFoodItemId}
+                    handleAmountChange={handleAmountChange}
                 />
-                <Field>
-                    <FieldLabel htmlFor="food-item-weight-input">
-                        Amount:
-                    </FieldLabel>
-                    <InputGroup className=" max-w-xs">
-                    <InputGroupInput
-                    placeholder="Enter the weight you ate"
-                    id="food-item-weight-input"
-                    ref={inputRef}
-                    name="weight"
-                    value={foodItemWeight}
-                    onChange={(e) => {
-                        setFoodItemWeight(e.target.value);
-                        setWeightInputError("");
-                    }}
-                    />
-                    <InputGroupAddon align="inline-end">g</InputGroupAddon>
-                    </InputGroup>
-
-                    {weightInputError && (
-                        <FieldError>{weightInputError}</FieldError>
-                    )}
-                </Field>
                 <MealSelectField
                     onChange={setSelectedMealId}
                     selectedMealId={selectedMealId}
