@@ -21,6 +21,7 @@ import {
 import { FoodItem, FoodLogEntry, Meal } from "@/types";
 import FoodLogPanel from "@/components/FoodLogPanel";
 import { getToday } from "@/lib/getToday";
+import CreateCompositeFoodItemPanel from "@/components/CreateCompositeFoodItemPanel";
 
 function App() {
     const [foodLogEntries, setFoodLogEntries] = useState<FoodLogEntry[]>([]);
@@ -114,7 +115,7 @@ function App() {
 
     function createMeal(newMeal: Meal): void {
         const updatedMeals = [...meals, newMeal];
-        setMeals(updatedMeals);        
+        setMeals(updatedMeals);
         createStoredMeal(newMeal);
     }
 
@@ -135,8 +136,9 @@ function App() {
                     onProteinTargetChange={updateProteinTarget}
                     selectedDate={selectedDate}
                 />
+                <div>
                     <AddFoodLogEntryPanel
-                    className="h-fit"
+                        className="h-fit"
                         foodItems={foodItems}
                         onAddFoodLogEntry={addFoodLogEntry}
                         onDeleteFoodItem={deleteFoodItem}
@@ -146,6 +148,8 @@ function App() {
                         meals={meals}
                         onAddFoodItem={addFoodItem}
                     />
+                    <CreateCompositeFoodItemPanel/>
+                </div>
                 <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"
                     foodLogEntries={foodLogEntries}

@@ -23,10 +23,13 @@ import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { getToday } from "@/lib/getToday";
 import createNewId from "@/lib/createNewId";
+import FoodItemNameField from "@/components/app/FoodItemNameField";
+import FoodItemCategorySelectField from "@/components/app/FoodItemCategorySelectField";
+import NutrimentInputField from "@/components/app/NutrimentInputField";
 
 type FoodItemDetailsFormProps = {
     onSubmit: (newFoodItem: FoodItem) => void;
-    isEdit:boolean;
+    isEdit: boolean;
 
     existingFoodItem?: FoodItem;
     className?: string;
@@ -36,7 +39,7 @@ export default function FoodItemDetailsForm({
     existingFoodItem,
     onSubmit,
     className,
-    isEdit
+    isEdit,
 }: FoodItemDetailsFormProps) {
     const [addFoodItemName, setAddFoodItemName] = useState(
         existingFoodItem?.name ?? "",
@@ -58,12 +61,12 @@ export default function FoodItemDetailsForm({
     const inputRef = useRef<HTMLInputElement | null>(null);
     const shouldFocusInputRef = useRef(false);
 
-    function handleValueChange(value: string): void {
+    function handleCategoryValueChange(value: string): void {
         shouldFocusInputRef.current = true;
         setSelectedFoodItemCategoryId(value);
         setFoodItemCategorySelectError("");
     }
-    function handleSelectOpenChange(open: boolean): void {
+    function handleCategorySelectOpenChange(open: boolean): void {
         if (!open && shouldFocusInputRef.current) {
             shouldFocusInputRef.current = false;
             setTimeout(() => {
@@ -140,7 +143,7 @@ export default function FoodItemDetailsForm({
         const userId = user.userId;
         const dateCreated = existingFoodItem?.dateCreated ?? getToday();
         const foodItemCategoryId = selectedFoodItemCategoryId;
-        const type = existingFoodItem?.type ?? "simple"
+        const type = existingFoodItem?.type ?? "simple";
 
         const foodItemObj: FoodItem = {
             foodItemId,
@@ -150,7 +153,7 @@ export default function FoodItemDetailsForm({
             userId,
             dateCreated,
             foodItemCategoryId,
-            type
+            type,
         };
 
         onSubmit(foodItemObj);
@@ -164,104 +167,51 @@ export default function FoodItemDetailsForm({
         setSelectedFoodItemCategoryId("");
     }
 
-    const submitButtonText = isEdit ?  "Save Food Item" : "Add Food Item" 
+    const submitButtonText = isEdit ? "Save Food Item" : "Add Food Item";
+
+    function handleNameValueChange(event:React.ChangeEvent<HTMLInputElement>) {
+        setAddFoodItemName(event.target.value);
+        setFoodItemNameError("");
+    }
+    function handleCalorieValueChange(event:React.ChangeEvent<HTMLInputElement>) {
+        setAddFoodItemCalories(event.target.value);
+        setAddFoodItemCaloriesError("");
+    }
+    function handleProteinValueChange(event:React.ChangeEvent<HTMLInputElement>) {
+        setAddFoodItemProtein(event.target.value);
+        setAddFoodItemProteinError("");
+    }
 
     return (
         <form className={className} onSubmit={handleSaveFoodItemSubmit}>
             <FieldGroup>
-                <Field>
-                    <FieldLabel htmlFor="foodItem-name">
-                        Food Item Name:
-                    </FieldLabel>
-                    <Input
-                        id="foodItem-name"
-                        name="foodItem-name"
-                        value={addFoodItemName}
-                        onChange={(e) => {
-                            setAddFoodItemName(e.target.value);
-                            setFoodItemNameError("");
-                        }}
-                    />
-                    {foodItemNameError && (
-                        <FieldError>{foodItemNameError}</FieldError>
-                    )}
-                </Field>
-                <Field>
-                    <FieldLabel htmlFor="foodItem-category-id">
-                        Food Item Category:
-                    </FieldLabel>
-                    <Select
-                        value={selectedFoodItemCategoryId}
-                        name="foodItem-category-id"
-                        onValueChange={handleValueChange}
-                        onOpenChange={handleSelectOpenChange}
-                    >
-                        <SelectTrigger
-                            id="foodItem-category-id"
-                            className="bg-muted/40 shadow-inner/10"
-                        >
-                            <SelectValue placeholder="Please choose a category..." />
-                        </SelectTrigger>
-                        <SelectContent position="popper">
-                            <SelectGroup>
-                                {defaultFoodItemCategories.map(
-                                    ({
-                                        foodItemCategoryId,
-                                        foodItemCategoryName,
-                                    }: FoodItemCategory) => {
-                                        return (
-                                            <SelectItem
-                                                key={foodItemCategoryId}
-                                                value={foodItemCategoryId}
-                                            >
-                                                {foodItemCategoryName}
-                                            </SelectItem>
-                                        );
-                                    },
-                                )}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
-                    {foodItemCategorySelectError && (
-                        <FieldError>{foodItemCategorySelectError}</FieldError>
-                    )}
-                </Field>
+                <FoodItemNameField
+                    name={addFoodItemName}
+                    nameError={foodItemNameError}
+                    onValueChange={handleNameValueChange}
+                />
+
+                <FoodItemCategorySelectField
+                    value={selectedFoodItemCategoryId}
+                    onValueChange={handleCategoryValueChange}
+                    onOpenChange={handleCategorySelectOpenChange}
+                    categories={defaultFoodItemCategories}
+                    categoryError={foodItemCategorySelectError}
+                />
                 <div className="grid grid-cols-2 gap-4">
-                    <Field>
-                        <FieldLabel htmlFor="calories-per-100g">
-                            Calories per 100g:
-                        </FieldLabel>
-                        <Input
-                            ref={inputRef}
-                            id="calories-per-100g"
-                            name="FoodItem-calories"
-                            value={addFoodItemCalories}
-                            onChange={(e) => {
-                                setAddFoodItemCalories(e.target.value);
-                                setAddFoodItemCaloriesError("");
-                            }}
-                        />
-                        {addFoodItemCaloriesError && (
-                            <FieldError>{addFoodItemCaloriesError}</FieldError>
-                        )}
-                    </Field>
-                    <Field>
-                        <FieldLabel htmlFor="protein-per-100g">
-                            Protein per 100g:
-                        </FieldLabel>
-                        <Input
-                            id="protein-per-100g"
-                            name="foodItem-protein"
-                            value={addFoodItemProtein}
-                            onChange={(e) => {
-                                setAddFoodItemProtein(e.target.value);
-                                setAddFoodItemProteinError("");
-                            }}
-                        />
-                        {addFoodItemProteinError && (
-                            <FieldError>{addFoodItemProteinError}</FieldError>
-                        )}
-                    </Field>
+                    <NutrimentInputField
+                        inputRef={inputRef}
+                        value={addFoodItemCalories}
+                        onValueChange={handleCalorieValueChange}
+                        inputError={addFoodItemCaloriesError}
+                        type="calories"
+                    />
+                    <NutrimentInputField
+                        value={addFoodItemProtein}
+                        onValueChange={handleProteinValueChange}
+                        inputError={addFoodItemProteinError}
+                        type="protein"
+                    />
                 </div>
                 <FieldSeparator />
                 <Button className="w-full rounded-full" type="submit">
