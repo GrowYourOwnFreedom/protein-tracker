@@ -102,14 +102,14 @@ export default function NutritionSummaryPanel({
             <div className="flex flex-1 flex-col gap-3 p-5 items-center bg-muted/40 overflow-y-auto shadow-[inset_0_2px_8px_rgb(0_0_0/0.12)] ring-1 ring-foreground/10 rounded-xl">
                 <TargetCard
                     title={"Calories"}
-                    current={Number(calories.toFixed(0))}
+                    current={calories}
                     target={calorieLimit}
                     unit={"kcal"}
                     type={"limit"}
                 />
                 <TargetCard
                     title={"Protein"}
-                    current={Number(protein.toFixed(1))}
+                    current={protein}
                     target={proteinTarget}
                     unit={"g"}
                     type={"goal"}

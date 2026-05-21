@@ -62,8 +62,8 @@ export default function FoodItemSelectField({
                         return (
                             <div key={category.foodItemCategoryId}>
                                 <SelectGroup>
-                                    <SelectLabel>
-                                        {category.foodItemCategoryName}
+                                    <SelectLabel className="text-primary font-extrabold">
+                                            {category.foodItemCategoryName}
                                     </SelectLabel>
                                     {foodItems
                                         .filter((foodItem) => {

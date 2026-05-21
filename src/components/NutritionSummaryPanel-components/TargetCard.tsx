@@ -21,7 +21,7 @@ import {
 export default function TargetCard({ title, current, target, unit, type }: TargetCardProps) {
     const remaining = target - current;
     const formattedRemaining = Number(formatNumber(remaining));
-    let statusText = `${remaining} ${unit} remaining`;
+    let statusText = `${formattedRemaining} ${unit} remaining`;
     if (remaining < 0) {
         statusText = `${Math.abs(formattedRemaining)} ${unit} over ${type}`;
     }
@@ -71,7 +71,7 @@ export default function TargetCard({ title, current, target, unit, type }: Targe
                         <p>{title} consumed:</p>
                     </CardTitle>
                     <p className="ml-auto inline-block text-xl">
-                        {current} {unit}
+                        {formatNumber(current)} {unit}
                     </p>
                 </div>
                 <CardDescription>
@@ -81,7 +81,7 @@ export default function TargetCard({ title, current, target, unit, type }: Targe
             <CardContent className="gap-6">
                 <div className="flex items-center gap-6">
                     <p>
-                        {current} / {target} {unit}
+                        {formatNumber(current)} / {target} {unit}
                     </p>
                     <div className="flex items-center gap-3 w-1/2 ml-auto">
                         <Progress

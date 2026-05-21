@@ -7,7 +7,7 @@ import {
     FieldGroup,
     FieldLabel,
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import createNewId from "@/lib/createNewId";
 import { sortFoodItemsByProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
@@ -142,18 +142,22 @@ export default function AddFoodLogEntryForm({
                 />
                 <Field>
                     <FieldLabel htmlFor="food-item-weight-input">
-                        Enter The Weight (g):
+                        Amount:
                     </FieldLabel>
-                    <Input
-                        id="food-item-weight-input"
-                        ref={inputRef}
-                        name="weight"
-                        value={foodItemWeight}
-                        onChange={(e) => {
-                            setFoodItemWeight(e.target.value);
-                            setWeightInputError("");
-                        }}
+                    <InputGroup className=" max-w-xs">
+                    <InputGroupInput
+                    placeholder="Enter the weight you ate"
+                    id="food-item-weight-input"
+                    ref={inputRef}
+                    name="weight"
+                    value={foodItemWeight}
+                    onChange={(e) => {
+                        setFoodItemWeight(e.target.value);
+                        setWeightInputError("");
+                    }}
                     />
+                    <InputGroupAddon align="inline-end">g</InputGroupAddon>
+                    </InputGroup>
 
                     {weightInputError && (
                         <FieldError>{weightInputError}</FieldError>

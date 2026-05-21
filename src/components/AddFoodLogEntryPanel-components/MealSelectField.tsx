@@ -32,7 +32,7 @@ export default function MealSelectField({
 
     return (
         <Field>
-            <FieldLabel htmlFor="meal-select">Select Meal:</FieldLabel>
+            <FieldLabel htmlFor="meal-select">Meal:</FieldLabel>
             <Select
                 name="select-meal-id"
                 value={selectedMealId}

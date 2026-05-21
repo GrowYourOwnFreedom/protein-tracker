@@ -30,7 +30,7 @@ export default function FoodLogPanel({
     const displayItems = createFoodLogEntryDisplayItems(foodLogEntries, meals);
 
     return (
-        <Panel title="Food Entries" className={className}>
+        <Panel title="Food Log" className={className}>
             <DatePicker
                 onSelectedDateChange={onSelectedDateChange}
                 selectedDate={selectedDate}
