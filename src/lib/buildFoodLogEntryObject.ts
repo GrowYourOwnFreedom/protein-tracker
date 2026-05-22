@@ -1,7 +1,7 @@
 import createNewId from "@/lib/createNewId";
 import { FoodItem, FoodLogEntry } from "@/types";
 
-export default function buildFoodLogEntry(
+export default function buildFoodLogEntryObject(
     foodItem: FoodItem,
     date: string,
     userId: string,
@@ -14,7 +14,7 @@ export default function buildFoodLogEntry(
     const foodLogEntryId = createNewId();
     const name = foodItem.name;
     const foodItemId = foodItem.foodItemId;
-    const newFoodLogEntry: FoodLogEntry = {
+    const newFoodLogEntryObject: FoodLogEntry = {
         name,
         weight,
         calories,
@@ -27,8 +27,8 @@ export default function buildFoodLogEntry(
     };
 
     if (mealId && mealId !== "none") {
-        newFoodLogEntry.mealId = mealId;
+        newFoodLogEntryObject.mealId = mealId;
     }
 
-    return newFoodLogEntry;
+    return newFoodLogEntryObject;
 }

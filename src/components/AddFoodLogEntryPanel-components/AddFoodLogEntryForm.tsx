@@ -2,7 +2,7 @@ import MealSelectField from "@/components/AddFoodLogEntryPanel-components/MealSe
 import FoodItemAmountSelectorFields from "@/components/app/FoodItemAmountSelectorFields";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
-import buildFoodLogEntry from "@/lib/buildFoodLogEntry";
+import buildFoodLogEntryObject from "@/lib/buildFoodLogEntryObject";
 
 import { sortFoodItemsByProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
@@ -78,14 +78,14 @@ export default function AddFoodLogEntryForm({
 
         const userId = (await getCurrentUser()).userId;
 
-        const newFoodLogEntry = buildFoodLogEntry(
+        const newFoodLogEntryObject = buildFoodLogEntryObject(
             foodItem,
             selectedDate,
             userId,
             selectedMealId,
             weight
         );
-        onAddFoodLogEntry(newFoodLogEntry);
+        onAddFoodLogEntry(newFoodLogEntryObject);
         setAmountText("");
         setAmountError("");
         setFoodItemSelectError("");
