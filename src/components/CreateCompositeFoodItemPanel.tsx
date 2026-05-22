@@ -41,8 +41,8 @@ export default function CreateCompositeFoodItemPanel({
         // create new component
 
         // Add New Composite Item Popover
-        <Panel title="Create Food Item" className={className}>
-            <form onSubmit={handleSubmit}>
+        <Panel title="Create Composite Food Item" className={className}>
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 space-y-5">
                 <FieldGroup>
                     <FoodItemNameField
                         name={name}
@@ -57,7 +57,6 @@ export default function CreateCompositeFoodItemPanel({
                     />
                 </FieldGroup>
                 <Button className="rounded-full" type="submit">
-                    {" "}
                     Create Food Item
                 </Button>
             </form>

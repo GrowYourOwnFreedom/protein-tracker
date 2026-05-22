@@ -2,8 +2,8 @@ import MealSelectField from "@/components/AddFoodLogEntryPanel-components/MealSe
 import FoodItemAmountSelectorFields from "@/components/app/FoodItemAmountSelectorFields";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
+import buildFoodLogEntry from "@/lib/buildFoodLogEntry";
 
-import createNewId from "@/lib/createNewId";
 import { sortFoodItemsByProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { FoodLogEntry, FoodItem, Meal } from "@/types";
@@ -74,31 +74,17 @@ export default function AddFoodLogEntryForm({
             return;
         }
 
-        const protein = (weight / 100) * foodItem.proteinPer100g;
-        const calories = (weight / 100) * foodItem.caloriesPer100g;
-        const date = selectedDate;
-        const createdAt = new Date().toISOString();
-        const foodLogEntryId = createNewId();
-        const user = await getCurrentUser();
-        const userId = user.userId;
-        const name = foodItem.name;
-        const foodItemId = foodItem.foodItemId;
-        const newFoodLogEntry: FoodLogEntry = {
-            name,
-            weight,
-            calories,
-            protein,
-            date,
-            createdAt,
-            foodLogEntryId,
+        
+
+        const userId = (await getCurrentUser()).userId;
+
+        const newFoodLogEntry = buildFoodLogEntry(
+            foodItem,
+            selectedDate,
             userId,
-            foodItemId,
-        };
-
-        if (selectedMealId) {
-            newFoodLogEntry.mealId = selectedMealId;
-        }
-
+            selectedMealId,
+            weight
+        );
         onAddFoodLogEntry(newFoodLogEntry);
         setAmountText("");
         setAmountError("");
@@ -125,7 +111,7 @@ export default function AddFoodLogEntryForm({
         event: React.ChangeEvent<HTMLInputElement | null>,
     ) {
         setAmountText(event.target.value);
-        setAmountError("")
+        setAmountError("");
     }
     return (
         <form onSubmit={handleCreateFoodLogEntrySubmit}>
@@ -133,9 +119,7 @@ export default function AddFoodLogEntryForm({
                 <FoodItemAmountSelectorFields
                     foodItemSelectError={foodItemSelectError}
                     amountText={amountText}
-                    onFoodItemSelectOpenChange={
-                        handleFoodItemSelectOpenChange
-                    }
+                    onFoodItemSelectOpenChange={handleFoodItemSelectOpenChange}
                     onFoodItemSelectValueChange={
                         handleFoodItemSelectValueChange
                     }

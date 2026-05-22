@@ -15,7 +15,7 @@ const FOOD_LOG_ENTRIES_STORAGE_KEY = "proteinTrackerEntries";
 const MEALS_STORAGE_KEY = "proteinTrackerMeals";
 const CALORIE_LIMIT_STORAGE_KEY = "proteinTrackerCalorieLimit";
 const PROTEIN_TARGET_STORAGE_KEY = "proteinTrackerProteinTarget";
-const FOOD_IETMS_BACKUP_KEY = "ingredientsMigrationBackup";
+const FOOD_ITEMS_BACKUP_KEY = "ingredientsMigrationBackup";
 const FOOD_ENTRY_LOG_BACKUP_KEY = "foodLogEntriesBackup";
 const DEFAULT_CALORIE_LIMIT = 2000;
 const DEFAULT_PROTEIN_TARGET = 100;
@@ -105,7 +105,7 @@ function fetchLocalFoodItems(userId: string): FoodItem[] {
     const normalisedSavedFoodItems = normaliseFoodItems(savedFoodItems, userId);
 
     if (dataVersion !== DATA_VERSION) {
-        saveArrayToStorage(FOOD_IETMS_BACKUP_KEY, savedFoodItems);
+        saveArrayToStorage(FOOD_ITEMS_BACKUP_KEY, savedFoodItems);
         console.log(`Migrating FoodItems to version ${DATA_VERSION}`);
         replaceLocalFoodItems(normalisedSavedFoodItems);
         localStorage.setItem(DATA_VERSION_STORAGE_KEY, DATA_VERSION);
@@ -178,15 +178,15 @@ function fetchLocalFoodLogEntries(selectedDate: string): FoodLogEntry[] {
         FOOD_LOG_ENTRIES_STORAGE_KEY,
     );
     const dataVersion = localStorage.getItem(DATA_VERSION_STORAGE_KEY);
-    const normalisedFoodEntries = normaliseFoodLogEntries(savedFoodLogEntries);
+    const normalisedFoodLogEntries = normaliseFoodLogEntries(savedFoodLogEntries);
     if (dataVersion !== DATA_VERSION) {
         saveArrayToStorage(FOOD_ENTRY_LOG_BACKUP_KEY, savedFoodLogEntries);
         console.log(`Migrating FoodLogEntries to version ${DATA_VERSION}`);
-        replaceLocalFoodLogEntries(normalisedFoodEntries);
+        replaceLocalFoodLogEntries(normalisedFoodLogEntries);
         localStorage.setItem(DATA_VERSION_STORAGE_KEY, DATA_VERSION);
     }
 
-    const selectedFoodLogEntries = savedFoodLogEntries.filter(
+    const selectedFoodLogEntries = normalisedFoodLogEntries.filter(
         (foodLogentry: FoodLogEntry): boolean =>
             foodLogentry.date === selectedDate,
     );
@@ -224,11 +224,11 @@ function updateLocalCalorieLimit(calories: number): void {
 }
 
 function fetchLocalCalorieLimit(): number {
-    const savedCalorielLimit = localStorage.getItem(CALORIE_LIMIT_STORAGE_KEY);
-    if (savedCalorielLimit === null) {
+    const savedCalorieLimit = localStorage.getItem(CALORIE_LIMIT_STORAGE_KEY);
+    if (savedCalorieLimit === null) {
         return DEFAULT_CALORIE_LIMIT;
     }
-    const parsedCalorieLimit = Number(savedCalorielLimit);
+    const parsedCalorieLimit = Number(savedCalorieLimit);
     if (Number.isNaN(parsedCalorieLimit)) {
         return DEFAULT_CALORIE_LIMIT;
     }
