@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { FoodLogEntry } from "@/types";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export type NutritionSummaryPanelProps = {
     foodLogEntries: FoodLogEntry[];
@@ -33,40 +33,55 @@ export default function NutritionSummaryPanel({
 }: NutritionSummaryPanelProps) {
     const [proteinError, setProteinError] = useState<string>("");
     const [calorieError, setCalorieError] = useState<string>("");
-    const totals = {
-        weight: 0,
-        calories: 0,
-        protein: 0,
+
+    type NutritionTotals = {
+        weight: number;
+        calories: number;
+        protein: number;
     };
 
-    foodLogEntries.forEach((foodLogEntry) => {
-        totals.calories = totals.calories + foodLogEntry.calories;
-        totals.protein = totals.protein + foodLogEntry.protein;
-        totals.weight = totals.weight + foodLogEntry.weight;
-    });
+    function buildNutritionTotalsObject(
+        foodLogEntries: FoodLogEntry[],
+    ): NutritionTotals {
+        const totals = {
+            weight: 0,
+            calories: 0,
+            protein: 0,
+        };
+        foodLogEntries.forEach((foodLogEntry) => {
+            totals.calories = totals.calories + foodLogEntry.calories;
+            totals.protein = totals.protein + foodLogEntry.protein;
+            totals.weight = totals.weight + foodLogEntry.weight;
+        });
 
-    const { weight, calories, protein } = totals;
+        return totals;
+    }
 
-    function handleUdateProteinTarget(event) {
+    const { weight, calories, protein } =
+        buildNutritionTotalsObject(foodLogEntries);
+
+    function handleUdateProteinTarget(
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) {
         const proteinNumber = Number(event.target.value);
         if (Number.isNaN(proteinNumber)) {
             setProteinError("please enter a valid number");
             return;
-        }else {
-
-            onProteinTargetChange(proteinNumber) ;
-            setProteinError("")
+        } else {
+            onProteinTargetChange(proteinNumber);
+            setProteinError("");
         }
     }
-     function handleUdateCalorieLimit(event) {
+    function handleUdateCalorieLimit(
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) {
         const calorieNumber = Number(event.target.value);
         if (Number.isNaN(calorieNumber)) {
             setCalorieError("please enter a valid number");
             return;
-        }else{
-            onCalorieLimitChange(calorieNumber) ;
-            setCalorieError("")
-
+        } else {
+            onCalorieLimitChange(calorieNumber);
+            setCalorieError("");
         }
     }
 
@@ -84,7 +99,9 @@ export default function NutritionSummaryPanel({
                             value={calorieLimit}
                             onChange={handleUdateCalorieLimit}
                         />
-                        {calorieError && <FieldError>{calorieError}</FieldError>}
+                        {calorieError && (
+                            <FieldError>{calorieError}</FieldError>
+                        )}
                     </Field>
                     <Field>
                         <FieldLabel htmlFor="protein-target">
@@ -95,7 +112,9 @@ export default function NutritionSummaryPanel({
                             value={proteinTarget}
                             onChange={handleUdateProteinTarget}
                         />
-                        {proteinError && <FieldError>{proteinError}</FieldError>}
+                        {proteinError && (
+                            <FieldError>{proteinError}</FieldError>
+                        )}
                     </Field>
                 </div>
             </FieldGroup>
@@ -124,4 +143,3 @@ export default function NutritionSummaryPanel({
         </Panel>
     );
 }
-

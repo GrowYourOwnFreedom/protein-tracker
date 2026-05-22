@@ -37,10 +37,21 @@ export default function AddFoodLogEntryForm({
         event: React.SubmitEvent<HTMLFormElement>,
     ): Promise<void> {
         event.preventDefault();
-        const foodItem = foodItems.find((foodItem) => {
-            return foodItem.foodItemId === selectedFoodItemId;
-        });
+
+        function findFoodItem(
+            foodItems: FoodItem[],
+            selectedFoodItemId: string,
+        ) {
+            const foodItem = foodItems.find((foodItem) => {
+                return foodItem.foodItemId === selectedFoodItemId;
+            });
+            return foodItem;
+        }
+        
+        const foodItemForLogEntry = findFoodItem(foodItems, selectedFoodItemId);
+
         const weight = Number(amountText);
+
         let inputError = false;
         let selectError = false;
 
@@ -69,21 +80,19 @@ export default function AddFoodLogEntryForm({
         if (inputError || selectError) {
             return;
         }
-        if (!foodItem) {
+        if (!foodItemForLogEntry) {
             setFoodItemSelectError("Please select a valid food item");
             return;
         }
 
-        
-
         const userId = (await getCurrentUser()).userId;
 
         const newFoodLogEntryObject = buildFoodLogEntryObject(
-            foodItem,
+            foodItemForLogEntry,
             selectedDate,
             userId,
             selectedMealId,
-            weight
+            weight,
         );
         onAddFoodLogEntry(newFoodLogEntryObject);
         setAmountText("");
