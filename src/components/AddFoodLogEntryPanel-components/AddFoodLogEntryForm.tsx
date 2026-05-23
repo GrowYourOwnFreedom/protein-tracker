@@ -1,5 +1,6 @@
+import FoodItemSelectField from "@/components/AddFoodLogEntryPanel-components/FoodItemSelectField";
 import MealSelectField from "@/components/AddFoodLogEntryPanel-components/MealSelectField";
-import FoodItemAmountSelectorFields from "@/components/app/FoodItemAmountSelectorFields";
+import FoodItemAmountInputField from "@/components/app/FoodItemAmountInputField";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import buildFoodLogEntryObject from "@/lib/buildFoodLogEntryObject";
@@ -47,7 +48,7 @@ export default function AddFoodLogEntryForm({
             });
             return foodItem;
         }
-        
+
         const foodItemForLogEntry = findFoodItem(foodItems, selectedFoodItemId);
 
         const weight = Number(amountText);
@@ -125,18 +126,18 @@ export default function AddFoodLogEntryForm({
     return (
         <form onSubmit={handleCreateFoodLogEntrySubmit}>
             <FieldGroup>
-                <FoodItemAmountSelectorFields
-                    foodItemSelectError={foodItemSelectError}
-                    amountText={amountText}
-                    onFoodItemSelectOpenChange={handleFoodItemSelectOpenChange}
-                    onFoodItemSelectValueChange={
-                        handleFoodItemSelectValueChange
-                    }
-                    inputRef={inputRef}
-                    amountError={amountError}
-                    foodItems={sortedFoodItems}
+                <FoodItemSelectField
+                    foodItems={foodItems}
                     selectedFoodItemId={selectedFoodItemId}
-                    handleAmountChange={handleAmountChange}
+                    onChange={handleFoodItemSelectValueChange}
+                    onOpenChange={handleFoodItemSelectOpenChange}
+                    foodItemSelectError={foodItemSelectError}
+                />
+                <FoodItemAmountInputField
+                    inputRef={inputRef}
+                    amountText={amountText}
+                    onAmountTextChange={handleAmountChange}
+                    amountError={amountError}
                 />
                 <MealSelectField
                     onChange={setSelectedMealId}
