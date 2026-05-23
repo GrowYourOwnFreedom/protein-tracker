@@ -136,7 +136,7 @@ function App() {
                     onProteinTargetChange={updateProteinTarget}
                     selectedDate={selectedDate}
                 />
-                <div>
+                <div className="space-y-4">
                     <AddFoodLogEntryPanel
                         className="h-fit"
                         foodItems={foodItems}

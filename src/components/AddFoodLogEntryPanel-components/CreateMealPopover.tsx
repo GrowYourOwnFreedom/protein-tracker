@@ -9,6 +9,7 @@ import {
     PopoverTitle,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import buildMealObject from "@/lib/buildMealObject";
 import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { Meal } from "@/types";
@@ -38,21 +39,15 @@ export default function CreateMealPopover({
             return;
         }
         setInputError("");
-        const mealId = createNewId();
-        const date = selectedDate;
-        const user =await getCurrentUser()
-        const newMeal: Meal = {
-            name: mealName.trim(),
-            mealId,
-            date,
-            createdAt: new Date().toISOString(),
-            userId: user.userId,
-        };
+
+        const userId = (await getCurrentUser()).userId;
+
+        const newMeal = buildMealObject(selectedDate, userId, mealName);
+
         createMeal(newMeal);
         setMealName("");
         setInputError("");
         setPopoverOpen(false);
-        
     }
 
     return (
@@ -104,4 +99,3 @@ export default function CreateMealPopover({
         </Popover>
     );
 }
-

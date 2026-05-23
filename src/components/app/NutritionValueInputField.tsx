@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/input-group";
 import React from "react";
 
-type NutrimentInputFieldProps = {
+type NutritionValueInputFieldProps = {
     inputRef?: React.RefObject<HTMLInputElement | null>;
     value: string;
     onValueChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -15,13 +15,13 @@ type NutrimentInputFieldProps = {
     type: "calories" | "protein";
 };
 
-export default function NutrimentInputField({
+export default function NutritionValueInputField({
     inputRef,
     value,
     onValueChange,
     inputError,
     type,
-}:NutrimentInputFieldProps) {
+}:NutritionValueInputFieldProps) {
     const nutrimentTodisplay = type
         .split("")
         .map((char: string, i: number) => {

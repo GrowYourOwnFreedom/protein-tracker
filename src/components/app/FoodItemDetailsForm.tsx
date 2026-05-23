@@ -1,31 +1,14 @@
-import {
-    Field,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-    FieldSeparator,
-} from "@/components/ui/field";
+import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-
-import { Input } from "@/components/ui/input";
 import { useRef, useState } from "react";
 import { defaultFoodItemCategories } from "@/data/defaultFoodItemCategories";
-import { FoodItem, FoodItemCategory } from "@/types";
+import { FoodItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { getToday } from "@/lib/getToday";
-import createNewId from "@/lib/createNewId";
 import FoodItemNameField from "@/components/app/FoodItemNameField";
 import FoodItemCategorySelectField from "@/components/app/FoodItemCategorySelectField";
-import NutrimentInputField from "@/components/app/NutrimentInputField";
+import NutritionValueInputField from "@/components/app/NutritionValueInputField";
+import { buildFoodItemObject } from "@/lib/buildFoodItemObject";
 
 type FoodItemDetailsFormProps = {
     onSubmit: (newFoodItem: FoodItem) => void;
@@ -134,29 +117,19 @@ export default function FoodItemDetailsForm({
         if (caloriesError || proteinError || categorySelectError || nameError) {
             return;
         }
-
-        const foodItemId = existingFoodItem?.foodItemId ?? createNewId();
-        const name = addFoodItemName.trim();
-        const caloriesPer100g = newFoodItemCalories;
-        const proteinPer100g = newFoodItemProtein;
+        
         const user = await getCurrentUser();
         const userId = user.userId;
-        const dateCreated = existingFoodItem?.dateCreated ?? getToday();
-        const foodItemCategoryId = selectedFoodItemCategoryId;
-        const type = existingFoodItem?.type ?? "simple";
-
-        const foodItemObj: FoodItem = {
-            foodItemId,
-            name,
-            caloriesPer100g,
-            proteinPer100g,
+        
+        const newFoodItemObject = buildFoodItemObject(
+            existingFoodItem,
+            addFoodItemName,
+            addFoodItemCalories,
+            addFoodItemProtein,
             userId,
-            dateCreated,
-            foodItemCategoryId,
-            type,
-        };
-
-        onSubmit(foodItemObj);
+            selectedFoodItemCategoryId,
+        );
+        onSubmit(newFoodItemObject);
         setAddFoodItemName("");
         setAddFoodItemCalories("");
         setAddFoodItemProtein("");
@@ -169,15 +142,19 @@ export default function FoodItemDetailsForm({
 
     const submitButtonText = isEdit ? "Save Food Item" : "Add Food Item";
 
-    function handleNameValueChange(event:React.ChangeEvent<HTMLInputElement>) {
+    function handleNameValueChange(event: React.ChangeEvent<HTMLInputElement>) {
         setAddFoodItemName(event.target.value);
         setFoodItemNameError("");
     }
-    function handleCalorieValueChange(event:React.ChangeEvent<HTMLInputElement>) {
+    function handleCalorieValueChange(
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) {
         setAddFoodItemCalories(event.target.value);
         setAddFoodItemCaloriesError("");
     }
-    function handleProteinValueChange(event:React.ChangeEvent<HTMLInputElement>) {
+    function handleProteinValueChange(
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) {
         setAddFoodItemProtein(event.target.value);
         setAddFoodItemProteinError("");
     }
@@ -199,14 +176,14 @@ export default function FoodItemDetailsForm({
                     categoryError={foodItemCategorySelectError}
                 />
                 <div className="grid grid-cols-2 gap-4">
-                    <NutrimentInputField
+                    <NutritionValueInputField
                         inputRef={inputRef}
                         value={addFoodItemCalories}
                         onValueChange={handleCalorieValueChange}
                         inputError={addFoodItemCaloriesError}
                         type="calories"
                     />
-                    <NutrimentInputField
+                    <NutritionValueInputField
                         value={addFoodItemProtein}
                         onValueChange={handleProteinValueChange}
                         inputError={addFoodItemProteinError}

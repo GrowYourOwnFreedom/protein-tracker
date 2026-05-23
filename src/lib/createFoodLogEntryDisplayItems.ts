@@ -23,7 +23,9 @@ type FoodLogEntryTotals = {
     weight: number;
 };
 
-function calculateFoodLogEntriesTotals(foodLogEntries: FoodLogEntry[]):FoodLogEntryTotals {
+function calculateFoodLogEntriesTotals(
+    foodLogEntries: FoodLogEntry[],
+): FoodLogEntryTotals {
     return foodLogEntries.reduce(
         (totalsObj, foodLogEntry) => {
             return {
@@ -42,12 +44,20 @@ export default function createFoodLogEntryDisplayItems(
 ): DisplayItem[] {
     const mealDisplayItems: MealDisplayItem[] = meals
         .map((meal): MealDisplayItem => {
-            const foodLogEntriesForMeal = foodLogEntries.filter((foodLogEntry) => {
-                return foodLogEntry.mealId === meal.mealId;
-            });
+            const foodLogEntriesForMeal = foodLogEntries
+                .filter((foodLogEntry) => {
+                    return foodLogEntry.mealId === meal.mealId;
+                })
+                .sort((a, b) => {
+                    return (
+                        new Date(b.createdAt).getTime() -
+                        new Date(a.createdAt).getTime()
+                    );
+                });
 
-            const { protein, calories, weight } =
-                calculateFoodLogEntriesTotals(foodLogEntriesForMeal);
+            const { protein, calories, weight } = calculateFoodLogEntriesTotals(
+                foodLogEntriesForMeal,
+            );
             return {
                 type: "meal",
                 createdAt: meal.createdAt,
@@ -62,17 +72,18 @@ export default function createFoodLogEntryDisplayItems(
             return item.foodLogEntries.length > 0;
         });
 
-    const looseFoodLogEntryDisplayItems: FoodLogEntryDisplayItem[] = foodLogEntries
-        .filter((foodLogEntry) => {
-            return !foodLogEntry.mealId;
-        })
-        .map((foodLogEntry): FoodLogEntryDisplayItem => {
-            return {
-                type: "foodLogEntry",
-                foodLogEntry,
-                createdAt: foodLogEntry.createdAt,
-            };
-        });
+    const looseFoodLogEntryDisplayItems: FoodLogEntryDisplayItem[] =
+        foodLogEntries
+            .filter((foodLogEntry) => {
+                return !foodLogEntry.mealId;
+            })
+            .map((foodLogEntry): FoodLogEntryDisplayItem => {
+                return {
+                    type: "foodLogEntry",
+                    foodLogEntry,
+                    createdAt: foodLogEntry.createdAt,
+                };
+            });
 
     const displayItems: DisplayItem[] = [
         ...mealDisplayItems,

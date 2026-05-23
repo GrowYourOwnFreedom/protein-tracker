@@ -95,11 +95,11 @@ export default function AddFoodLogEntryForm({
             selectedMealId,
             weight,
         );
+
         onAddFoodLogEntry(newFoodLogEntryObject);
         setAmountText("");
         setAmountError("");
         setFoodItemSelectError("");
-        setSelectedMealId("");
     }
 
     function handleFoodItemSelectValueChange(value: string): void {
