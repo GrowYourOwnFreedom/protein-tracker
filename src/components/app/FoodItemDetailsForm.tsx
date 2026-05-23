@@ -2,7 +2,7 @@ import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 
 import { useRef, useState } from "react";
 import { defaultFoodItemCategories } from "@/data/defaultFoodItemCategories";
-import { FoodItem, NutritionTypes } from "@/types";
+import { FoodItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import FoodItemNameField from "@/components/app/FoodItemNameField";
@@ -50,6 +50,8 @@ function validateFoodItemDetailsFormData({
         calories: "",
         categoryId: "",
     };
+    const caloriesNumber = Number(calories)
+    const proteinNumber =Number(protein)
 
     if (name.trim() === "") {
         formErrors.name = "Please enter a name";
@@ -61,18 +63,18 @@ function validateFoodItemDetailsFormData({
 
     if (calories === "") {
         formErrors.calories = "Please enter a number";
-    } else if (Number.isNaN(Number(calories))) {
+    } else if (Number.isNaN(caloriesNumber)) {
         formErrors.calories = "Please enter a valid number";
-    } else if (Number(calories) <= 0) {
+    } else if (caloriesNumber <= 0) {
         formErrors.calories = `Calories must be a positive number`;
     }
 
     if (protein === "") {
         formErrors.protein = "Please enter a number";
-    } else if (Number.isNaN(Number(protein))) {
+    } else if (Number.isNaN(proteinNumber)) {
         formErrors.protein = "Please enter a valid number";
-    } else if (Number(protein) <= 0) {
-        formErrors.protein = `Protein must be a positive number`;
+    } else if (proteinNumber < 0) {
+        formErrors.protein = `Protein must not be a negative number`;
     }
 
     return formErrors;
@@ -84,6 +86,7 @@ export default function FoodItemDetailsForm({
     className,
     isEdit,
 }: FoodItemDetailsFormProps) {
+    
     const [name, setName] = useState(existingFoodItem?.name ?? "");
     const [nameError, setNameError] = useState<string>("");
     const [calories, setCalories] = useState(
@@ -106,7 +109,7 @@ export default function FoodItemDetailsForm({
         setCategoryId(value);
         setCategorySelectError("");
     }
-    
+
     function handleCategorySelectOpenChange(open: boolean): void {
         if (!open && shouldFocusInputRef.current) {
             shouldFocusInputRef.current = false;
