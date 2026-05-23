@@ -2,31 +2,39 @@ import createNewId from "@/lib/createNewId";
 import { getToday } from "@/lib/getToday";
 import { FoodItem } from "@/types";
 
-export function buildFoodItemObject(
-            foodItem: FoodItem,
-            newName: string,
-            calories: string,
-            protein: string,
-            userId: string,
-            foodItemCategoryId: string,
-        ):FoodItem {
-            const foodItemId = foodItem?.foodItemId ?? createNewId();
-            const name = newName.trim();
-            const dateCreated = foodItem?.dateCreated ?? getToday();
-            const type = foodItem?.type ?? "simple";
-            const caloriesPer100g = Number(calories);
-            const proteinPer100g = Number(protein);
+type buildFoodItemArgs = {
+    foodItem: FoodItem;
+    name: string;
+    calories: string;
+    protein: string;
+    userId: string;
+    categoryId: string;
+};
 
-            const foodItemObj: FoodItem = {
-                foodItemId,
-                name,
-                caloriesPer100g,
-                proteinPer100g,
-                userId,
-                dateCreated,
-                foodItemCategoryId,
-                type,
-            };
+export function buildFoodItemObject({
+    foodItem,
+    name,
+    calories,
+    protein,
+    userId,
+    categoryId,
+}:buildFoodItemArgs): FoodItem {
+    const foodItemId = foodItem?.foodItemId ?? createNewId();
+    const dateCreated = foodItem?.dateCreated ?? getToday();
+    const type = foodItem?.type ?? "simple";
+    const caloriesPer100g = Number(calories);
+    const proteinPer100g = Number(protein);
 
-            return foodItemObj;
-        }
+    const foodItemObj: FoodItem = {
+        foodItemId,
+        name:name.trim(),
+        caloriesPer100g,
+        proteinPer100g,
+        userId,
+        dateCreated,
+        foodItemCategoryId:categoryId,
+        type,
+    };
+
+    return foodItemObj;
+}

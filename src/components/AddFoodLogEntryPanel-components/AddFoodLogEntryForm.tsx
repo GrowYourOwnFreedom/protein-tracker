@@ -88,13 +88,13 @@ export default function AddFoodLogEntryForm({
 
         const userId = (await getCurrentUser()).userId;
 
-        const newFoodLogEntryObject = buildFoodLogEntryObject(
-            foodItemForLogEntry,
-            selectedDate,
+        const newFoodLogEntryObject: FoodLogEntry = buildFoodLogEntryObject({
+            foodItem: foodItemForLogEntry,
+            date: selectedDate,
             userId,
-            selectedMealId,
+            mealId: selectedMealId,
             weight,
-        );
+        });
 
         onAddFoodLogEntry(newFoodLogEntryObject);
         setAmountText("");
@@ -117,9 +117,7 @@ export default function AddFoodLogEntryForm({
     }
     const sortedFoodItems = sortFoodItemsByProteinEfficiency(foodItems);
 
-    function handleAmountChange(
-        event: React.ChangeEvent<HTMLInputElement | null>,
-    ) {
+    function handleAmountChange(event: React.ChangeEvent<HTMLInputElement>) {
         setAmountText(event.target.value);
         setAmountError("");
     }

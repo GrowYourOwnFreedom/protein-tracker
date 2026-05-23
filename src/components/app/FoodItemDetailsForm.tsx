@@ -2,7 +2,7 @@ import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 
 import { useRef, useState } from "react";
 import { defaultFoodItemCategories } from "@/data/defaultFoodItemCategories";
-import { FoodItem } from "@/types";
+import { FoodItem, NutritionTypes } from "@/types";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import FoodItemNameField from "@/components/app/FoodItemNameField";
@@ -18,37 +18,95 @@ type FoodItemDetailsFormProps = {
     className?: string;
 };
 
+type FormValues = {
+    calories: string;
+    protein: string;
+    categoryId: string;
+    name: string;
+};
+
+type FormErrors = {
+    calories: string;
+    protein: string;
+    categoryId: string;
+    name: string;
+};
+
+function hasErrors(errors: FormErrors): boolean {
+    return Object.values(errors).some((error) => {
+        return error !== "";
+    });
+}
+
+function validateFoodItemDetailsFormData({
+    calories,
+    protein,
+    categoryId,
+    name,
+}: FormValues): FormErrors {
+    const formErrors = {
+        name: "",
+        protein: "",
+        calories: "",
+        categoryId: "",
+    };
+
+    if (name.trim() === "") {
+        formErrors.name = "Please enter a name";
+    }
+
+    if (!categoryId) {
+        formErrors.categoryId = "Please select a category";
+    }
+
+    if (calories === "") {
+        formErrors.calories = "Please enter a number";
+    } else if (Number.isNaN(Number(calories))) {
+        formErrors.calories = "Please enter a valid number";
+    } else if (Number(calories) <= 0) {
+        formErrors.calories = `Calories must be a positive number`;
+    }
+
+    if (protein === "") {
+        formErrors.protein = "Please enter a number";
+    } else if (Number.isNaN(Number(protein))) {
+        formErrors.protein = "Please enter a valid number";
+    } else if (Number(protein) <= 0) {
+        formErrors.protein = `Protein must be a positive number`;
+    }
+
+    return formErrors;
+}
+
 export default function FoodItemDetailsForm({
     existingFoodItem,
     onSubmit,
     className,
     isEdit,
 }: FoodItemDetailsFormProps) {
-    const [addFoodItemName, setAddFoodItemName] = useState(
-        existingFoodItem?.name ?? "",
-    );
-    const [addFoodItemCalories, setAddFoodItemCalories] = useState(
+    const [name, setName] = useState(existingFoodItem?.name ?? "");
+    const [nameError, setNameError] = useState<string>("");
+    const [calories, setCalories] = useState(
         String(existingFoodItem?.caloriesPer100g ?? ""),
     );
-    const [addFoodItemProtein, setAddFoodItemProtein] = useState(
+    const [caloriesError, setCaloriesError] = useState("");
+    const [protein, setProtein] = useState(
         String(existingFoodItem?.proteinPer100g ?? ""),
     );
-    const [selectedFoodItemCategoryId, setSelectedFoodItemCategoryId] =
-        useState(existingFoodItem?.foodItemCategoryId ?? "");
-    const [addFoodItemCaloriesError, setAddFoodItemCaloriesError] =
-        useState("");
-    const [addFoodItemProteinError, setAddFoodItemProteinError] = useState("");
-    const [foodItemCategorySelectError, setFoodItemCategorySelectError] =
-        useState<string>("");
-    const [foodItemNameError, setFoodItemNameError] = useState<string>("");
+    const [proteinError, setProteinError] = useState("");
+    const [categoryId, setCategoryId] = useState(
+        existingFoodItem?.foodItemCategoryId ?? "",
+    );
+    const [categorySelectError, setCategorySelectError] = useState<string>("");
     const inputRef = useRef<HTMLInputElement | null>(null);
     const shouldFocusInputRef = useRef(false);
 
     function handleCategoryValueChange(value: string): void {
         shouldFocusInputRef.current = true;
-        setSelectedFoodItemCategoryId(value);
-        setFoodItemCategorySelectError("");
+        setCategoryId(value);
+        setCategorySelectError("");
     }
+    
     function handleCategorySelectOpenChange(open: boolean): void {
         if (!open && shouldFocusInputRef.current) {
             shouldFocusInputRef.current = false;
@@ -58,135 +116,98 @@ export default function FoodItemDetailsForm({
         }
     }
 
+    function resetForm() {
+        setName("");
+        setCalories("");
+        setProtein("");
+        setProteinError("");
+        setCaloriesError("");
+        setCategorySelectError("");
+        setNameError("");
+        setCategoryId("");
+    }
+
     async function handleSaveFoodItemSubmit(
         event: React.SubmitEvent<HTMLFormElement>,
     ): Promise<void> {
+
+
         event.preventDefault();
-        const newFoodItemCalories = Number(addFoodItemCalories);
-        const newFoodItemProtein = Number(addFoodItemProtein);
-
-        let caloriesError = "";
-        let proteinError = "";
-        let categorySelectError = "";
-        let nameError = "";
-
-        if (addFoodItemName.trim() === "") {
-            nameError = "Please enter a name";
-            setFoodItemNameError(nameError);
-        } else {
-            nameError = "";
-            setFoodItemNameError("");
-        }
-
-        if (!selectedFoodItemCategoryId) {
-            categorySelectError = "Please select a category";
-            setFoodItemCategorySelectError(categorySelectError);
-        } else {
-            categorySelectError = "";
-            setFoodItemCategorySelectError("");
-        }
-
-        if (addFoodItemCalories === "") {
-            caloriesError = "Please enter a number";
-            setAddFoodItemCaloriesError(caloriesError);
-        } else if (Number.isNaN(newFoodItemCalories)) {
-            caloriesError = "Please enter a valid number";
-            setAddFoodItemCaloriesError(caloriesError);
-        } else if (newFoodItemCalories <= 0) {
-            caloriesError = "Calories must be a positive number";
-            setAddFoodItemCaloriesError(caloriesError);
-        } else {
-            caloriesError = "";
-            setAddFoodItemCaloriesError("");
-        }
-
-        if (addFoodItemProtein === "") {
-            proteinError = "Please enter a number";
-            setAddFoodItemProteinError(proteinError);
-        } else if (Number.isNaN(newFoodItemProtein)) {
-            proteinError = "Please enter a valid number";
-            setAddFoodItemProteinError(proteinError);
-        } else if (newFoodItemProtein < 0) {
-            proteinError = "Protein must not be a negative number";
-            setAddFoodItemProteinError(proteinError);
-        } else {
-            proteinError = "";
-            setAddFoodItemProteinError("");
-        }
-
-        if (caloriesError || proteinError || categorySelectError || nameError) {
+        const errors = validateFoodItemDetailsFormData({
+            name,
+            calories,
+            protein,
+            categoryId,
+        });
+        setCaloriesError(errors.calories);
+        setCategorySelectError(errors.categoryId);
+        setProteinError(errors.protein);
+        setNameError(errors.name);
+        if (hasErrors(errors)) {
             return;
         }
-        
+
         const user = await getCurrentUser();
         const userId = user.userId;
-        
-        const newFoodItemObject = buildFoodItemObject(
-            existingFoodItem,
-            addFoodItemName,
-            addFoodItemCalories,
-            addFoodItemProtein,
+        const newFoodItemObject: FoodItem = buildFoodItemObject({
+            foodItem: existingFoodItem,
+            name,
+            calories,
+            protein,
             userId,
-            selectedFoodItemCategoryId,
-        );
+            categoryId,
+        });
         onSubmit(newFoodItemObject);
-        setAddFoodItemName("");
-        setAddFoodItemCalories("");
-        setAddFoodItemProtein("");
-        setAddFoodItemProteinError("");
-        setAddFoodItemCaloriesError("");
-        setFoodItemCategorySelectError("");
-        setFoodItemNameError("");
-        setSelectedFoodItemCategoryId("");
+        resetForm();
     }
 
     const submitButtonText = isEdit ? "Save Food Item" : "Add Food Item";
 
     function handleNameValueChange(event: React.ChangeEvent<HTMLInputElement>) {
-        setAddFoodItemName(event.target.value);
-        setFoodItemNameError("");
+        setName(event.target.value);
+        setNameError("");
     }
     function handleCalorieValueChange(
         event: React.ChangeEvent<HTMLInputElement>,
     ) {
-        setAddFoodItemCalories(event.target.value);
-        setAddFoodItemCaloriesError("");
+        setCalories(event.target.value);
+        setCaloriesError("");
     }
     function handleProteinValueChange(
         event: React.ChangeEvent<HTMLInputElement>,
     ) {
-        setAddFoodItemProtein(event.target.value);
-        setAddFoodItemProteinError("");
+        setProtein(event.target.value);
+        setProteinError("");
     }
 
     return (
         <form className={className} onSubmit={handleSaveFoodItemSubmit}>
             <FieldGroup>
                 <FoodItemNameField
-                    name={addFoodItemName}
-                    nameError={foodItemNameError}
+                    name={name}
+                    nameError={nameError}
                     onValueChange={handleNameValueChange}
                 />
 
                 <FoodItemCategorySelectField
-                    value={selectedFoodItemCategoryId}
+                    value={categoryId}
                     onValueChange={handleCategoryValueChange}
                     onOpenChange={handleCategorySelectOpenChange}
                     categories={defaultFoodItemCategories}
-                    categoryError={foodItemCategorySelectError}
+                    categoryError={categorySelectError}
                 />
                 <div className="grid grid-cols-2 gap-4">
                     <NutritionValueInputField
                         inputRef={inputRef}
-                        value={addFoodItemCalories}
+                        value={calories}
                         onValueChange={handleCalorieValueChange}
-                        inputError={addFoodItemCaloriesError}
+                        inputError={caloriesError}
                         type="calories"
                     />
                     <NutritionValueInputField
-                        value={addFoodItemProtein}
+                        value={protein}
                         onValueChange={handleProteinValueChange}
-                        inputError={addFoodItemProteinError}
+                        inputError={proteinError}
                         type="protein"
                     />
                 </div>

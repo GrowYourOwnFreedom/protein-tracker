@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+export type NutritionTypes = "protein"|"calories"
 
 export type User = {
     userId: string;
