@@ -1,27 +1,27 @@
 import FoodItemSelectField from "@/components/AddFoodLogEntryPanel-components/FoodItemSelectField";
 import MealSelectField from "@/components/AddFoodLogEntryPanel-components/MealSelectField";
+import SearchableFoodItemSelectField from "@/components/AddFoodLogEntryPanel-components/SearchableFoodItemSelectField";
 import FoodItemAmountInputField from "@/components/app/FoodItemAmountInputField";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import buildFoodLogEntryObject from "@/lib/buildFoodLogEntryObject";
 
-import { sortFoodItemsByProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { FoodLogEntry, FoodItem, Meal } from "@/types";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 type AddFoodLogEntryFormProps = {
     foodItems: FoodItem[];
-    selectedFoodItemId: string;
+    selectedFoodItem: FoodItem | null;
     onAddFoodLogEntry: (entry: FoodLogEntry) => void;
     selectedDate: string;
     meals: Meal[];
-    onFoodItemChange: (value: string) => void;
+    onFoodItemChange: (foodItem:FoodItem)=> void
 };
 
 export default function AddFoodLogEntryForm({
     foodItems,
-    selectedFoodItemId,
+    selectedFoodItem,
     onAddFoodLogEntry,
     selectedDate,
     meals,
@@ -49,7 +49,6 @@ export default function AddFoodLogEntryForm({
             return foodItem;
         }
 
-        const foodItemForLogEntry = findFoodItem(foodItems, selectedFoodItemId);
 
         const weight = Number(amountText);
 
@@ -70,7 +69,7 @@ export default function AddFoodLogEntryForm({
             setAmountError("");
         }
 
-        if (!selectedFoodItemId) {
+        if (!selectedFoodItem) {
             selectError = true;
             setFoodItemSelectError("Please select a food item");
         } else {
@@ -81,7 +80,7 @@ export default function AddFoodLogEntryForm({
         if (inputError || selectError) {
             return;
         }
-        if (!foodItemForLogEntry) {
+        if (!selectedFoodItem) {
             setFoodItemSelectError("Please select a valid food item");
             return;
         }
@@ -89,7 +88,7 @@ export default function AddFoodLogEntryForm({
         const userId = (await getCurrentUser()).userId;
 
         const newFoodLogEntryObject: FoodLogEntry = buildFoodLogEntryObject({
-            foodItem: foodItemForLogEntry,
+            foodItem: selectedFoodItem,
             date: selectedDate,
             userId,
             mealId: selectedMealId,
@@ -102,9 +101,9 @@ export default function AddFoodLogEntryForm({
         setFoodItemSelectError("");
     }
 
-    function handleFoodItemSelectValueChange(value: string): void {
+    function handleFoodItemSelectValueChange(foodItem: FoodItem): void {
         shouldFocusInputRef.current = true;
-        onFoodItemChange(value);
+        onFoodItemChange(foodItem);
         setFoodItemSelectError("");
     }
     function handleFoodItemSelectOpenChange(open: boolean): void {
@@ -115,7 +114,6 @@ export default function AddFoodLogEntryForm({
             }, 0);
         }
     }
-    const sortedFoodItems = sortFoodItemsByProteinEfficiency(foodItems);
 
     function handleAmountChange(event: React.ChangeEvent<HTMLInputElement>) {
         setAmountText(event.target.value);
@@ -124,12 +122,19 @@ export default function AddFoodLogEntryForm({
     return (
         <form onSubmit={handleCreateFoodLogEntrySubmit}>
             <FieldGroup>
-                <FoodItemSelectField
+                {/* <FoodItemSelectField
                     foodItems={foodItems}
                     selectedFoodItemId={selectedFoodItemId}
                     onChange={handleFoodItemSelectValueChange}
                     onOpenChange={handleFoodItemSelectOpenChange}
                     foodItemSelectError={foodItemSelectError}
+                /> */}
+                <SearchableFoodItemSelectField
+                foodItems={foodItems}
+                selectedFoodItem={selectedFoodItem}
+                onChange={handleFoodItemSelectValueChange}
+                onOpenChange={handleFoodItemSelectOpenChange}
+                selectError={foodItemSelectError}
                 />
                 <FoodItemAmountInputField
                     inputRef={inputRef}

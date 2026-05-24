@@ -13,6 +13,7 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { formatNumber } from "@/lib/formatNumber";
+import { getProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { FoodLogEntry, Meal } from "@/types";
 import { useState } from "react";
 
@@ -80,6 +81,7 @@ export default function MealCard({
                         Protein: {formatNumber(protein)}g (
                         {formatNumber(percentOfProteinTarget)}%)
                     </p>
+                    <p>Efficiency: {formatNumber(getProteinEfficiency(calories,protein))}g/100kcal</p>
                     <CollapsibleContent className="mt-4 flex flex-col gap-y-3 pl-3">
                         {foodLogEntries.map((foodLogEntry) => {
                             return (

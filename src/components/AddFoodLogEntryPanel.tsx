@@ -31,24 +31,28 @@ export default function AddFoodLogEntryPanel({
     meals,
     onAddFoodItem,
 }: AddFoodLogEntryPanelProps) {
-    const [selectedFoodItemId, setSelectedFoodItemId] = useState<string>("");
+    const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem|null>(null);
 
     function handleDeleteFoodItemClick() {
         const deletedFoodItem = foodItems.find((foodItem) => {
-            return foodItem.foodItemId === selectedFoodItemId;
+            return foodItem.foodItemId === selectedFoodItem.foodItemId;
         });
         if (
             confirm(
                 `Are you sure you want to permanently delete the FoodItem ${deletedFoodItem.name} from your list?`,
             )
         ) {
-            onDeleteFoodItem(selectedFoodItemId);
-            setSelectedFoodItemId("");
+            onDeleteFoodItem(selectedFoodItem.foodItemId);
+            setSelectedFoodItem(null);
         }
     }
 
     const selectedFoodItemToEdit = foodItems.find((foodItem) => {
-        return foodItem.foodItemId === selectedFoodItemId;
+        if(selectedFoodItem){
+            return foodItem.foodItemId === selectedFoodItem.foodItemId;
+
+        }
+        return
     });
 
     return (
@@ -56,14 +60,14 @@ export default function AddFoodLogEntryPanel({
             <AddFoodLogEntryForm
                 foodItems={foodItems}
                 meals={meals}
-                selectedFoodItemId={selectedFoodItemId}
+                selectedFoodItem={selectedFoodItem}
                 onAddFoodLogEntry={onAddFoodLogEntry}
-                onFoodItemChange={setSelectedFoodItemId}
+                onFoodItemChange={setSelectedFoodItem}
                 selectedDate={selectedDate}
             />
             <div className="grid  grid-cols-2 gap-4 ">
                 <Button
-                    disabled={!selectedFoodItemId}
+                    disabled={!selectedFoodItem}
                     className="rounded-full"
                     type="button"
                     variant="destructive"
