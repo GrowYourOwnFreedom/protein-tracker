@@ -1,4 +1,4 @@
-import FoodLogEntryCard from "@/components/FoodLogPanel-components/FoodLogEntryCard";
+import FoodLogEntryCard from "@/components/food-log/FoodLogEntryCard";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -81,7 +81,11 @@ export default function MealCard({
                         Protein: {formatNumber(protein)}g (
                         {formatNumber(percentOfProteinTarget)}%)
                     </p>
-                    <p>Efficiency: {formatNumber(getProteinEfficiency(calories,protein))}g/100kcal</p>
+                    <p>
+                        Efficiency:{" "}
+                        {formatNumber(getProteinEfficiency(calories, protein))}
+                        g/100kcal
+                    </p>
                     <CollapsibleContent className="mt-4 flex flex-col gap-y-3 pl-3">
                         {foodLogEntries.map((foodLogEntry) => {
                             return (

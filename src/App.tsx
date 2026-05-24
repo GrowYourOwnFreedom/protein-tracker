@@ -1,7 +1,7 @@
 import "./App.css";
-import NutritionSummaryPanel from "@/components/NutritionSummaryPanel";
+import NutritionSummaryPanel from "@/components/nutrition-summary/NutritionSummaryPanel";
 import { useState, useEffect } from "react";
-import AddFoodLogEntryPanel from "@/components/AddFoodLogEntryPanel";
+import AddFoodLogEntryPanel from "@/components/food-log/AddFoodLogEntryPanel";
 import {
     getCurrentUser,
     createStoredFoodItem,
@@ -19,9 +19,9 @@ import {
     updateStoredProteinTarget,
 } from "@/lib/storageCrudHelpers";
 import { FoodItem, FoodLogEntry, Meal } from "@/types";
-import FoodLogPanel from "@/components/FoodLogPanel";
+import FoodLogPanel from "@/components/food-log/FoodLogPanel";
 import { getToday } from "@/lib/getToday";
-import CreateCompositeFoodItemPanel from "@/components/CreateCompositeFoodItemPanel";
+import CreateCompositeFoodItemPanel from "@/components/food-items/CreateCompositeFoodItemPanel";
 
 function App() {
     const [foodLogEntries, setFoodLogEntries] = useState<FoodLogEntry[]>([]);
@@ -148,7 +148,7 @@ function App() {
                         meals={meals}
                         onAddFoodItem={addFoodItem}
                     />
-                    <CreateCompositeFoodItemPanel/>
+                    <CreateCompositeFoodItemPanel />
                 </div>
                 <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"

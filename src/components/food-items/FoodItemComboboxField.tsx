@@ -16,12 +16,12 @@ import { formatNumber } from "@/lib/formatNumber";
 import { getProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
 import { FoodItem, FoodItemCategory } from "@/types";
 
-type ComboboxGroup = {
+type FoodItemComboboxGroup = {
     value: string;
     items: FoodItem[];
 };
 
-type SearchableFoodItemSelectProps = {
+type FoodItemComboboxProps = {
     foodItems: FoodItem[];
     selectedFoodItem: FoodItem|null;
     onChange: (value: FoodItem) => void;
@@ -33,7 +33,7 @@ type SearchableFoodItemSelectProps = {
 function createComboboxList(
     foodItems: FoodItem[],
     categories: FoodItemCategory[],
-): ComboboxGroup[] {
+): FoodItemComboboxGroup[] {
     const foodItemsGroups = categories.map((category) => {
         const groupItems = foodItems.filter((item) => {
             return item.foodItemCategoryId === category.foodItemCategoryId;
@@ -54,14 +54,14 @@ function getFoodItemSelectLabel(foodItem: FoodItem): string {
     return `${foodItem.name} ${formatNumber(proteinEfficiency)}g/100kcal`;
 }
 
-export default function SearchableFoodItemSelectField({
+export default function FoodItemComboboxField({
     foodItems,
     selectedFoodItem,
     onChange,
     onOpenChange,
     selectError,
     className,
-}:SearchableFoodItemSelectProps) {
+}:FoodItemComboboxProps) {
     const foodItemsGroups = createComboboxList(
         foodItems,
         defaultFoodItemCategories,
@@ -83,7 +83,7 @@ export default function SearchableFoodItemSelectField({
                 <ComboboxContent>
                     <ComboboxEmpty>No food items found.</ComboboxEmpty>
                     <ComboboxList>
-                        {(group:ComboboxGroup, index) =>  (
+                        {(group:FoodItemComboboxGroup, index) =>  (
                             <ComboboxGroup key={group.value} items={group.items}>
                                 <ComboboxLabel className="text-primary font-bold">{group.value}</ComboboxLabel>
                                 <ComboboxCollection>

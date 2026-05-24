@@ -5,10 +5,10 @@ import { defaultFoodItemCategories } from "@/data/defaultFoodItemCategories";
 import { FoodItem } from "@/types";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import FoodItemNameField from "@/components/app/FoodItemNameField";
-import FoodItemCategorySelectField from "@/components/app/FoodItemCategorySelectField";
-import NutritionValueInputField from "@/components/app/NutritionValueInputField";
-import { buildFoodItemObject } from "@/lib/buildFoodItemObject";
+import FoodItemNameField from "@/components/food-items/FoodItemNameField";
+import FoodItemCategorySelectField from "@/components/food-items/FoodItemCategorySelectField";
+import NutritionValueInputField from "@/components/food-items/NutritionValueInputField";
+import buildFoodItem from "@/lib/buildFoodItem";
 import hasErrors from "@/lib/hasErrors";
 
 type FoodItemDetailsFormProps = {
@@ -26,8 +26,6 @@ type FoodItemDetailsFormValues = {
     categoryId: string;
     name: string;
 };
-
-
 
 function validateFoodItemDetailsFormData({
     calories,
@@ -140,7 +138,7 @@ export default function FoodItemDetailsForm({
 
         const user = await getCurrentUser();
         const userId = user.userId;
-        const newFoodItemObject: FoodItem = buildFoodItemObject({
+        const newFoodItem: FoodItem = buildFoodItem({
             foodItem: existingFoodItem,
             name,
             calories,
@@ -148,7 +146,7 @@ export default function FoodItemDetailsForm({
             userId,
             categoryId,
         });
-        onSubmit(newFoodItemObject);
+        onSubmit(newFoodItem);
         resetForm();
     }
 

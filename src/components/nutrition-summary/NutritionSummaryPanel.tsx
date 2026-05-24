@@ -1,5 +1,5 @@
-import SummaryCard from "@/components/NutritionSummaryPanel-components/SummaryCard";
-import TargetCard from "@/components/NutritionSummaryPanel-components/TargetCard";
+import SummaryCard from "@/components/nutrition-summary/SummaryCard";
+import TargetCard from "@/components/nutrition-summary/TargetCard";
 import Panel from "@/components/app/Panel";
 import {
     Field,

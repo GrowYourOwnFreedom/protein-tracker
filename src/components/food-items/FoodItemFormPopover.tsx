@@ -1,4 +1,4 @@
-import FoodItemDetailsForm from "@/components/app/FoodItemDetailsForm";
+import FoodItemDetailsForm from "@/components/food-items/FoodItemDetailsForm";
 import { Button } from "@/components/ui/button";
 import {
     Popover,

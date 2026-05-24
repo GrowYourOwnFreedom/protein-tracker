@@ -1,9 +1,9 @@
-import MealSelectField from "@/components/AddFoodLogEntryPanel-components/MealSelectField";
-import SearchableFoodItemSelectField from "@/components/AddFoodLogEntryPanel-components/SearchableFoodItemSelectField";
-import FoodItemAmountInputField from "@/components/app/FoodItemAmountInputField";
+import MealSelectField from "@/components/food-log/MealSelectField";
+import FoodItemComboboxField from "@/components/food-items/FoodItemComboboxField";
+import FoodItemAmountInputField from "@/components/food-items/FoodItemAmountInputField";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
-import buildFoodLogEntryObject from "@/lib/buildFoodLogEntryObject";
+import buildFoodLogEntry from "@/lib/buildFoodLogEntry";
 import hasErrors from "@/lib/hasErrors";
 
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
@@ -19,11 +19,11 @@ type AddFoodLogEntryFormProps = {
     onFoodItemChange: (foodItem: FoodItem) => void;
 };
 
-type validateFoodLogEntryFormDetailsValues = {
+type ValidateFoodLogEntryFormDetailsValues = {
     amount: string;
-    foodItem: FoodItem;
+    foodItem: FoodItem | null;
 };
-type validateFoodLogEntryFormDetailsErrors = {
+type ValidateFoodLogEntryFormDetailsErrors = {
     amount: string;
     foodItem: string;
 };
@@ -31,7 +31,7 @@ type validateFoodLogEntryFormDetailsErrors = {
 function validateFoodLogEntryFormDetails({
     amount,
     foodItem,
-}: validateFoodLogEntryFormDetailsValues): validateFoodLogEntryFormDetailsErrors {
+}: ValidateFoodLogEntryFormDetailsValues): ValidateFoodLogEntryFormDetailsErrors {
     const formErrors = {
         amount: "",
         foodItem: "",
@@ -67,11 +67,10 @@ export default function AddFoodLogEntryForm({
     const shouldFocusInputRef = useRef(false);
     const [foodItemSelectError, setFoodItemSelectError] = useState<string>("");
 
-    function resetForm(){
-         setAmountText("");
+    function resetForm() {
+        setAmountText("");
         setAmountError("");
         setFoodItemSelectError("");
-
     }
     async function handleCreateFoodLogEntrySubmit(
         event: React.SubmitEvent<HTMLFormElement>,
@@ -93,7 +92,7 @@ export default function AddFoodLogEntryForm({
 
         const userId = (await getCurrentUser()).userId;
 
-        const newFoodLogEntryObject: FoodLogEntry = buildFoodLogEntryObject({
+        const newFoodLogEntry: FoodLogEntry = buildFoodLogEntry({
             foodItem: selectedFoodItem,
             date: selectedDate,
             userId,
@@ -101,8 +100,8 @@ export default function AddFoodLogEntryForm({
             weight,
         });
 
-        onAddFoodLogEntry(newFoodLogEntryObject);
-        resetForm()
+        onAddFoodLogEntry(newFoodLogEntry);
+        resetForm();
     }
 
     function handleFoodItemSelectValueChange(foodItem: FoodItem): void {
@@ -126,7 +125,7 @@ export default function AddFoodLogEntryForm({
     return (
         <form onSubmit={handleCreateFoodLogEntrySubmit}>
             <FieldGroup>
-                <SearchableFoodItemSelectField
+                <FoodItemComboboxField
                     foodItems={foodItems}
                     selectedFoodItem={selectedFoodItem}
                     onChange={handleFoodItemSelectValueChange}

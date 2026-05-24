@@ -1,5 +1,5 @@
-import FoodItemCategorySelectField from "@/components/app/FoodItemCategorySelectField";
-import FoodItemNameField from "@/components/app/FoodItemNameField";
+import FoodItemCategorySelectField from "@/components/food-items/FoodItemCategorySelectField";
+import FoodItemNameField from "@/components/food-items/FoodItemNameField";
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
@@ -42,7 +42,10 @@ export default function CreateCompositeFoodItemPanel({
 
         // Add New Composite Item Popover
         <Panel title="Create Composite Food Item" className={className}>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 space-y-5">
+            <form
+                onSubmit={handleSubmit}
+                className="grid grid-cols-1 space-y-5"
+            >
                 <FieldGroup>
                     <FoodItemNameField
                         name={name}

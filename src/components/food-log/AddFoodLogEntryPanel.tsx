@@ -2,10 +2,10 @@ import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
 
 import { FoodItem, FoodLogEntry, Meal } from "@/types";
-import CreateMealPopover from "@/components/AddFoodLogEntryPanel-components/CreateMealPopover";
-import AddFoodLogEntryForm from "@/components/AddFoodLogEntryPanel-components/AddFoodLogEntryForm";
+import CreateMealPopover from "@/components/food-log/CreateMealPopover";
+import AddFoodLogEntryForm from "@/components/food-log/AddFoodLogEntryForm";
 import { useState } from "react";
-import FoodItemFormPopover from "@/components/AddFoodLogEntryPanel-components/FoodItemFormPopover";
+import FoodItemFormPopover from "@/components/food-items/FoodItemFormPopover";
 
 type AddFoodLogEntryPanelProps = {
     foodItems: FoodItem[];
@@ -31,9 +31,14 @@ export default function AddFoodLogEntryPanel({
     meals,
     onAddFoodItem,
 }: AddFoodLogEntryPanelProps) {
-    const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem|null>(null);
+    const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem | null>(
+        null,
+    );
 
     function handleDeleteFoodItemClick() {
+        if (!selectedFoodItem) {
+            return;
+        }
         const deletedFoodItem = foodItems.find((foodItem) => {
             return foodItem.foodItemId === selectedFoodItem.foodItemId;
         });
@@ -48,11 +53,10 @@ export default function AddFoodLogEntryPanel({
     }
 
     const selectedFoodItemToEdit = foodItems.find((foodItem) => {
-        if(selectedFoodItem){
+        if (selectedFoodItem) {
             return foodItem.foodItemId === selectedFoodItem.foodItemId;
-
         }
-        return
+        return;
     });
 
     return (

@@ -1,7 +1,7 @@
 import Panel from "@/components/app/Panel";
-import FoodLogEntryCard from "./FoodLogPanel-components/FoodLogEntryCard";
-import MealCard from "@/components/FoodLogPanel-components/MealCard";
-import DatePicker from "@/components/FoodLogPanel-components/DatePicker";
+import FoodLogEntryCard from "@/components/food-log/FoodLogEntryCard";
+import MealCard from "@/components/food-log/MealCard";
+import DatePicker from "@/components/food-log/DatePicker";
 import createFoodLogEntryDisplayItems from "@/lib/createFoodLogEntryDisplayItems";
 import { FoodLogEntry, Meal } from "@/types";
 

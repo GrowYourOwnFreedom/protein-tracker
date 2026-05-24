@@ -11,7 +11,7 @@ type buildFoodItemArgs = {
     categoryId: string;
 };
 
-export function buildFoodItemObject({
+export default function buildFoodItem({
     foodItem,
     name,
     calories,
