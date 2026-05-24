@@ -122,13 +122,6 @@ export default function AddFoodLogEntryForm({
     return (
         <form onSubmit={handleCreateFoodLogEntrySubmit}>
             <FieldGroup>
-                {/* <FoodItemSelectField
-                    foodItems={foodItems}
-                    selectedFoodItemId={selectedFoodItemId}
-                    onChange={handleFoodItemSelectValueChange}
-                    onOpenChange={handleFoodItemSelectOpenChange}
-                    foodItemSelectError={foodItemSelectError}
-                /> */}
                 <SearchableFoodItemSelectField
                 foodItems={foodItems}
                 selectedFoodItem={selectedFoodItem}

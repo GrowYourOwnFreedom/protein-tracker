@@ -51,7 +51,7 @@ function getFoodItemSelectLabel(foodItem: FoodItem): string {
         foodItem.caloriesPer100g,
         foodItem.proteinPer100g,
     );
-    return `${foodItem.name} ${formatNumber(proteinEfficiency)}g protein/100kcal`;
+    return `${foodItem.name} ${formatNumber(proteinEfficiency)}g/100kcal`;
 }
 
 export default function SearchableFoodItemSelectField({
@@ -79,13 +79,13 @@ export default function SearchableFoodItemSelectField({
                 onValueChange={onChange}
                 onOpenChange={onOpenChange}
             >
-                <ComboboxInput placeholder="Select a food item" />
+                <ComboboxInput placeholder="Select a food item" showClear/>
                 <ComboboxContent>
                     <ComboboxEmpty>No food items found.</ComboboxEmpty>
                     <ComboboxList>
                         {(group:ComboboxGroup, index) =>  (
                             <ComboboxGroup key={group.value} items={group.items}>
-                                <ComboboxLabel>{group.value}</ComboboxLabel>
+                                <ComboboxLabel className="text-primary font-bold">{group.value}</ComboboxLabel>
                                 <ComboboxCollection>
                                     {(foodItem: FoodItem) =>  (
                                         <ComboboxItem
