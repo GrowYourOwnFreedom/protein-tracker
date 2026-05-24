@@ -9,6 +9,7 @@ import FoodItemNameField from "@/components/app/FoodItemNameField";
 import FoodItemCategorySelectField from "@/components/app/FoodItemCategorySelectField";
 import NutritionValueInputField from "@/components/app/NutritionValueInputField";
 import { buildFoodItemObject } from "@/lib/buildFoodItemObject";
+import hasErrors from "@/lib/hasErrors";
 
 type FoodItemDetailsFormProps = {
     onSubmit: (newFoodItem: FoodItem) => void;
@@ -18,40 +19,30 @@ type FoodItemDetailsFormProps = {
     className?: string;
 };
 
-type FormValues = {
+type FoodItemDetailsFormErrors = FoodItemDetailsFormValues;
+type FoodItemDetailsFormValues = {
     calories: string;
     protein: string;
     categoryId: string;
     name: string;
 };
 
-type FormErrors = {
-    calories: string;
-    protein: string;
-    categoryId: string;
-    name: string;
-};
 
-function hasErrors(errors: FormErrors): boolean {
-    return Object.values(errors).some((error) => {
-        return error !== "";
-    });
-}
 
 function validateFoodItemDetailsFormData({
     calories,
     protein,
     categoryId,
     name,
-}: FormValues): FormErrors {
+}: FoodItemDetailsFormValues): FoodItemDetailsFormErrors {
     const formErrors = {
         name: "",
         protein: "",
         calories: "",
         categoryId: "",
     };
-    const caloriesNumber = Number(calories)
-    const proteinNumber =Number(protein)
+    const caloriesNumber = Number(calories);
+    const proteinNumber = Number(protein);
 
     if (name.trim() === "") {
         formErrors.name = "Please enter a name";
@@ -86,7 +77,6 @@ export default function FoodItemDetailsForm({
     className,
     isEdit,
 }: FoodItemDetailsFormProps) {
-    
     const [name, setName] = useState(existingFoodItem?.name ?? "");
     const [nameError, setNameError] = useState<string>("");
     const [calories, setCalories] = useState(
@@ -133,8 +123,6 @@ export default function FoodItemDetailsForm({
     async function handleSaveFoodItemSubmit(
         event: React.SubmitEvent<HTMLFormElement>,
     ): Promise<void> {
-
-
         event.preventDefault();
         const errors = validateFoodItemDetailsFormData({
             name,

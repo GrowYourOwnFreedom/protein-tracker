@@ -1,10 +1,10 @@
-import FoodItemSelectField from "@/components/AddFoodLogEntryPanel-components/FoodItemSelectField";
 import MealSelectField from "@/components/AddFoodLogEntryPanel-components/MealSelectField";
 import SearchableFoodItemSelectField from "@/components/AddFoodLogEntryPanel-components/SearchableFoodItemSelectField";
 import FoodItemAmountInputField from "@/components/app/FoodItemAmountInputField";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
 import buildFoodLogEntryObject from "@/lib/buildFoodLogEntryObject";
+import hasErrors from "@/lib/hasErrors";
 
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { FoodLogEntry, FoodItem, Meal } from "@/types";
@@ -16,8 +16,41 @@ type AddFoodLogEntryFormProps = {
     onAddFoodLogEntry: (entry: FoodLogEntry) => void;
     selectedDate: string;
     meals: Meal[];
-    onFoodItemChange: (foodItem:FoodItem)=> void
+    onFoodItemChange: (foodItem: FoodItem) => void;
 };
+
+type validateFoodLogEntryFormDetailsValues = {
+    amount: string;
+    foodItem: FoodItem;
+};
+type validateFoodLogEntryFormDetailsErrors = {
+    amount: string;
+    foodItem: string;
+};
+
+function validateFoodLogEntryFormDetails({
+    amount,
+    foodItem,
+}: validateFoodLogEntryFormDetailsValues): validateFoodLogEntryFormDetailsErrors {
+    const formErrors = {
+        amount: "",
+        foodItem: "",
+    };
+    const amountNumber = Number(amount);
+
+    if (amount === "") {
+        formErrors.amount = "Please enter a weight";
+    } else if (Number.isNaN(amountNumber)) {
+        formErrors.amount = "Please enter a valid number";
+    } else if (amountNumber <= 0) {
+        formErrors.amount = "Weight must be above 0g";
+    }
+
+    if (!foodItem) {
+        formErrors.foodItem = "Please select a food item";
+    }
+    return formErrors;
+}
 
 export default function AddFoodLogEntryForm({
     foodItems,
@@ -34,54 +67,27 @@ export default function AddFoodLogEntryForm({
     const shouldFocusInputRef = useRef(false);
     const [foodItemSelectError, setFoodItemSelectError] = useState<string>("");
 
+    function resetForm(){
+         setAmountText("");
+        setAmountError("");
+        setFoodItemSelectError("");
+
+    }
     async function handleCreateFoodLogEntrySubmit(
         event: React.SubmitEvent<HTMLFormElement>,
     ): Promise<void> {
         event.preventDefault();
 
-        function findFoodItem(
-            foodItems: FoodItem[],
-            selectedFoodItemId: string,
-        ) {
-            const foodItem = foodItems.find((foodItem) => {
-                return foodItem.foodItemId === selectedFoodItemId;
-            });
-            return foodItem;
-        }
-
-
         const weight = Number(amountText);
 
-        let inputError = false;
-        let selectError = false;
+        const errors = validateFoodLogEntryFormDetails({
+            amount: amountText,
+            foodItem: selectedFoodItem,
+        });
 
-        if (amountText === "") {
-            inputError = true;
-            setAmountError("Please enter a weight");
-        } else if (Number.isNaN(weight)) {
-            inputError = true;
-            setAmountError("Please enter a valid number");
-        } else if (weight <= 0) {
-            inputError = true;
-            setAmountError("Weight must be above 0g");
-        } else {
-            inputError = false;
-            setAmountError("");
-        }
-
-        if (!selectedFoodItem) {
-            selectError = true;
-            setFoodItemSelectError("Please select a food item");
-        } else {
-            selectError = false;
-            setFoodItemSelectError("");
-        }
-
-        if (inputError || selectError) {
-            return;
-        }
-        if (!selectedFoodItem) {
-            setFoodItemSelectError("Please select a valid food item");
+        setAmountError(errors.amount);
+        setFoodItemSelectError(errors.foodItem);
+        if (hasErrors(errors)) {
             return;
         }
 
@@ -96,9 +102,7 @@ export default function AddFoodLogEntryForm({
         });
 
         onAddFoodLogEntry(newFoodLogEntryObject);
-        setAmountText("");
-        setAmountError("");
-        setFoodItemSelectError("");
+        resetForm()
     }
 
     function handleFoodItemSelectValueChange(foodItem: FoodItem): void {
@@ -123,11 +127,11 @@ export default function AddFoodLogEntryForm({
         <form onSubmit={handleCreateFoodLogEntrySubmit}>
             <FieldGroup>
                 <SearchableFoodItemSelectField
-                foodItems={foodItems}
-                selectedFoodItem={selectedFoodItem}
-                onChange={handleFoodItemSelectValueChange}
-                onOpenChange={handleFoodItemSelectOpenChange}
-                selectError={foodItemSelectError}
+                    foodItems={foodItems}
+                    selectedFoodItem={selectedFoodItem}
+                    onChange={handleFoodItemSelectValueChange}
+                    onOpenChange={handleFoodItemSelectOpenChange}
+                    selectError={foodItemSelectError}
                 />
                 <FoodItemAmountInputField
                     inputRef={inputRef}

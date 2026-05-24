@@ -24,7 +24,7 @@ export default function FoodItemAmountInputField({
             <FieldLabel htmlFor="food-item-weight-input">Amount:</FieldLabel>
             <InputGroup className=" max-w-xs">
                 <InputGroupInput
-                    placeholder="Enter the weight you ate"
+                    placeholder="Enter the weight"
                     id="food-item-weight-input"
                     ref={inputRef}
                     name="weight"
