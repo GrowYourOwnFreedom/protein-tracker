@@ -123,7 +123,7 @@ function App() {
         <div className="lg:h-screen lg:flex lg:flex-col">
             <header className="lg:shrink-0 p-4">
                 <h1 className="text-3xl text-center font-bold">
-                    Protein And Calorie Tracker
+                    Protein Calorie Tracker
                 </h1>
             </header>
             <main className="grid grid-cols-1 gap-4 lg:min-h-0 lg:flex-1 lg:grid-cols-[1fr_1.5fr_1fr]">
