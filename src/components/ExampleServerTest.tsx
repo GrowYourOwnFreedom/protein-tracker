@@ -1,4 +1,4 @@
-import { getCollection } from "@/api/client";
+import { createItem, getCollection } from "@/api/client";
 import { useEffect, useState } from "react";
 
 type ExampleItem = {
@@ -7,6 +7,8 @@ type ExampleItem = {
 };
 export default function ExampleServerTest() {
     const [items, setItems] = useState<ExampleItem[]>([]);
+    const [inputValue, setInputValue] = useState<string>("");
+
     const [isLoading, setIsLoading] = useState(true);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -31,12 +33,37 @@ export default function ExampleServerTest() {
         return <p>{errorMessage}</p>;
     }
 
-    const testFunction = () => ( <p></p>) 
+    async function handleSubmit(event: React.SubmitEvent) {
+        event.preventDefault();
+        try {
+            const createdItem = await createItem(inputValue);
+            setItems((currentItems) => [...currentItems, createdItem]);
+            setInputValue("");
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(error.message);
+            } else {
+                setErrorMessage("Could not create an item");
+            }
+        }
+    }
+
     return (
-        <ul>
-            {items.map((item) => (
-                <li key={item.id}>{item.name}</li>
-            ))}
-        </ul>
+        <section>
+            <form onSubmit={handleSubmit}>
+                <input
+                    value={inputValue}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        setInputValue(event.target.value)
+                    }
+                />
+                <button type="submit">submit post</button>
+            </form>
+            <ul>
+                {items.map((item) => (
+                    <li key={item.id}>{item.name}</li>
+                ))}
+            </ul>
+        </section>
     );
 }

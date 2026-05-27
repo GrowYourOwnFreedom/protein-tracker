@@ -27,8 +27,6 @@ export default function FoodLogPanel({
     className,
     meals,
 }: FoodLogPanelProps) {
-    console.log(foodLogEntries);
-
     const displayItems = createFoodLogEntryDisplayItems(foodLogEntries, meals);
 
     return (
