@@ -5,7 +5,7 @@ import {
     getAll,
     getOne,
     updateOne,
-} from "../controllers/itemController.js";
+} from "@/controllers/itemController.js";
 
 const itemRouter = express.Router();
 

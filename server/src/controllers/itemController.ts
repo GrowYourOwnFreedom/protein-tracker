@@ -1,6 +1,6 @@
 import { type Request, type Response } from "express";
-import { parseRequiredString } from "../helpers/validationHelpers.js";
-import { HttpError } from "../errors/HttpError.js";
+import { parseRequiredString } from "@/helpers/validationHelpers.js";
+import { HttpError } from "@/errors/HttpError.js";
 
 type Item = {
     id: string;
