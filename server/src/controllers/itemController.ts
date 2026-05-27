@@ -1,5 +1,6 @@
 import { type Request, type Response } from "express";
 import { parseRequiredString } from "../helpers/validationHelpers.js";
+import { HttpError } from "../errors/HttpError.js";
 
 type Item = {
     id: string;
@@ -19,7 +20,7 @@ export function getAll(_request: Request, response: Response) {
 export function getOne(request: Request, response: Response) {
     const id = parseRequiredString(request.params.id);
     if (id === null) {
-        return response.status(404).json({ error: "ID is required " });
+        throw new HttpError(400, "ID is required");
     }
 
     const result = testData.find((item) => {
@@ -27,7 +28,7 @@ export function getOne(request: Request, response: Response) {
     });
 
     if (!result) {
-        return response.status(404).json({ error: "Item not found " });
+        throw new HttpError(404, "Item not found");
     }
     response.status(200).json(result);
 }
@@ -35,9 +36,7 @@ export function getOne(request: Request, response: Response) {
 export function createOne(request: Request, response: Response) {
     const name = parseRequiredString(request.body.name);
     if (name === null) {
-        return response
-            .status(400)
-            .json({ error: "Name must be a non-empty string" });
+        throw new HttpError(400, "Name must be a non-empty string");
     }
 
     const newItem: Item = {
@@ -51,21 +50,19 @@ export function createOne(request: Request, response: Response) {
 export function updateOne(request: Request, response: Response) {
     const id = parseRequiredString(request.params.id);
     if (id === null) {
-        return response.status(404).json({ error: "ID is required " });
+        throw new HttpError(400, "ID is required");
     }
     const itemToUpdate = testData.find((item) => {
         return item.id === id;
     });
 
     if (!itemToUpdate) {
-        return response.status(404).json({ error: "Item not found " });
+        throw new HttpError(404, "Item not found");
     }
     const name = parseRequiredString(request.body.name);
 
     if (name === null) {
-        return response
-            .status(400)
-            .json({ error: "Name must be a non-empty string" });
+        throw new HttpError(400, "Name must be a non-empty string");
     }
 
     itemToUpdate.name = name;
@@ -76,14 +73,14 @@ export function updateOne(request: Request, response: Response) {
 export function deleteOne(request: Request, response: Response) {
     const id = parseRequiredString(request.params.id);
     if (id === null) {
-        return response.status(404).json({ error: "ID is required " });
+        throw new HttpError(400, "ID is required");
     }
     const itemIndex = testData.findIndex((item) => {
         return item.id === id;
     });
 
     if (itemIndex === -1) {
-        return response.status(404).json({ error: "Item not found " });
+        throw new HttpError(404, "Item not found");
     }
     const deletedItem = testData.splice(itemIndex, 1);
     response.json(deletedItem[0]);
