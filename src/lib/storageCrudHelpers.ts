@@ -64,7 +64,7 @@ function normaliseFoodItem(oldFoodItem: OldFoodItem, userId: string): FoodItem {
             oldFoodItem.foodItemCategoryId ||
             oldFoodItem.ingredientCategoryId ||
             "other",
-        type:oldFoodItem.type || "simple"
+        type: oldFoodItem.type || "simple",
     };
 }
 
@@ -74,7 +74,7 @@ function normaliseFoodItems(
 ): FoodItem[] {
     const cleanFoodItem = oldFoodItems.map((oldFoodItem) =>
         normaliseFoodItem(oldFoodItem, userId),
-    );    
+    );
     return cleanFoodItem;
 }
 
@@ -178,7 +178,8 @@ function fetchLocalFoodLogEntries(selectedDate: string): FoodLogEntry[] {
         FOOD_LOG_ENTRIES_STORAGE_KEY,
     );
     const dataVersion = localStorage.getItem(DATA_VERSION_STORAGE_KEY);
-    const normalisedFoodLogEntries = normaliseFoodLogEntries(savedFoodLogEntries);
+    const normalisedFoodLogEntries =
+        normaliseFoodLogEntries(savedFoodLogEntries);
     if (dataVersion !== DATA_VERSION) {
         saveArrayToStorage(FOOD_ENTRY_LOG_BACKUP_KEY, savedFoodLogEntries);
         console.log(`Migrating FoodLogEntries to version ${DATA_VERSION}`);

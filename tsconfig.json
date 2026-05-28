@@ -36,7 +36,7 @@
         "jsx": "react-jsx"
     },
 
-    "include": ["src"],
+    "include": ["src", "src/types.ts"],
 
     "references": []
 }

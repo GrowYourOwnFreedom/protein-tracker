@@ -23,7 +23,7 @@ export default function FoodItemCategorySelectField({
     onOpenChange,
     categories,
     categoryError,
-}:FoodItemCategorySelectFieldProps) {
+}: FoodItemCategorySelectFieldProps) {
     return (
         <Field>
             <FieldLabel htmlFor="foodItem-category-id">

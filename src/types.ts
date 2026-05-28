@@ -74,3 +74,8 @@ export type Meal = {
     createdAt: string;
     userId: string;
 };
+
+export type ExampleItem = {
+    id: string;
+    name: string;
+};

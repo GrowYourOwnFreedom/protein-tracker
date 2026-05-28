@@ -10,7 +10,7 @@ import {
     ComboboxList,
     ComboboxSeparator,
 } from "@/components/ui/combobox";
-import { Field,FieldError } from "@/components/ui/field";
+import { Field, FieldError } from "@/components/ui/field";
 import { defaultFoodItemCategories } from "@/data/defaultFoodItemCategories";
 import { formatNumber } from "@/lib/formatNumber";
 import { getProteinEfficiency } from "@/lib/proteinEfficiencyHelpers";
@@ -23,13 +23,13 @@ type FoodItemComboboxGroup = {
 
 type FoodItemComboboxProps = {
     foodItems: FoodItem[];
-    selectedFoodItem: FoodItem|null;
+    selectedFoodItem: FoodItem | null;
     onChange: (value: FoodItem) => void;
     onOpenChange: (open: boolean) => void;
     selectError: string;
 
     className?: string;
-} 
+};
 function createComboboxList(
     foodItems: FoodItem[],
     categories: FoodItemCategory[],
@@ -61,7 +61,7 @@ export default function FoodItemComboboxField({
     onOpenChange,
     selectError,
     className,
-}:FoodItemComboboxProps) {
+}: FoodItemComboboxProps) {
     const foodItemsGroups = createComboboxList(
         foodItems,
         defaultFoodItemCategories,
@@ -72,37 +72,45 @@ export default function FoodItemComboboxField({
             <Combobox
                 items={foodItemsGroups}
                 itemToStringValue={(foodItem: FoodItem) => foodItem.name}
-                itemToStringLabel={(foodItem)=>{
-                    return getFoodItemSelectLabel(foodItem)
+                itemToStringLabel={(foodItem) => {
+                    return getFoodItemSelectLabel(foodItem);
                 }}
                 value={selectedFoodItem}
                 onValueChange={onChange}
                 onOpenChange={onOpenChange}
             >
-                <ComboboxInput placeholder="Select a food item" showClear/>
+                <ComboboxInput placeholder="Select a food item" showClear />
                 <ComboboxContent>
                     <ComboboxEmpty>No food items found.</ComboboxEmpty>
                     <ComboboxList>
-                        {(group:FoodItemComboboxGroup, index) =>  (
-                            <ComboboxGroup key={group.value} items={group.items}>
-                                <ComboboxLabel className="text-primary font-bold">{group.value}</ComboboxLabel>
+                        {(group: FoodItemComboboxGroup, index) => (
+                            <ComboboxGroup
+                                key={group.value}
+                                items={group.items}
+                            >
+                                <ComboboxLabel className="text-primary font-bold">
+                                    {group.value}
+                                </ComboboxLabel>
                                 <ComboboxCollection>
-                                    {(foodItem: FoodItem) =>  (
+                                    {(foodItem: FoodItem) => (
                                         <ComboboxItem
                                             key={foodItem.foodItemId}
                                             value={foodItem}
-                                        >{getFoodItemSelectLabel(foodItem)}</ComboboxItem>
+                                        >
+                                            {getFoodItemSelectLabel(foodItem)}
+                                        </ComboboxItem>
                                     )}
                                 </ComboboxCollection>
-                                {index !== defaultFoodItemCategories.length-1  && <ComboboxSeparator/>}
+                                {index !==
+                                    defaultFoodItemCategories.length - 1 && (
+                                    <ComboboxSeparator />
+                                )}
                             </ComboboxGroup>
                         )}
                     </ComboboxList>
                 </ComboboxContent>
             </Combobox>
-            { selectError && 
-            (<FieldError>{selectError}</FieldError>)
-            }
+            {selectError && <FieldError>{selectError}</FieldError>}
         </Field>
     );
 }

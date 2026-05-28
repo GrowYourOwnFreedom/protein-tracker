@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/select";
 import { Meal } from "@/types";
 
-
 type MealSelectFieldProps = {
     meals: Meal[];
     selectedMealId: string;

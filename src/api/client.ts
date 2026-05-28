@@ -1,22 +1,46 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import { ExampleItem } from "@/types";
 
-export async function getCollection() {
-    const response = await fetch(`${API_BASE_URL}/items`);
+const PROTEIN_TRACKER_SERVER_URL = import.meta.env
+    .VITE_API_PROTEIN_TRACKER_SERVER_URL;
+
+async function proteinTrackerApiRequest<TResponse>(
+    path: string,
+    options?: RequestInit,
+): Promise<TResponse> {
+    const response = await fetch(
+        `${PROTEIN_TRACKER_SERVER_URL}${path}`,
+        options,
+    );
+
+    const data = await response.json();
     if (!response.ok) {
-        throw new Error("Failed to fetch collection");
+        throw new Error(data.error ?? "Request failed");
     }
-    return response.json();
+    return data;
 }
 
-export async function createItem(name: string) {
-    const response = await fetch(`${API_BASE_URL}/items`, {
+export function getCollection(): Promise<ExampleItem[]> {
+    return proteinTrackerApiRequest<ExampleItem[]>("/items");
+}
+
+export function createItem(name: string): Promise<ExampleItem> {
+    return proteinTrackerApiRequest("/items", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
     });
-    const data =  await response.json()
-    if(!response.ok) {        
-        throw new Error(data.error ?? "Failed to create an item")
-    }
-    return data
+}
+
+export function deleteItem(id: string): Promise<ExampleItem> {
+    return proteinTrackerApiRequest(`/items/${id}`, {
+        method: "DELETE",
+    });
+}
+
+export function updateItem(id: string, name: string): Promise<ExampleItem> {
+    return proteinTrackerApiRequest(`/items/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+    });
 }

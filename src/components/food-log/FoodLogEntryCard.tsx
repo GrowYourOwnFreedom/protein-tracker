@@ -10,8 +10,7 @@ import { formatNumber } from "@/lib/formatNumber";
 import { cn } from "@/lib/utils";
 import { FoodLogEntry } from "@/types";
 
-
- type FoodLogEntryCardProps = {
+type FoodLogEntryCardProps = {
     entry: FoodLogEntry;
     calorieLimit: number;
     proteinTarget: number;

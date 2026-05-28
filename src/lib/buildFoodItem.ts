@@ -18,7 +18,7 @@ export default function buildFoodItem({
     protein,
     userId,
     categoryId,
-}:buildFoodItemArgs): FoodItem {
+}: buildFoodItemArgs): FoodItem {
     const foodItemId = foodItem?.foodItemId ?? createNewId();
     const dateCreated = foodItem?.dateCreated ?? getToday();
     const type = foodItem?.type ?? "simple";
@@ -27,12 +27,12 @@ export default function buildFoodItem({
 
     const foodItemObj: FoodItem = {
         foodItemId,
-        name:name.trim(),
+        name: name.trim(),
         caloriesPer100g,
         proteinPer100g,
         userId,
         dateCreated,
-        foodItemCategoryId:categoryId,
+        foodItemCategoryId: categoryId,
         type,
     };
 
