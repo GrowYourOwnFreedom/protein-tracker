@@ -199,7 +199,6 @@ function createLocalFoodLogEntry(newFoodLogEntry: FoodLogEntry): void {
     const existingFoodLogEntries = getArrayFromStorage<FoodLogEntry>(
         FOOD_LOG_ENTRIES_STORAGE_KEY,
     );
-    console.log(newFoodLogEntry,FOOD_LOG_ENTRIES_STORAGE_KEY);
     
     const updatedFoodLogEntries = [...existingFoodLogEntries, newFoodLogEntry];
     saveArrayToStorage<FoodLogEntry>(

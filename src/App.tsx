@@ -151,8 +151,8 @@ function App() {
                         onAddFoodItem={addFoodItem}
                     />
                     <CreateCompositeFoodItemPanel />
-                    <ExampleServerTest />
-                    <ServerBackupTest/>
+                    {/* <ExampleServerTest />
+                    <ServerBackupTest/> */}
                 </div>
                 <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"
