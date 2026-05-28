@@ -1,4 +1,4 @@
-import { ExampleItem } from "@/types";
+import { AppDataBackup, ExampleItem } from "@/types";
 
 const PROTEIN_TRACKER_SERVER_URL = import.meta.env
     .VITE_API_PROTEIN_TRACKER_SERVER_URL;
@@ -44,3 +44,18 @@ export function updateItem(id: string, name: string): Promise<ExampleItem> {
         body: JSON.stringify({ name }),
     });
 }
+
+export function saveAppDataBackup(
+    appData: AppDataBackup,
+): Promise<{ message: string; data: AppDataBackup }> {
+    return proteinTrackerApiRequest("/app-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ appData }),
+
+    });
+}
+ export function getAppDataBackup():Promise<AppDataBackup>{
+    return proteinTrackerApiRequest("/app-data")
+
+ }

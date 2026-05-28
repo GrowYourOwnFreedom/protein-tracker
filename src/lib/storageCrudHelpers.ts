@@ -1,6 +1,7 @@
 import { dummyUser } from "@/data/dummyUser";
 import { getToday } from "@/lib/getToday";
 import {
+    AppDataBackup,
     FoodItem,
     FoodLogEntry,
     Meal,
@@ -198,6 +199,8 @@ function createLocalFoodLogEntry(newFoodLogEntry: FoodLogEntry): void {
     const existingFoodLogEntries = getArrayFromStorage<FoodLogEntry>(
         FOOD_LOG_ENTRIES_STORAGE_KEY,
     );
+    console.log(newFoodLogEntry,FOOD_LOG_ENTRIES_STORAGE_KEY);
+    
     const updatedFoodLogEntries = [...existingFoodLogEntries, newFoodLogEntry];
     saveArrayToStorage<FoodLogEntry>(
         FOOD_LOG_ENTRIES_STORAGE_KEY,
@@ -271,6 +274,19 @@ function fetchLocalMeals(selectedDate: string): Meal[] {
     return selectedMeals;
 }
 
+function collectAppDataBackup(): AppDataBackup {
+    const backup =  {
+        calorieLimit: Number(localStorage.getItem(CALORIE_LIMIT_STORAGE_KEY)),
+        proteinTarget: Number(localStorage.getItem(PROTEIN_TARGET_STORAGE_KEY)),
+        entries: JSON.parse(localStorage.getItem(FOOD_LOG_ENTRIES_STORAGE_KEY)),
+        ingredients: JSON.parse(localStorage.getItem(FOOD_ITEMS_STORAGE_KEY)),
+        meals: JSON.parse(localStorage.getItem(MEALS_STORAGE_KEY))
+    };
+    console.log(backup);
+    return backup
+    
+}
+
 export {
     fetchLocalFoodLogEntries as fetchStoredFoodLogEntries,
     createLocalFoodLogEntry as createStoredFoodLogEntry,
@@ -288,4 +304,5 @@ export {
     normaliseFoodItems,
     createLocalMeal as createStoredMeal,
     fetchLocalMeals as fetchStoredMeals,
+    collectAppDataBackup
 };

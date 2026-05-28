@@ -23,6 +23,7 @@ import FoodLogPanel from "@/components/food-log/FoodLogPanel";
 import { getToday } from "@/lib/getToday";
 import CreateCompositeFoodItemPanel from "@/components/food-items/CreateCompositeFoodItemPanel";
 import ExampleServerTest from "@/components/ExampleServerTest";
+import ServerBackupTest from "@/components/ServerBackupTest";
 
 function App() {
     const [foodLogEntries, setFoodLogEntries] = useState<FoodLogEntry[]>([]);
@@ -151,6 +152,7 @@ function App() {
                     />
                     <CreateCompositeFoodItemPanel />
                     <ExampleServerTest />
+                    <ServerBackupTest/>
                 </div>
                 <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"

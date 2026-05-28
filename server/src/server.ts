@@ -4,6 +4,7 @@ import cors from "cors";
 import type { Request, Response } from "express";
 import itemRouter from "@/routes/itemRoutes.js";
 import { errorHandler } from "@/middleware/errorHandler.js";
+import appDataRouter from "@/routes/appDataRoutes.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get("/", (_request: Request, response: Response) => {
 });
 
 app.use("/items", itemRouter);
+app.use("/app-data", appDataRouter);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
