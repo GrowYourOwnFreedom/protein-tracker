@@ -1,5 +1,3 @@
-export * from "../shared/types"
-
 export type NutritionTypes = "protein"|"calories"
 
 export type User = {
@@ -81,3 +79,12 @@ export type ExampleItem = {
     id: string;
     name: string;
 };
+
+
+export type AppDataBackup = {
+    calorieLimit:number;
+    proteinTarget:number;
+    entries:FoodLogEntry[];
+    ingredients:FoodItem[];
+    meals:Meal[]
+}

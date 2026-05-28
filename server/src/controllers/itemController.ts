@@ -1,13 +1,11 @@
 import { type Request, type Response } from "express";
 import { parseRequiredString } from "@/helpers/validationHelpers.js";
 import { HttpError } from "@/errors/HttpError.js";
+import type { ExampleItem } from "@/types.js";
 
-type Item = {
-    id: string;
-    name: string;
-};
 
-const testData: Item[] = [
+
+const testData: ExampleItem[] = [
     { id: "1", name: "A" },
     { id: "2", name: "B" },
     { id: "3", name: "C" },
@@ -40,7 +38,7 @@ export function createOne(request: Request, response: Response) {
         throw new HttpError(400, "Name must be a non-empty string");
     }
 
-    const newItem: Item = {
+    const newItem: ExampleItem = {
         id: crypto.randomUUID(),
         name,
     };
