@@ -281,7 +281,6 @@ function collectAppDataBackup(): AppDataBackup {
         ingredients: JSON.parse(localStorage.getItem(FOOD_ITEMS_STORAGE_KEY)),
         meals: JSON.parse(localStorage.getItem(MEALS_STORAGE_KEY))
     };
-    console.log(backup);
     return backup
     
 }

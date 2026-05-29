@@ -1,6 +1,8 @@
 import { getAppDataBackup, saveAppDataBackup } from "@/api/client";
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
+import downloadJsonBackup from "@/lib/downloadJsonBackup";
+import { getToday } from "@/lib/getToday";
 import { collectAppDataBackup } from "@/lib/storageCrudHelpers";
 import { useState } from "react";
 
@@ -27,6 +29,13 @@ export default function ServerBackupTest() {
         }
     }
 
+   function handleDownloadBackup() {
+    const localData = collectAppDataBackup()    
+    const date = getToday()
+    downloadJsonBackup(localData, `proteinTrackerLocalData_${date}.json` )
+
+   }
+
     return (
         <Panel title="ServerBackupTest">
             {error && <p>{error}</p>}
@@ -36,6 +45,7 @@ export default function ServerBackupTest() {
             <Button onClick={handleGetBackup}>
                 Get backup
             </Button>
+            <Button onClick={handleDownloadBackup}>Download backup</Button>
         </Panel>
     );
 }
