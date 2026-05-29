@@ -1,11 +1,12 @@
 import { getAppData, saveAppData } from "@/controllers/appDataController.js";
+import { requireBackupKey } from "@/middleware/requireBackupKey.js";
 import express from "express";
 
 const appDataRouter = express.Router() 
 
- appDataRouter.get("/", getAppData)
+ appDataRouter.get("/",requireBackupKey, getAppData)
 
-appDataRouter.post("/", saveAppData)
+appDataRouter.post("/",requireBackupKey, saveAppData)
 
 export default appDataRouter
 

@@ -48,15 +48,19 @@ export function updateItem(id: string, name: string): Promise<ExampleItem> {
 export function saveAppDataBackup(
     appData: AppDataBackup,
 ): Promise<{ message: string; data: AppDataBackup }> {
-    
     return proteinTrackerApiRequest("/app-data", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(appData),
-
+        headers: {
+            "Content-Type": "application/json",
+            "X-Backup-Key": import.meta.env.VITE_BACKUP_KEY,
+        },
+        body: JSON.stringify(appData),
     });
 }
- export function getAppDataBackup():Promise<AppDataBackup>{
-    return proteinTrackerApiRequest("/app-data")
-
- }
+export function getAppDataBackup(): Promise<AppDataBackup> {
+    return proteinTrackerApiRequest("/app-data", {
+        headers: {
+            "X-Backup-Key": import.meta.env.VITE_BACKUP_KEY,
+        },
+    });
+}
