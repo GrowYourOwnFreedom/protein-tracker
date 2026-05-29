@@ -95,21 +95,21 @@ export default function ServerBackupTest() {
 
             <Button
                 variant="outline"
-                className="rounded-full min-w-3xs"
+                className="rounded-full"
                 onClick={handleSaveBackup}
             >
                 Save backup
             </Button>
             <Button
                 variant="outline"
-                className="rounded-full min-w-3xs"
+                className="rounded-full"
                 onClick={handleGetBackup}
             >
                 Get backup
             </Button>
             <Button
                 variant="outline"
-                className="rounded-full min-w-3xs"
+                className="rounded-full"
                 onClick={handleDownloadBackup}
                 >
                 Download backup

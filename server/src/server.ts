@@ -9,7 +9,7 @@ import appDataRouter from "@/routes/appDataRoutes.js";
 const app = express();
 
 app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
-app.use(express.json());
+app.use(express.json({limit:"1mb"}));
 
 const PORT = process.env.PORT ?? 3000;
 
