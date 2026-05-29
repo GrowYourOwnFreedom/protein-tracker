@@ -96,3 +96,7 @@ export type BackupSummary = {
     ingredients: number;
     meals: number;
 };
+
+export type HealthResponse = {
+    status:string
+}

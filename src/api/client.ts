@@ -1,4 +1,4 @@
-import { AppDataBackup, ExampleItem } from "@/types";
+import { AppDataBackup, ExampleItem, HealthResponse } from "@/types";
 
 const PROTEIN_TRACKER_SERVER_URL = import.meta.env
     .VITE_API_PROTEIN_TRACKER_SERVER_URL;
@@ -63,4 +63,9 @@ export function getAppDataBackup(): Promise<AppDataBackup> {
             "X-Backup-Key": import.meta.env.VITE_BACKUP_KEY,
         },
     });
+}
+
+export function getServerHealth():Promise<HealthResponse>{
+    return proteinTrackerApiRequest<HealthResponse>("/health")
+
 }

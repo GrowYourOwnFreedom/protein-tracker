@@ -13,8 +13,11 @@ app.use(express.json());
 
 const PORT = process.env.PORT ?? 3000;
 
+app.get("/", (_request: Request, response: Response) => {
+    response.json({message:"server is running"});
+});
 app.get("/health", (_request: Request, response: Response) => {
-    response.json("ok");
+    response.json({status:"ok"});
 });
 
 app.use("/items", itemRouter);

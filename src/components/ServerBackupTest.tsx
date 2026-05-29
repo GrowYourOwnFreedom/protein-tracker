@@ -1,11 +1,11 @@
-import { getAppDataBackup, saveAppDataBackup } from "@/api/client";
+import { getAppDataBackup, getServerHealth, saveAppDataBackup } from "@/api/client";
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
 import downloadJsonBackup from "@/lib/downloadJsonBackup";
 import getBackupsummary from "@/lib/getBackupSummary";
 import { getToday } from "@/lib/getToday";
 import { collectAppDataBackup } from "@/lib/storageCrudHelpers";
-import { BackupSummary } from "@/types";
+import { BackupSummary, HealthResponse } from "@/types";
 import { useState } from "react";
 
 type BackupComparison = {
@@ -21,7 +21,8 @@ type BackupComparison = {
 
 export default function ServerBackupTest() {
     const [error, setError] = useState("");
-    const [backupComparison, setBackupComparison] = useState<BackupComparison|null>(null);
+    const [backupComparison, setBackupComparison] = useState<BackupComparison | null>(null);
+    const [healthStatus, setHealthStatus] = useState<HealthResponse | null>(null)
 
     async function handleSaveBackup(): Promise<BackupComparison> {
         try {
@@ -81,9 +82,17 @@ export default function ServerBackupTest() {
         downloadJsonBackup(localData, `proteinTrackerLocalData_${date}.json`);
     }
 
+    async function handleHealthClick() {
+        const healthStatus = await getServerHealth()
+        setHealthStatus(healthStatus)
+    }
+    const health = healthStatus?.status === "ok" ? "ok" : ""
+
     return (
-        <Panel className="flex flex-col items-center" title="ServerBackupTest">
+        <Panel title="ServerBackupTest">
             {error && <p>{error}</p>}
+            <div className="grid grid-cols-2 gap-4" >
+
             <Button
                 variant="outline"
                 className="rounded-full min-w-3xs"
@@ -102,12 +111,14 @@ export default function ServerBackupTest() {
                 variant="outline"
                 className="rounded-full min-w-3xs"
                 onClick={handleDownloadBackup}
-            >
+                >
                 Download backup
             </Button>
+            <Button variant="outline" className="rounded-full " onClick={handleHealthClick}>Server health {health}</Button>
+            </div>
             {backupComparison && 
             <pre className="whitespace-pre-wrap wrap-break-word text-sm">{JSON.stringify(backupComparison,null,2)}</pre>
-            }
+        }
         </Panel>
     );
 }
