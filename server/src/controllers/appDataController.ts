@@ -2,16 +2,18 @@ import { HttpError } from "@/errors/HttpError.js";
 import type { AppDataBackup } from "@/types.js";
 import { type Request, type Response } from "express";
 
+let storedAppData: AppDataBackup | null = null;
 
-let storedAppData:AppDataBackup| null = null
-
-export function saveAppData(request:Request,response:Response){
-    const appData = request.body as AppDataBackup
-    storedAppData = appData
+export function saveAppData(request: Request, response: Response) {
+    const appData = request.body as AppDataBackup;
+    if (appData === null) {
+        throw new HttpError(404, "No app data provided");
+    }    
+    storedAppData = appData;
     response.status(201).json({
-        message:"App data saved",
-        data: storedAppData
-    })
+        message: "App data saved",
+        data: storedAppData,
+    });
 }
 
 export function getAppData(_request: Request, response: Response) {

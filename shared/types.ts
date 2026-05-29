@@ -88,3 +88,11 @@ export type AppDataBackup = {
     ingredients:FoodItem[];
     meals:Meal[]
 }
+
+export type BackupSummary = {
+    calorieLimit: number;
+    proteinTarget: number;
+    entries: number;
+    ingredients: number;
+    meals: number;
+};

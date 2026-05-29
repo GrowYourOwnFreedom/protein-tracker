@@ -151,7 +151,6 @@ function App() {
                         onAddFoodItem={addFoodItem}
                     />
                     <CreateCompositeFoodItemPanel />
-                     <ExampleServerTest />
                     <ServerBackupTest/> 
                 </div>
                 <FoodLogPanel
