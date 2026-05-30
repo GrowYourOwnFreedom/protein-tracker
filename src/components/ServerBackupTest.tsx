@@ -24,7 +24,7 @@ export default function ServerBackupTest() {
     const [backupComparison, setBackupComparison] = useState<BackupComparison | null>(null);
     const [healthStatus, setHealthStatus] = useState<HealthResponse | null>(null)
 
-    async function handleSaveBackup(): Promise<BackupComparison> {
+    async function handleSaveBackup(): Promise<void> {
         try {
             const localData = collectAppDataBackup();
             const backup = await saveAppDataBackup(localData);
@@ -47,11 +47,7 @@ export default function ServerBackupTest() {
             };
 
             setBackupComparison(comparison)
-            
-
             console.log(backup.message, comparison);
-            return comparison;
-
             setError("");
         } catch (error) {
             if (error instanceof Error) {
