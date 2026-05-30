@@ -35,23 +35,6 @@ export default function AddFoodLogEntryPanel({
         null,
     );
 
-    useEffect(() => {
-        if (selectedFoodItem === null) {
-            return;
-        }
-
-        const updatedSelectedFoodItem = foodItems.find((foodItem) => {
-            return foodItem.foodItemId === selectedFoodItem.foodItemId;
-        });
-
-        if (!updatedSelectedFoodItem) {
-            setSelectedFoodItem(null);
-
-            return;
-        }
-
-        setSelectedFoodItem(updatedSelectedFoodItem);
-    }, [foodItems]);
 
     function handleDeleteFoodItemClick() {
         if (!selectedFoodItem) {
@@ -76,6 +59,12 @@ export default function AddFoodLogEntryPanel({
         }
         return;
     });
+
+    function handleEditFoodItem(updatedFoodItem:FoodItem):void {
+        setSelectedFoodItem(updatedFoodItem)
+        onEditFoodItem(updatedFoodItem)
+
+    }
 
     return (
         <Panel title="Add Food Log Entry" className={className}>
@@ -104,7 +93,7 @@ export default function AddFoodLogEntryPanel({
                 <FoodItemFormPopover isEdit={false} onSubmit={onAddFoodItem} />
                 <FoodItemFormPopover
                     isEdit={true}
-                    onSubmit={onEditFoodItem}
+                    onSubmit={handleEditFoodItem}
                     selectedFoodItem={selectedFoodItemToEdit}
                 />
             </div>

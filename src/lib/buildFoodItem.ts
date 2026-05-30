@@ -3,12 +3,13 @@ import { getToday } from "@/lib/getToday";
 import { FoodItem } from "@/types";
 
 type buildFoodItemArgs = {
-    foodItem: FoodItem;
     name: string;
     calories: string;
     protein: string;
     userId: string;
     categoryId: string;
+    
+    foodItem?: FoodItem;
 };
 
 export default function buildFoodItem({

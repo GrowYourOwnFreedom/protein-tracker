@@ -108,7 +108,7 @@ function replaceLocalFoodItems(foodItems: FoodItem[]): void {
 }
 
 function migrateFoodItems(userId: string): boolean {
-    const savedFoodItems = getRequiredArrayFromStorage<OldFoodItem>(
+    const savedFoodItems = getArrayFromStorage<OldFoodItem>(
         FOOD_ITEMS_STORAGE_KEY,
     );
     console.log(savedFoodItems);
@@ -206,7 +206,7 @@ function normaliseFoodLogEntries(
 }
 
 function migrateFoodLogEntries(): boolean {
-    const savedFoodLogEntries = getRequiredArrayFromStorage<OldFoodLogEntry>(
+    const savedFoodLogEntries = getArrayFromStorage<OldFoodLogEntry>(
         FOOD_LOG_ENTRIES_STORAGE_KEY,
     );
     saveArrayToStorage(FOOD_ENTRY_LOG_BACKUP_KEY, savedFoodLogEntries);
