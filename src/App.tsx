@@ -42,6 +42,8 @@ function App() {
             const user = await getCurrentUser();
             const fetchedFoodItems = fetchStoredFoodItems(user.userId);
             setFoodItems(fetchedFoodItems);
+            console.log(fetchedFoodItems);
+            
         }
         loadFoodItems();
     }, []);

@@ -20,7 +20,7 @@ const FOOD_ITEMS_BACKUP_KEY = "ingredientsMigrationBackup";
 const FOOD_ENTRY_LOG_BACKUP_KEY = "foodLogEntriesBackup";
 const DEFAULT_CALORIE_LIMIT = 2000;
 const DEFAULT_PROTEIN_TARGET = 100;
-const DATA_VERSION = "4";
+const DATA_VERSION = "5";
 const DATA_VERSION_STORAGE_KEY = "dataVersion";
 
 function getArrayFromStorage<T>(storageKey: string): T[] {
