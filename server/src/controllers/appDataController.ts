@@ -3,13 +3,14 @@ import {
     readAppDataBackup,
     saveAppDataBackup,
 } from "@/helpers/appDataStorage.js";
+import { isAppDataBackup } from "@/helpers/appDataValidationHelpers.js";
 import type { AppDataBackup } from "@/types.js";
 import { type Request, type Response } from "express";
 
 export async function saveAppData(request: Request, response: Response) {
-    const appData = request.body as AppDataBackup;
-    if (appData === null) {
-        throw new HttpError(404, "No app data provided");
+    const appData = request.body as unknown;
+    if (!isAppDataBackup(appData)) {
+        throw new HttpError(400, "Invalid app data backup");
     }
     await saveAppDataBackup(appData);
 

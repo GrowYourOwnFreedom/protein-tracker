@@ -100,3 +100,11 @@ export type BackupSummary = {
 export type HealthResponse = {
     status:string
 }
+
+export type BackupData = {
+  calorieLimit: number;
+  proteinTarget: number;
+  entries: unknown[];
+  ingredients: unknown[];
+  meals: unknown[];
+};

@@ -1,33 +1,9 @@
 import Panel from "@/components/app/Panel";
 import { Input } from "@/components/ui/input";
+import { isAppDataBackup } from "@/lib/appValidationHelpers";
 import { useState } from "react";
 
-type BackupData = {
-  calorieLimit: number;
-  proteinTarget: number;
-  entries: unknown[];
-  ingredients: unknown[];
-  meals: unknown[];
-};
 
-function isBackupData(value: unknown): value is BackupData {
-    // this function takes a parsed json object and makes sure it has the right shape for use as a backup
-
-    // check if value is an object and isnt null
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-//   assert that value is a varaiable called backup and will be type BackupData
-  const backup = value as BackupData;
-// 
-  return (
-    typeof backup.calorieLimit === "number" &&
-    typeof backup.proteinTarget === "number" &&
-    Array.isArray(backup.entries) &&
-    Array.isArray(backup.ingredients) &&
-    Array.isArray(backup.meals)
-  );
-}
 
 export default function DevBackupRestore() {
   const [message, setMessage] = useState("");
@@ -45,7 +21,7 @@ export default function DevBackupRestore() {
       const text = await file.text();
       const parsedData: unknown = JSON.parse(text);
 
-      if (!isBackupData(parsedData)) {
+      if (!isAppDataBackup(parsedData)) {
         setMessage("That file does not look like a valid backup.");
         return;
       }
