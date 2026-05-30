@@ -89,7 +89,7 @@ export default function ServerBackupTest() {
     const health = healthStatus?.status === "ok" ? "ok" : ""
 
     return (
-        <Panel title="ServerBackupTest">
+        <Panel title="Server Backup Test">
             {error && <p>{error}</p>}
             <div className="grid grid-cols-2 gap-4" >
 

@@ -20,12 +20,10 @@ const FOOD_ITEMS_BACKUP_KEY = "ingredientsMigrationBackup";
 const FOOD_ENTRY_LOG_BACKUP_KEY = "foodLogEntriesBackup";
 const DEFAULT_CALORIE_LIMIT = 2000;
 const DEFAULT_PROTEIN_TARGET = 100;
-const DATA_VERSION = "5";
 const DATA_VERSION_STORAGE_KEY = "dataVersion";
 
 function getArrayFromStorage<T>(storageKey: string): T[] {
-    const savedArrayJSON = localStorage.getItem(storageKey);
-
+    const savedArrayJSON = localStorage.getItem(storageKey);    
     if (savedArrayJSON === null) {
         return [];
     }
@@ -42,7 +40,21 @@ function getArrayFromStorage<T>(storageKey: string): T[] {
         return [];
     }
 }
+function getRequiredArrayFromStorage<T>(storageKey: string): T[] {
+    const savedArrayJSON = localStorage.getItem(storageKey);
 
+    if (savedArrayJSON === null) {
+        throw new Error(`Missing storage key: ${storageKey}`);
+    }    
+    
+    const parsedValue = JSON.parse(savedArrayJSON);
+
+    if (!Array.isArray(parsedValue)) {
+        throw new Error(`Storage value is not an array: ${storageKey}`);
+    }
+
+    return parsedValue;
+}
 function saveArrayToStorage<T>(storageKey: string, items: T[]): void {
     const itemsJSON = JSON.stringify(items);
     localStorage.setItem(storageKey, itemsJSON);
@@ -95,24 +107,41 @@ function replaceLocalFoodItems(foodItems: FoodItem[]): void {
     saveArrayToStorage<FoodItem>(FOOD_ITEMS_STORAGE_KEY, foodItems);
 }
 
+function migrateFoodItems(userId: string): boolean {
+    const savedFoodItems = getRequiredArrayFromStorage<OldFoodItem>(
+        FOOD_ITEMS_STORAGE_KEY,
+    );
+    console.log(savedFoodItems);
+
+    saveArrayToStorage(FOOD_ITEMS_BACKUP_KEY, savedFoodItems);
+    const normalisedFoodItems = normaliseFoodItems(savedFoodItems, userId);
+    replaceLocalFoodItems(normalisedFoodItems);
+    const migratedFoodItems = getRequiredArrayFromStorage<FoodItem>(
+        FOOD_ITEMS_STORAGE_KEY,
+    );
+    const didFoodItemsMigrate =
+        JSON.stringify(normalisedFoodItems) ===
+        JSON.stringify(migratedFoodItems);
+    console.log({
+        message: `Migrating FoodItems`,
+        status: didFoodItemsMigrate,
+        dataIn: migratedFoodItems,
+        dataOut: savedFoodItems,
+    });
+    return didFoodItemsMigrate;
+}
+
 function fetchLocalFoodItems(userId: string): FoodItem[] {
     const savedFoodItems = getArrayFromStorage<OldFoodItem>(
         FOOD_ITEMS_STORAGE_KEY,
     );
-    if (!Array.isArray(savedFoodItems) || savedFoodItems.length === 0)
+    if (!Array.isArray(savedFoodItems) || savedFoodItems.length === 0){
+        
         return setDefaultFoodItems(userId);
 
-    const dataVersion = localStorage.getItem(DATA_VERSION_STORAGE_KEY);
-    const normalisedSavedFoodItems = normaliseFoodItems(savedFoodItems, userId);
-    console.log(normalisedSavedFoodItems);
-    
-
-    if (dataVersion !== DATA_VERSION) {
-        saveArrayToStorage(FOOD_ITEMS_BACKUP_KEY, savedFoodItems);
-        console.log(`Migrating FoodItems to version ${DATA_VERSION}`);
-        replaceLocalFoodItems(normalisedSavedFoodItems);
-        localStorage.setItem(DATA_VERSION_STORAGE_KEY, DATA_VERSION);
     }
+
+    const normalisedSavedFoodItems = normaliseFoodItems(savedFoodItems, userId);
     return normalisedSavedFoodItems;
 }
 
@@ -176,20 +205,35 @@ function normaliseFoodLogEntries(
     return normalisedFoodEntries;
 }
 
-function fetchLocalFoodLogEntries(selectedDate: string): FoodLogEntry[] {
-    const savedFoodLogEntries = getArrayFromStorage<FoodLogEntry>(
+function migrateFoodLogEntries(): boolean {
+    const savedFoodLogEntries = getRequiredArrayFromStorage<OldFoodLogEntry>(
         FOOD_LOG_ENTRIES_STORAGE_KEY,
     );
-    const dataVersion = localStorage.getItem(DATA_VERSION_STORAGE_KEY);
+    saveArrayToStorage(FOOD_ENTRY_LOG_BACKUP_KEY, savedFoodLogEntries);
     const normalisedFoodLogEntries =
         normaliseFoodLogEntries(savedFoodLogEntries);
-    if (dataVersion !== DATA_VERSION) {
-        saveArrayToStorage(FOOD_ENTRY_LOG_BACKUP_KEY, savedFoodLogEntries);
-        console.log(`Migrating FoodLogEntries to version ${DATA_VERSION}`);
-        replaceLocalFoodLogEntries(normalisedFoodLogEntries);
-        localStorage.setItem(DATA_VERSION_STORAGE_KEY, DATA_VERSION);
-    }
+    replaceLocalFoodLogEntries(normalisedFoodLogEntries);
+    const migratedFoodLogEntries = getRequiredArrayFromStorage<FoodLogEntry>(
+        FOOD_LOG_ENTRIES_STORAGE_KEY,
+    );
+    const didFoodLogsMigrate =
+        JSON.stringify(migratedFoodLogEntries) ===
+        JSON.stringify(normalisedFoodLogEntries);
+    console.log({
+        message: `Migrating FoodLogEntries`,
+        status: didFoodLogsMigrate,
+        dataIn: migratedFoodLogEntries,
+        dataOut: savedFoodLogEntries,
+    });
+    return didFoodLogsMigrate;
+}
 
+function fetchLocalFoodLogEntries(selectedDate: string): FoodLogEntry[] {
+    const savedFoodLogEntries = getArrayFromStorage<OldFoodLogEntry>(
+        FOOD_LOG_ENTRIES_STORAGE_KEY,
+    );
+    const normalisedFoodLogEntries =
+        normaliseFoodLogEntries(savedFoodLogEntries);
     const selectedFoodLogEntries = normalisedFoodLogEntries.filter(
         (foodLogentry: FoodLogEntry): boolean =>
             foodLogentry.date === selectedDate,
@@ -201,7 +245,7 @@ function createLocalFoodLogEntry(newFoodLogEntry: FoodLogEntry): void {
     const existingFoodLogEntries = getArrayFromStorage<FoodLogEntry>(
         FOOD_LOG_ENTRIES_STORAGE_KEY,
     );
-    
+
     const updatedFoodLogEntries = [...existingFoodLogEntries, newFoodLogEntry];
     saveArrayToStorage<FoodLogEntry>(
         FOOD_LOG_ENTRIES_STORAGE_KEY,
@@ -276,17 +320,32 @@ function fetchLocalMeals(selectedDate: string): Meal[] {
 }
 
 function collectAppDataBackup(): AppDataBackup {
-    const backup =  {
+    const backup = {
         calorieLimit: Number(localStorage.getItem(CALORIE_LIMIT_STORAGE_KEY)),
         proteinTarget: Number(localStorage.getItem(PROTEIN_TARGET_STORAGE_KEY)),
         entries: JSON.parse(localStorage.getItem(FOOD_LOG_ENTRIES_STORAGE_KEY)),
         ingredients: JSON.parse(localStorage.getItem(FOOD_ITEMS_STORAGE_KEY)),
-        meals: JSON.parse(localStorage.getItem(MEALS_STORAGE_KEY))
+        meals: JSON.parse(localStorage.getItem(MEALS_STORAGE_KEY)),
     };
-    return backup
-    
+    return backup;
+}
+function setDataVersion(dataVersion: string) {
+    localStorage.setItem(DATA_VERSION_STORAGE_KEY, dataVersion);
+}
+function getDataVersion(): string {
+    const dataVersion = localStorage.getItem(DATA_VERSION_STORAGE_KEY);
+    return dataVersion;
 }
 
+function runMigration(userId: string): boolean {
+    const didFoodItemsMigrate = migrateFoodItems(userId);
+    const didFoodLogEntriesMigrate = migrateFoodLogEntries();
+
+    if (didFoodItemsMigrate && didFoodLogEntriesMigrate) {
+        return true;
+    }
+    return false;
+}
 export {
     fetchLocalFoodLogEntries as fetchStoredFoodLogEntries,
     createLocalFoodLogEntry as createStoredFoodLogEntry,
@@ -304,5 +363,10 @@ export {
     normaliseFoodItems,
     createLocalMeal as createStoredMeal,
     fetchLocalMeals as fetchStoredMeals,
-    collectAppDataBackup
+    collectAppDataBackup,
+    migrateFoodLogEntries,
+    migrateFoodItems,
+    getDataVersion,
+    setDataVersion,
+    runMigration,
 };

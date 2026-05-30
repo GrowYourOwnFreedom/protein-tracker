@@ -104,7 +104,7 @@ export default function ExampleServerTest() {
     }
 
     return (
-        <Panel title="Server test ui">
+        <Panel title="Server Test UI">
             {isLoading ? (
                 <p>Loading...</p>
             ) : (

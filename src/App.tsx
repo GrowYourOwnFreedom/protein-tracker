@@ -17,15 +17,23 @@ import {
     updateStoredCalorieLimit,
     fetchStoredProteinTarget,
     updateStoredProteinTarget,
+    getDataVersion,
+    setDataVersion,
+    runMigration,
 } from "@/lib/storageCrudHelpers";
-import { FoodItem, FoodLogEntry, Meal } from "@/types";
+import { FoodItem, FoodLogEntry, Meal, User } from "@/types";
 import FoodLogPanel from "@/components/food-log/FoodLogPanel";
 import { getToday } from "@/lib/getToday";
 import CreateCompositeFoodItemPanel from "@/components/food-items/CreateCompositeFoodItemPanel";
 import ExampleServerTest from "@/components/ExampleServerTest";
 import ServerBackupTest from "@/components/ServerBackupTest";
+import DevBackupRestore from "@/components/DevBackupRestore";
 
 function App() {
+    const [user, setUser] = useState<User | null>(null);
+    const [startupStatus, setStartupStatus] = useState<
+        "loading" | "ready" | "error"
+    >("loading");
     const [foodLogEntries, setFoodLogEntries] = useState<FoodLogEntry[]>([]);
     const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>(() => getToday());
@@ -38,31 +46,75 @@ function App() {
     );
 
     useEffect(() => {
-        async function loadFoodItems() {
-            const user = await getCurrentUser();
-            const fetchedFoodItems = fetchStoredFoodItems(user.userId);
-            setFoodItems(fetchedFoodItems);            
+        async function initialiseApp() {
+            try {
+                const currentUser = await getCurrentUser();
+                const currentDataVersion = import.meta.env.VITE_DATA_VERSION;
+                if (!currentDataVersion) {
+                    throw new Error("VITE_DATA_VERSION is not set");
+                }
+                const storedDataVersion = getDataVersion();
+                if (storedDataVersion !== currentDataVersion) {
+                    const savedFoodItems = fetchStoredFoodItems(
+                    currentUser.userId,
+                )
+                
+                    const migration = runMigration(currentUser.userId);
+                    if (migration) {
+                        console.log("migration success");
+                        
+                        setDataVersion(currentDataVersion);
+                    } else {
+                        throw new Error("Migration failed");
+                    }
+                }
+                const fetchedFoodItems = fetchStoredFoodItems(
+                    currentUser.userId,
+                );
+
+                setFoodItems(fetchedFoodItems);
+                setUser(currentUser);
+                setStartupStatus("ready");
+                
+            } catch (error) {
+                console.error(error);
+                setStartupStatus("error");
+            }
         }
-        loadFoodItems();
+        initialiseApp();
     }, []);
 
     useEffect(() => {
+        if (startupStatus !== "ready") {
+            return;
+        }
         const foodLogEntriesToDisplay = fetchStoredFoodLogEntries(selectedDate);
         setFoodLogEntries(foodLogEntriesToDisplay);
-    }, [selectedDate]);
+        
+    }, [selectedDate, startupStatus]);
 
     useEffect(() => {
+         if (startupStatus !== "ready") {
+            return;
+        }
         const mealsToDisplay = fetchStoredMeals(selectedDate);
         setMeals(mealsToDisplay);
-    }, [selectedDate]);
+        
+    }, [selectedDate, startupStatus]);
 
     useEffect(() => {
+         if (startupStatus !== "ready") {
+            return;
+        }
         updateStoredCalorieLimit(calorieLimit);
-    }, [calorieLimit]);
+    }, [calorieLimit, startupStatus]);
 
     useEffect(() => {
+         if (startupStatus !== "ready") {
+            return;
+        }
         updateStoredProteinTarget(proteinTarget);
-    }, [proteinTarget]);
+    }, [proteinTarget, startupStatus]);
 
     function addFoodItem(newFoodItem: FoodItem): void {
         const newFoodItems = [...foodItems, newFoodItem];
@@ -121,6 +173,13 @@ function App() {
         createStoredMeal(newMeal);
     }
 
+    if (startupStatus === "loading") {
+        return <p>Loading ...</p>;
+    }
+    if (startupStatus === "error") {
+        return <p>Something went wrong while loading the app</p>;
+    }
+
     return (
         <div className="lg:h-screen lg:flex lg:flex-col">
             <header className="lg:shrink-0 p-4">
@@ -151,7 +210,7 @@ function App() {
                         onAddFoodItem={addFoodItem}
                     />
                     <CreateCompositeFoodItemPanel />
-                    <ServerBackupTest/> 
+                    {/* <ServerBackupTest /> */}
                 </div>
                 <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"
