@@ -104,6 +104,8 @@ function fetchLocalFoodItems(userId: string): FoodItem[] {
 
     const dataVersion = localStorage.getItem(DATA_VERSION_STORAGE_KEY);
     const normalisedSavedFoodItems = normaliseFoodItems(savedFoodItems, userId);
+    console.log(normalisedSavedFoodItems);
+    
 
     if (dataVersion !== DATA_VERSION) {
         saveArrayToStorage(FOOD_ITEMS_BACKUP_KEY, savedFoodItems);
