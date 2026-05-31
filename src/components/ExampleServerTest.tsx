@@ -62,7 +62,6 @@ export default function ExampleServerTest() {
     async function handleDelete(id: string): Promise<void> {
         try {
             const deletedItem = await deleteItem(id);
-            console.log(deletedItem);
             function updateItemState(currentItems: ExampleItem[]) {
                 return currentItems.filter((item: ExampleItem) => {
                     return item.id !== id;
@@ -82,8 +81,6 @@ export default function ExampleServerTest() {
     async function handleUpdate(id: string): Promise<void> {
         try {
             const updatedItem = await updateItem(id, "updated");
-            console.log(updatedItem);
-
             function updateItemState(currentItems: ExampleItem[]) {
                 const updatedItems = currentItems.map((item) => {
                     if (item.id === id) {

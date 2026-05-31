@@ -28,7 +28,7 @@ import CreateCompositeFoodItemPanel from "@/components/food-items/CreateComposit
 import ExampleServerTest from "@/components/ExampleServerTest";
 import ServerBackupTest from "@/components/ServerBackupTest";
 import DevBackupRestore from "@/components/DevBackupRestore";
-import { DATA_VERSION } from "@/config/env";
+import { DATA_VERSION, DEV_ENVIRONMENT } from "@/config/env";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -207,7 +207,8 @@ function App() {
                         meals={meals}
                         onAddFoodItem={addFoodItem}
                     />
-                    <ExampleServerTest/>
+                    {DEV_ENVIRONMENT && <ExampleServerTest/>}
+                    
                     <ServerBackupTest />
                 </div>
                 <FoodLogPanel
