@@ -10,7 +10,7 @@ export function requireBackupKey(
     const expectedBackupKey = process.env.BACKUP_KEY
 
     if(!backupKey){
-        throw new HttpError(500,"Backup key is not configured")
+        throw new HttpError(500,"Internal server error")
     }
 
     if(backupKey !== expectedBackupKey){
