@@ -8,9 +8,18 @@ export function errorHandler(
     _next: NextFunction,
 ) {
     if (error instanceof HttpError) {
-        return response.status(error.statusCode).json({ error: error.message });
+        response.status(error.statusCode).json({
+            sucess: false,
+            error: { messgae: error.message, statusCode: error.statusCode },
+        });
+        return;
     }
 
     console.error(error);
-    return response.status(500).json({ error: "Internal server error" });
+    return response
+        .status(500)
+        .json({
+            sucess: false,
+            error: { message: "Internal server error", statusCode: 500 },
+        });
 }
