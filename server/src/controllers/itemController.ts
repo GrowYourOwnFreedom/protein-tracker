@@ -1,7 +1,7 @@
 import { type Request, type Response } from "express";
 import { parseRequiredString } from "@/helpers/validationHelpers.js";
 import { HttpError } from "@/errors/HttpError.js";
-import type { ApiSuccessResponse, ExampleItem } from "@/types.js";
+import type { ExampleItem } from "@/types.js";
 import { createSuccessResponse } from "@/helpers/apiResponseHelpers.js";
 
 const testData: ExampleItem[] = [
