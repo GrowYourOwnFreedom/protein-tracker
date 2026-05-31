@@ -10,13 +10,15 @@ import type {
     HealthResponse,
     RootResponse,
 } from "@/types.js";
+import { CLIENT_ORIGIN, PORT } from "@/config/env.js";
+import { notFoundHandler } from "@/middleware/notFoundHandler.js";
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_ORIGIN }));
+app.use(cors({ origin: CLIENT_ORIGIN}));
 app.use(express.json({ limit: "1mb" }));
 
-const PORT = process.env.PORT ?? 3000;
+
 
 app.get("/", (_request: Request, response: Response) => {
     const responseBody: ApiSuccessResponse<RootResponse> = {
@@ -33,8 +35,9 @@ app.get("/health", (_request: Request, response: Response) => {
     response.json(responseBody);
 });
 
-app.use("/items", itemRouter);
+app.use("/examples/items", itemRouter);
 app.use("/app-data", appDataRouter);
+app.use(notFoundHandler)
 app.use(errorHandler);
 
 app.listen(PORT, () => {

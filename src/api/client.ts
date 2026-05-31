@@ -22,11 +22,11 @@ async function proteinTrackerApiRequest<TResponse>(
 }
 
 export function getCollection(): Promise<ExampleItem[]> {
-    return proteinTrackerApiRequest<ExampleItem[]>("/items");
+    return proteinTrackerApiRequest<ExampleItem[]>("/examples/items");
 }
 
 export function createItem(name: string): Promise<ExampleItem> {
-    return proteinTrackerApiRequest("/items", {
+    return proteinTrackerApiRequest("/examples/items", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
@@ -34,13 +34,13 @@ export function createItem(name: string): Promise<ExampleItem> {
 }
 
 export function deleteItem(id: string): Promise<ExampleItem> {
-    return proteinTrackerApiRequest(`/items/${id}`, {
+    return proteinTrackerApiRequest(`/examples/items/${id}`, {
         method: "DELETE",
     });
 }
 
 export function updateItem(id: string, name: string): Promise<ExampleItem> {
-    return proteinTrackerApiRequest(`/items/${id}`, {
+    return proteinTrackerApiRequest(`/examples/items/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),

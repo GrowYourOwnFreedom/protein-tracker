@@ -1,20 +1,16 @@
-import type { NextFunction, Request, Response } from "express";
+import type { NextFunction, Request, RequestHandler, Response } from "express";
 import { HttpError } from "@/errors/HttpError.js";
+import { BACKUP_KEY } from "@/config/env.js";
 
-export function requireBackupKey(
-    request: Request,
-    _response: Response,
-    next: NextFunction,
-):void {
-    const backupKey = request.header("X-Backup-Key")
-    const expectedBackupKey = process.env.BACKUP_KEY
+export const requireBackupKey: RequestHandler = (request, _response, nextFunction) => {
+    const backupKey = request.header("X-Backup-Key");
 
-    if(!backupKey){
-        throw new HttpError(500,"Internal server error")
+    if (!backupKey) {
+        throw new HttpError(500, "Internal server error");
     }
 
-    if(backupKey !== expectedBackupKey){
-        throw new HttpError(401,"Invalid backup key")
+    if (backupKey !== BACKUP_KEY) {
+        throw new HttpError(401, "Invalid backup key");
     }
-    next()
-}
+    nextFunction();
+};

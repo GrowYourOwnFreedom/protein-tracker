@@ -45,7 +45,6 @@ export default function ServerBackupTest() {
             };
 
             setBackupComparison(comparison)
-            console.log( comparison);
             setError("");
         } catch (error) {
             if (error instanceof Error) {
