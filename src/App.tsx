@@ -207,7 +207,7 @@ function App() {
                         meals={meals}
                         onAddFoodItem={addFoodItem}
                     />
-
+                    <ExampleServerTest/>
                     <ServerBackupTest />
                 </div>
                 <FoodLogPanel

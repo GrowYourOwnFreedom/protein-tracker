@@ -2,6 +2,7 @@ import { type Request, type Response } from "express";
 import { parseRequiredString } from "@/helpers/validationHelpers.js";
 import { HttpError } from "@/errors/HttpError.js";
 import type { ApiSuccessResponse, ExampleItem } from "@/types.js";
+import { createSuccessResponse } from "@/helpers/apiResponseHelpers.js";
 
 const testData: ExampleItem[] = [
     { id: "1", name: "A" },
@@ -11,10 +12,7 @@ const testData: ExampleItem[] = [
 ];
 
 export function getAll(_request: Request, response: Response) {
-    const responseBody: ApiSuccessResponse<ExampleItem[]> = {
-        success: true,
-        data: testData,
-    };
+    const responseBody = createSuccessResponse(testData);
     response.json(responseBody);
 }
 
@@ -31,11 +29,7 @@ export function getOne(request: Request, response: Response) {
     if (!result) {
         throw new HttpError(404, "Item not found");
     }
-
-    const responseBody: ApiSuccessResponse<ExampleItem> = {
-        success: true,
-        data: result,
-    };
+    const responseBody = createSuccessResponse(result);
     response.status(200).json(responseBody);
 }
 
@@ -50,11 +44,7 @@ export function createOne(request: Request, response: Response) {
         name,
     };
     testData.push(newItem);
-    const responseBody: ApiSuccessResponse<ExampleItem> = {
-        success: true,
-        message: "item created",
-        data: newItem,
-    };
+    const responseBody = createSuccessResponse(newItem, "item created");
     response.status(201).json(responseBody);
 }
 
@@ -77,11 +67,7 @@ export function updateOne(request: Request, response: Response) {
     }
 
     itemToUpdate.name = name;
-    const responseBody: ApiSuccessResponse<ExampleItem> = {
-        success: true,
-        message: "item updated",
-        data: itemToUpdate,
-    };
+    const responseBody = createSuccessResponse(itemToUpdate, "item updated");
     response.json(responseBody);
 }
 
@@ -101,10 +87,7 @@ export function deleteOne(request: Request, response: Response) {
     if (!deletedItem) {
         throw new HttpError(500, "Item could not be deleted");
     }
-    const responseBody: ApiSuccessResponse<ExampleItem> = {
-        success: true,
-        message: "item deleted",
-        data: deletedItem,
-    };
+    const responseBody = createSuccessResponse(deletedItem,"item deleted")
+
     response.json(responseBody);
 }
