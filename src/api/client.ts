@@ -1,4 +1,4 @@
-import { AppDataBackup, ExampleItem, HealthResponse } from "@/types";
+import { ApiErrorResponse, ApiSuccessResponse, AppDataBackup, ExampleItem, HealthResponse } from "@/types";
 
 const PROTEIN_TRACKER_SERVER_URL = import.meta.env
     .VITE_API_PROTEIN_TRACKER_SERVER_URL;
@@ -14,9 +14,11 @@ async function proteinTrackerApiRequest<TResponse>(
 
     const data = await response.json();
     if (!response.ok) {
-        throw new Error(data.error?.message ?? "Request failed");
+        const errorData = data as Partial<ApiErrorResponse>
+        throw new Error(errorData.error?.message ?? "Request failed");
     }
-    return data;
+    const successData = data as ApiSuccessResponse<TResponse>
+    return successData.data
 }
 
 export function getCollection(): Promise<ExampleItem[]> {

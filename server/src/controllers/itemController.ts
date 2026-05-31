@@ -1,9 +1,7 @@
 import { type Request, type Response } from "express";
 import { parseRequiredString } from "@/helpers/validationHelpers.js";
 import { HttpError } from "@/errors/HttpError.js";
-import type { ExampleItem } from "@/types.js";
-
-
+import type { ApiSuccessResponse, ExampleItem } from "@/types.js";
 
 const testData: ExampleItem[] = [
     { id: "1", name: "A" },
@@ -13,7 +11,11 @@ const testData: ExampleItem[] = [
 ];
 
 export function getAll(_request: Request, response: Response) {
-    response.json(testData);
+    const responseBody: ApiSuccessResponse<ExampleItem[]> = {
+        success: true,
+        data: testData,
+    };
+    response.json(responseBody);
 }
 
 export function getOne(request: Request, response: Response) {
@@ -29,7 +31,12 @@ export function getOne(request: Request, response: Response) {
     if (!result) {
         throw new HttpError(404, "Item not found");
     }
-    response.status(200).json(result);
+
+    const responseBody: ApiSuccessResponse<ExampleItem> = {
+        success: true,
+        data: result,
+    };
+    response.status(200).json(responseBody);
 }
 
 export function createOne(request: Request, response: Response) {
@@ -43,7 +50,12 @@ export function createOne(request: Request, response: Response) {
         name,
     };
     testData.push(newItem);
-    response.status(201).json(newItem);
+    const responseBody: ApiSuccessResponse<ExampleItem> = {
+        success: true,
+        message: "item created",
+        data: newItem,
+    };
+    response.status(201).json(responseBody);
 }
 
 export function updateOne(request: Request, response: Response) {
@@ -65,8 +77,12 @@ export function updateOne(request: Request, response: Response) {
     }
 
     itemToUpdate.name = name;
-
-    response.json(itemToUpdate);
+    const responseBody: ApiSuccessResponse<ExampleItem> = {
+        success: true,
+        message: "item updated",
+        data: itemToUpdate,
+    };
+    response.json(responseBody);
 }
 
 export function deleteOne(request: Request, response: Response) {
@@ -81,6 +97,14 @@ export function deleteOne(request: Request, response: Response) {
     if (itemIndex === -1) {
         throw new HttpError(404, "Item not found");
     }
-    const deletedItem = testData.splice(itemIndex, 1);
-    response.json(deletedItem[0]);
+    const deletedItem = testData.splice(itemIndex, 1)[0];
+    if (!deletedItem) {
+        throw new HttpError(500, "Item could not be deleted");
+    }
+    const responseBody: ApiSuccessResponse<ExampleItem> = {
+        success: true,
+        message: "item deleted",
+        data: deletedItem,
+    };
+    response.json(responseBody);
 }

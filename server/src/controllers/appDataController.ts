@@ -4,7 +4,7 @@ import {
     saveAppDataBackup,
 } from "@/helpers/appDataStorage.js";
 import { isAppDataBackup } from "@/helpers/appDataValidationHelpers.js";
-import type { AppDataBackup } from "@/types.js";
+import type { ApiSuccessResponse, AppDataBackup } from "@/types.js";
 import { type Request, type Response } from "express";
 
 export async function saveAppData(request: Request, response: Response) {
@@ -13,11 +13,12 @@ export async function saveAppData(request: Request, response: Response) {
         throw new HttpError(400, "Invalid app data backup");
     }
     await saveAppDataBackup(appData);
-
-    response.status(201).json({
+    const responseBody: ApiSuccessResponse<AppDataBackup> = {
+        success: true,
         message: "App data saved",
         data: appData,
-    });
+    };
+    response.status(201).json(responseBody);
 }
 
 export async function getAppData(_request: Request, response: Response) {
@@ -25,6 +26,10 @@ export async function getAppData(_request: Request, response: Response) {
     if (savedAppData === null) {
         throw new HttpError(404, "No app data has been saved yet");
     }
+    const responseBody: ApiSuccessResponse<AppDataBackup> = {
+        success: true,
+        data: savedAppData,
+    };
 
-    response.json(savedAppData);
+    response.json(responseBody);
 }

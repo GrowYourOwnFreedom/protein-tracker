@@ -1,4 +1,4 @@
-export type NutritionTypes = "protein"|"calories"
+export type NutritionTypes = "protein" | "calories";
 
 export type User = {
     userId: string;
@@ -80,14 +80,13 @@ export type ExampleItem = {
     name: string;
 };
 
-
 export type AppDataBackup = {
-    calorieLimit:number;
-    proteinTarget:number;
-    entries:FoodLogEntry[];
-    ingredients:FoodItem[];
-    meals:Meal[]
-}
+    calorieLimit: number;
+    proteinTarget: number;
+    entries: FoodLogEntry[];
+    ingredients: FoodItem[];
+    meals: Meal[];
+};
 
 export type BackupSummary = {
     calorieLimit: number;
@@ -98,13 +97,35 @@ export type BackupSummary = {
 };
 
 export type HealthResponse = {
-    status:string
-}
+    status: string;
+};
 
 export type BackupData = {
-  calorieLimit: number;
-  proteinTarget: number;
-  entries: unknown[];
-  ingredients: unknown[];
-  meals: unknown[];
+    calorieLimit: number;
+    proteinTarget: number;
+    entries: unknown[];
+    ingredients: unknown[];
+    meals: unknown[];
 };
+
+export type ApiErrorResponse = {
+    success: false;
+    error: {
+        message: string;
+        statusCode: number;
+    };
+};
+
+export type ApiSuccessResponse<TData> = {
+    success: true;
+    data: TData;
+
+    message?: string;
+};
+
+export type ApiResponse<TData> = ApiSuccessResponse<TData> | ApiErrorResponse;
+
+export type RootResponse = {
+    name:string;
+    status:"running"
+}

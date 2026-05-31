@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { HttpError } from "@/errors/HttpError.js";
+import type { ApiErrorResponse } from "@/types.js";
 
 export function errorHandler(
     error: unknown,
@@ -8,18 +9,19 @@ export function errorHandler(
     _next: NextFunction,
 ) {
     if (error instanceof HttpError) {
-        response.status(error.statusCode).json({
-            sucess: false,
-            error: { messgae: error.message, statusCode: error.statusCode },
-        });
+        const expectedErrorResponse: ApiErrorResponse = {
+            success: false,
+            error: { message: error.message, statusCode: error.statusCode },
+        };
+        response.status(error.statusCode).json(expectedErrorResponse);
         return;
     }
 
     console.error(error);
-    return response
-        .status(500)
-        .json({
-            sucess: false,
-            error: { message: "Internal server error", statusCode: 500 },
-        });
+    const internalrrorResponse: ApiErrorResponse = {
+        success: false,
+        error: { message: "Internal server error", statusCode: 500 },
+    };
+    response.status(500).json(internalrrorResponse);
+    return;
 }

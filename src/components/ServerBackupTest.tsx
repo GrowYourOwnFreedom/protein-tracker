@@ -27,9 +27,7 @@ export default function ServerBackupTest() {
     async function handleSaveBackup(): Promise<void> {
         try {
             const localData = collectAppDataBackup();
-            const backup = await saveAppDataBackup(localData);
             const serverBackup = await getAppDataBackup();
-
             const localSummary: BackupSummary = getBackupsummary(localData);
             const serverSummary: BackupSummary = getBackupsummary(serverBackup);
             const exactlyEqual =
@@ -47,7 +45,7 @@ export default function ServerBackupTest() {
             };
 
             setBackupComparison(comparison)
-            console.log(backup.message, comparison);
+            console.log( comparison);
             setError("");
         } catch (error) {
             if (error instanceof Error) {

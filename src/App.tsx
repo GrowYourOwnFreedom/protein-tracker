@@ -56,13 +56,13 @@ function App() {
                 const storedDataVersion = getDataVersion();
                 if (storedDataVersion !== currentDataVersion) {
                     const savedFoodItems = fetchStoredFoodItems(
-                    currentUser.userId,
-                )
-                
+                        currentUser.userId,
+                    );
+
                     const migration = runMigration(currentUser.userId);
                     if (migration) {
                         console.log("migration success");
-                        
+
                         setDataVersion(currentDataVersion);
                     } else {
                         throw new Error("Migration failed");
@@ -75,7 +75,6 @@ function App() {
                 setFoodItems(fetchedFoodItems);
                 setUser(currentUser);
                 setStartupStatus("ready");
-                
             } catch (error) {
                 console.error(error);
                 setStartupStatus("error");
@@ -90,27 +89,25 @@ function App() {
         }
         const foodLogEntriesToDisplay = fetchStoredFoodLogEntries(selectedDate);
         setFoodLogEntries(foodLogEntriesToDisplay);
-        
     }, [selectedDate, startupStatus]);
 
     useEffect(() => {
-         if (startupStatus !== "ready") {
+        if (startupStatus !== "ready") {
             return;
         }
         const mealsToDisplay = fetchStoredMeals(selectedDate);
         setMeals(mealsToDisplay);
-        
     }, [selectedDate, startupStatus]);
 
     useEffect(() => {
-         if (startupStatus !== "ready") {
+        if (startupStatus !== "ready") {
             return;
         }
         updateStoredCalorieLimit(calorieLimit);
     }, [calorieLimit, startupStatus]);
 
     useEffect(() => {
-         if (startupStatus !== "ready") {
+        if (startupStatus !== "ready") {
             return;
         }
         updateStoredProteinTarget(proteinTarget);
@@ -198,6 +195,7 @@ function App() {
                     selectedDate={selectedDate}
                 />
                 <div className="space-y-4">
+                    <CreateCompositeFoodItemPanel />
                     <AddFoodLogEntryPanel
                         className="h-fit"
                         foodItems={foodItems}
@@ -209,7 +207,7 @@ function App() {
                         meals={meals}
                         onAddFoodItem={addFoodItem}
                     />
-                    <CreateCompositeFoodItemPanel />
+
                     <ServerBackupTest />
                 </div>
                 <FoodLogPanel
