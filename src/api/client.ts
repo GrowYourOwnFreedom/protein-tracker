@@ -1,14 +1,14 @@
+import { API_BASE_URL, BACKUP_KEY } from "@/config/env";
 import { ApiErrorResponse, ApiSuccessResponse, AppDataBackup, ExampleItem, HealthResponse } from "@/types";
 
-const PROTEIN_TRACKER_SERVER_URL = import.meta.env
-    .VITE_API_PROTEIN_TRACKER_SERVER_URL;
+
 
 async function proteinTrackerApiRequest<TResponse>(
     path: string,
     options?: RequestInit,
 ): Promise<TResponse> {
     const response = await fetch(
-        `${PROTEIN_TRACKER_SERVER_URL}${path}`,
+        `${API_BASE_URL}${path}`,
         options,
     );
 
@@ -54,7 +54,7 @@ export function saveAppDataBackup(
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-Backup-Key": import.meta.env.VITE_BACKUP_KEY,
+            "X-Backup-Key": BACKUP_KEY,
         },
         body: JSON.stringify(appData),
     });
@@ -62,7 +62,7 @@ export function saveAppDataBackup(
 export function getAppDataBackup(): Promise<AppDataBackup> {
     return proteinTrackerApiRequest("/app-data", {
         headers: {
-            "X-Backup-Key": import.meta.env.VITE_BACKUP_KEY,
+            "X-Backup-Key": BACKUP_KEY,
         },
     });
 }

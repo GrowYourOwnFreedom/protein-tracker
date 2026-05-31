@@ -28,6 +28,7 @@ import CreateCompositeFoodItemPanel from "@/components/food-items/CreateComposit
 import ExampleServerTest from "@/components/ExampleServerTest";
 import ServerBackupTest from "@/components/ServerBackupTest";
 import DevBackupRestore from "@/components/DevBackupRestore";
+import { DATA_VERSION } from "@/config/env";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -49,12 +50,11 @@ function App() {
         async function initialiseApp() {
             try {
                 const currentUser = await getCurrentUser();
-                const currentDataVersion = import.meta.env.VITE_DATA_VERSION;
-                if (!currentDataVersion) {
+                if (!DATA_VERSION) {
                     throw new Error("VITE_DATA_VERSION is not set");
                 }
                 const storedDataVersion = getDataVersion();
-                if (storedDataVersion !== currentDataVersion) {
+                if (storedDataVersion !== DATA_VERSION) {
                     const savedFoodItems = fetchStoredFoodItems(
                         currentUser.userId,
                     );
@@ -63,7 +63,7 @@ function App() {
                     if (migration) {
                         console.log("migration success");
 
-                        setDataVersion(currentDataVersion);
+                        setDataVersion(DATA_VERSION);
                     } else {
                         throw new Error("Migration failed");
                     }
