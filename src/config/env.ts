@@ -11,4 +11,4 @@ export const BACKUP_KEY = getRequiredEnv("VITE_BACKUP_KEY");
 export const API_BASE_URL = getRequiredEnv(
     "VITE_API_PROTEIN_TRACKER_SERVER_URL",
 );
-export const DEV_ENVIRONMENT = getRequiredEnv("DEV");
+export const DEV_ENVIRONMENT = import.meta.env.DEV
