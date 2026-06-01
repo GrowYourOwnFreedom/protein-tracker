@@ -1,3 +1,5 @@
+// these types cover all legacy keys for migrations and normalisation
+
 export type OldFoodItem = {
     name: string;
     caloriesPer100g: number;

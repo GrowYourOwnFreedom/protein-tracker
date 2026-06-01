@@ -1,3 +1,5 @@
+// these types are for the shape of responses sent out from the server/api
+
 export type ApiErrorResponse = {
     success: false;
     error: {

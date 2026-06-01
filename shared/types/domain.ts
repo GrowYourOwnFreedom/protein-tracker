@@ -1,3 +1,5 @@
+// these types are the shape of actual data objects from the db used in the frontend
+
 export type NutritionTypes = "protein" | "calories";
 
 export type FoodItemType = "simple" | "composite"

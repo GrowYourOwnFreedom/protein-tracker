@@ -1,3 +1,5 @@
+// these types are tempoarary for locals storage backup operations
+
 import { FoodItem, FoodLogEntry, Meal } from "./domain";
 
 export type AppDataBackup = {

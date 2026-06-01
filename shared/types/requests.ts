@@ -1,4 +1,5 @@
 import { FoodItemType } from "./domain";
+//  these types are for request bodies
 
 export type createFoodItemRequestBody = {
     name: string;
