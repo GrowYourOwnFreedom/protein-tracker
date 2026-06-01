@@ -31,7 +31,7 @@ app.get("/health", (_request: Request, response: Response) => {
     const responseBody: ApiSuccessResponse<HealthResponse> = {
         success: true,
         data: { status: "ok" },
-    };
+    };    
     response.json(responseBody);
 });
 
