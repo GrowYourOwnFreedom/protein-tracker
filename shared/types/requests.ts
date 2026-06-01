@@ -1,4 +1,4 @@
-import { FoodItemType } from "./domain";
+import type { FoodItemType } from "../types/domain.js";
 //  these types are for request bodies
 
 export type createFoodItemRequestBody = {

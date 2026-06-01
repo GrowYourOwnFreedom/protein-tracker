@@ -1,4 +1,4 @@
-import { AppDataBackup } from "@/types";
+import type { AppDataBackup } from "./types/backup.js";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
     return typeof value === "object" && value !== null;

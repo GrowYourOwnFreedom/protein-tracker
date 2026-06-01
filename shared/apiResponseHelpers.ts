@@ -1,4 +1,4 @@
-import type { ApiSuccessResponse } from "shared/types";
+import type { ApiSuccessResponse } from "./types/api.js";
 
 export function createSuccessResponse<TData>(
     data: TData,

@@ -1,6 +1,6 @@
 // these types are tempoarary for locals storage backup operations
 
-import { FoodItem, FoodLogEntry, Meal } from "./domain";
+import type { FoodItem, FoodLogEntry, Meal } from "../types/domain.js";
 
 export type AppDataBackup = {
     calorieLimit: number;
