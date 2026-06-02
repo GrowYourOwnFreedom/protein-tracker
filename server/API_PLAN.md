@@ -1,79 +1,191 @@
+## Food items
 
-GET /food-items
-Purpose: load all FoodItems for user to choose from
-Request: plain
+### GET /food-items
+
+Purpose: Load all FoodItem objects for the current user.
+
+Request: No body required.
+
 Response data: FoodItem[]
 
-POST /food-items
-Purpose: Create new FoodItem
-Request: body must contain FoodItem json object
+Notes: Later this will use the authenticated user. For now it can use the dummy/current user.
+
+### POST /food-items
+
+Purpose: Create a new FoodItem.
+
+Request: Body must be CreateFoodItemRequestBody.
+
 Response data: FoodItem
-Notes:
 
-PATCH /food-items/:foodItemId
-Purpose: update details for a particular FoodItem
-Request: url must have foodItemId as a param, json details object must be sent as the body
-Response data:
-Notes:
+Notes: Server will eventually create foodItemId, userId, and dateCreated.
 
-DELETE /food-items/:foodItemId
-Purpose:
+### PATCH /food-items/:foodItemId
+
+Purpose: Update details for a specific FoodItem.
+
 Request:
-Response data:
-Notes:
 
-GET /food-log-entries?date=YYYY-MM-DD
-Purpose:
+- URL must include foodItemId as a param.
+
+- Body must be UpdateFoodItemRequestBody.
+
+Response data: FoodItem
+
+Notes: Body should contain at least one field to update.
+
+### DELETE /food-items/:foodItemId
+
+Purpose: Remove a specific FoodItem from storage.
+
 Request:
-Response data:
-Notes:
 
-POST /food-log-entries
-Purpose:
+- URL must include foodItemId as a param.
+
+Response data: FoodItem
+
+Notes: Response returns the deleted FoodItem.
+
+## Food log entries
+
+### GET /food-log-entries?date=YYYY-MM-DD
+
+Purpose: Get FoodLogEntry objects for a selected date.
+
 Request:
-Response data:
-Notes:
 
-PATCH /food-log-entries/:foodLogEntryId
-Purpose:
+- URL must include a date query string.
+
+- Date must be in YYYY-MM-DD format.
+
+Response data: FoodLogEntry[]
+
+Notes: Later this will use the authenticated user.
+
+### POST /food-log-entries
+
+Purpose: Create a new FoodLogEntry.
+
+Request: Body must be CreateFoodLogEntryRequestBody.
+
+Response data: FoodLogEntry
+
+Notes: Server should eventually calculate calories and protein from the linked FoodItem and weight.
+
+### PATCH /food-log-entries/:foodLogEntryId
+
+Purpose: Update a specific FoodLogEntry.
+
 Request:
-Response data:
-Notes:
 
-DELETE /food-log-entries/:foodLogEntryId
-Purpose:
+- URL must include foodLogEntryId as a param.
+
+- Body must be UpdateFoodLogEntryRequestBody.
+
+Response data: FoodLogEntry
+
+Notes: This can be implemented later if editing log entries is not needed yet.
+
+### DELETE /food-log-entries/:foodLogEntryId
+
+Purpose: Remove a specific FoodLogEntry from storage.
+
 Request:
-Response data:
-Notes:
 
+- URL must include foodLogEntryId as a param.
 
-GET /meals?date=YYYY-MM-DD
-Purpose:
+Response data: FoodLogEntry
+
+Notes: Response returns the deleted FoodLogEntry.
+
+## Meals
+
+### GET /meals?date=YYYY-MM-DD
+
+Purpose: Get Meal objects for a selected date.
+
 Request:
-Response data:
-Notes:
 
-POST /meals
-Purpose:
+- URL must include a date query string.
+
+- Date must be in YYYY-MM-DD format.
+
+Response data: Meal[]
+
+Notes: This does not use mealId. The date is a query filter.
+
+### POST /meals
+
+Purpose: Create a new Meal in storage.
+
+Request: Body must be CreateMealRequestBody.
+
+Response data: Meal
+
+Notes: Server will eventually create mealId, userId, and createdAt.
+
+### PATCH /meals/:mealId
+
+Purpose: Update a specific Meal.
+
 Request:
-Response data:
-Notes:
 
+- URL must include mealId as a param.
 
-GET /targets
-Purpose:
+- Body must be UpdateMealRequestBody.
+
+Response data: Meal
+
+Notes: This can be implemented later.
+
+### DELETE /meals/:mealId
+
+Purpose: Remove a specific Meal from storage.
+
 Request:
-Response data:
+
+- URL must include mealId as a param.
+
+Response data: Meal
+
+Notes: This can be implemented later.
+
+## Targets
+
+### GET /targets
+
+Purpose: Get nutritional targets for calories and protein.
+
+Request: No body required.
+
+Response data: Targets
+
+Notes: Targets probably belong to the current user.
+
+### PATCH /targets
+
+Purpose: Update nutritional targets in storage.
+
+Request: Body must be UpdateTargetsRequestBody.
+
+Response data: Targets
+
+Notes: Body should contain at least one target field to update.
+
+## App data import
+
+### POST /app-data/import
+
+Purpose: Import a full AppDataBackup into database storage.
+
+Request: Body must be AppDataBackup.
+
+Response data: BackupImportSummary
+
 Notes:
 
-PATCH /targets
-Purpose:
-Request:
-Response data:
-Notes:
+- This is a migration/import route, not a normal day-to-day app route.
 
-POST /app-data/import
-Purpose:
-Request:
-Response data:
-Notes:
+- It should validate the full backup before importing.
+
+- It should return counts of imported records.

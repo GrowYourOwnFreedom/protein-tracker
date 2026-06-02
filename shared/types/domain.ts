@@ -45,3 +45,9 @@ export type Meal = {
     createdAt: string;
     userId: string;
 };
+
+export type Targets = {
+    proteinTarget:number;
+    calorieLimit:number
+
+}
