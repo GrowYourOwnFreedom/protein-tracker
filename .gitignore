@@ -24,5 +24,10 @@ dist-ssr
 *.sw?
 
 .env
+.env.test
 server/data/*
 !server/data/.gitkeep
+!server/data/test/
+server/data/test/*
+!server/data/test/.gitkeep
+

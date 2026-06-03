@@ -1,8 +1,9 @@
 import { readFile, writeFile } from "node:fs/promises";
 import type { AppDataBackup } from "@/types.js";
 import { HttpError } from "@/errors/HttpError.js";
+import { BACKUP_FILE_PATH } from "@/config/env.js";
 
-const BACKUP_FILE_PATH = "data/app-data-backup.json";
+
 
 export async function saveAppDataBackup(appData: AppDataBackup): Promise<void> {
     const appDataJson = JSON.stringify(appData, null, 2);

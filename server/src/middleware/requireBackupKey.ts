@@ -6,7 +6,7 @@ export const requireBackupKey: RequestHandler = (request, _response, nextFunctio
     const backupKey = request.header("X-Backup-Key");
 
     if (!backupKey) {
-        throw new HttpError(500, "Internal server error");
+        throw new HttpError(401, "Unauthorised");
     }
 
     if (backupKey !== BACKUP_KEY) {

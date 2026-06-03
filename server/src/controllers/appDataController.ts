@@ -17,12 +17,12 @@ export async function saveAppData(request: Request, response: Response) {
     response.status(201).json(responseBody);
 }
 
-export async function getAppData(_request: Request, response: Response) {   
+export async function getAppData(_request: Request, response: Response) {       
     const savedAppData = await readAppDataBackup();
     if (savedAppData === null) {
         throw new HttpError(404, "No app data has been saved yet");
     }
     const responseBody = createSuccessResponse(savedAppData)
 
-    response.json(responseBody);
+    response.status(200).json(responseBody);
 }
