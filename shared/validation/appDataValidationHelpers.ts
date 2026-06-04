@@ -1,8 +1,5 @@
-import type { AppDataBackup } from "./types/backup.js";
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-    return typeof value === "object" && value !== null;
-}
+import type { AppDataBackup } from "../types/backup.js";
+import { isRecord } from "./validationHelpers.js";
 
 export function isAppDataBackup(value: unknown): value is AppDataBackup {
     if (!isRecord(value)) {
