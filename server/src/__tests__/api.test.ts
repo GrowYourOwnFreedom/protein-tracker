@@ -2,7 +2,7 @@ import request from "supertest";
 import { app } from "@/app.js";
 import { describe, it, expect } from "vitest";
 
-describe("GET/", () => {
+describe("GET /", () => {
     it("returns server name and status", async () => {
         const response = await request(app).get("/");
 

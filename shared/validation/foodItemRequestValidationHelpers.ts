@@ -1,4 +1,8 @@
-import { isRecord, isFoodItemType } from "./validationHelpers.js";
+import {
+    isRecord,
+    isFoodItemType,
+    isfoodItemCategoryId,
+} from "./validationHelpers.js";
 import type {
     CreateFoodItemRequestBody,
     UpdateFoodItemRequestBody,
@@ -15,6 +19,7 @@ export function isCreateFoodItemRequestBody(
         typeof value.proteinPer100g === "number" &&
         typeof value.caloriesPer100g === "number" &&
         typeof value.foodItemCategoryId === "string" &&
+        isfoodItemCategoryId(value.foodItemCategoryId) &&
         isFoodItemType(value.type)
     );
 }
@@ -72,7 +77,9 @@ export function isUpdateFoodItemRequestBody(
         }
     }
     if (value.foodItemCategoryId) {
-        if (typeof value.foodItemCategoryId !== "string") {
+        if(typeof value.foodItemCategoryId !== "string" ||
+        !isfoodItemCategoryId(value.foodItemCategoryId)){
+
             return false;
         }
     }
