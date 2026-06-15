@@ -1,4 +1,4 @@
-import { FoodItemCategory } from "../types/index";
+import type { FoodItemCategory } from "../types/index.js";
 
 export const defaultFoodItemCategories: FoodItemCategory[] = [
     {
