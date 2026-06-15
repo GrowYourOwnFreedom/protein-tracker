@@ -2,7 +2,7 @@ import type { AppDataBackup } from "@/types.js";
 import { isAppDataBackup } from "@/helpers/appDataValidationHelpers.js";
 import { describe, expect, it } from "vitest";
 
-describe("iaAppDataBackup", () => {
+describe("isAppDataBackup", () => {
     it("returns true when passed a valid backup", () => {
         const testBackup: AppDataBackup = {
             calorieLimit: 2000,

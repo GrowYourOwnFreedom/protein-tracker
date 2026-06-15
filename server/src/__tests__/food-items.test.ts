@@ -44,7 +44,6 @@ describe("/food-items", () => {
             const response = await request(app)
                 .post("/food-items")
                 .send({ banana: true });
-            console.log(response.body);
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);

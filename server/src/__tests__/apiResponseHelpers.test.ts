@@ -1,7 +1,7 @@
 import { createSuccessResponse } from "@/helpers/apiResponseHelpers.js";
 import { describe, expect, it } from "vitest";
 
-describe("createSuccessResonse", () => {
+describe("createSuccessResponse", () => {
     it("creates a success response without a message", () => {
         const data = { status: "ok" };
         const successResponse = createSuccessResponse(data);

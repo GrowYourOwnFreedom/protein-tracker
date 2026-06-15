@@ -1,8 +1,7 @@
 import request from "supertest";
 import { app } from "@/app.js";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import type { AppDataBackup } from "@/types.js";
-import { beforeEach } from "node:test";
 import { rm } from "node:fs/promises";
 import { BACKUP_FILE_PATH, BACKUP_KEY } from "@/config/env.js";
 
