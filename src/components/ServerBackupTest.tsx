@@ -34,6 +34,7 @@ export default function ServerBackupTest() {
     async function handleSaveBackup(): Promise<void> {
         try {
             const localData = collectAppDataBackup();
+            await saveAppDataBackup(localData)
             const serverBackup = await getAppDataBackup();
             const localSummary: BackupSummary = getBackupsummary(localData);
             const serverSummary: BackupSummary = getBackupsummary(serverBackup);
