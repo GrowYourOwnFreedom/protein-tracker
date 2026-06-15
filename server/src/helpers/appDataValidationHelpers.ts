@@ -1,1 +1,1 @@
-export * from "../../../shared/appDataValidationHelpers.js";
+export * from "../../../shared/validation/appDataValidationHelpers.js";

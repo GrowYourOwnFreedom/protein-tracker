@@ -1,8 +1,7 @@
 import request from "supertest";
 import { app } from "@/app.js";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import type { AppDataBackup } from "@/types.js";
-import { beforeEach } from "node:test";
 import { rm } from "node:fs/promises";
 import { BACKUP_FILE_PATH, BACKUP_KEY } from "@/config/env.js";
 
@@ -18,7 +17,7 @@ beforeEach(async () => {
 });
 
 describe("/app-data", () => {
-    describe("POST/app-data", () => {
+    describe("POST /app-data", () => {
         it("should save app data", async () => {
             const response = await request(app)
                 .post("/app-data")
@@ -32,7 +31,7 @@ describe("/app-data", () => {
         });
     });
 
-    describe("GET/app-data", () => {
+    describe("GET /app-data", () => {
         it("returns expected error when no backup key is provided", async () => {
             const response = await request(app).get("/app-data");
             expect(response.status).toBe(401);

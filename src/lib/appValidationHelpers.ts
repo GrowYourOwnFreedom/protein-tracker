@@ -1,1 +1,1 @@
-export * from "../../shared/appDataValidationHelpers"
+export * from "../../shared/validation/appDataValidationHelpers";
