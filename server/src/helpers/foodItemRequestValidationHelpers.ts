@@ -1,1 +1,1 @@
-export * from "../../../shared/validation/foodItemRequestValidationHelpers.js"
+export * from "@shared/validation/foodItemRequestValidationHelpers.js"

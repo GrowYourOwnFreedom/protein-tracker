@@ -1,1 +1,1 @@
-export * from "../../../shared/apiResponseHelpers.js"
+export * from "@shared/apiResponseHelpers.js"

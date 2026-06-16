@@ -67,7 +67,6 @@ export function updateStoredFoodItem(
 
  export function removeFoodItemById(foodItemId:string):FoodItem{
     const index = foodItemsArray.findIndex((item) => item.foodItemId === foodItemId)
-    console.log(`index: ${index}`);
     
     if(index === -1){
                 throw new HttpError(404,"Food item not found")
