@@ -219,7 +219,6 @@ describe("/food-items", () => {
             const response = await request(app).delete(
                 `/food-items/${foodItemId}`,
             );
-            console.log(response.body);
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -250,7 +249,6 @@ describe("/food-items", () => {
                     statusCode: 404,
                 },
             };
-            console.log(response.body);
 
             expect(response.status).toBe(404);
             expect(response.body).toEqual(expected);

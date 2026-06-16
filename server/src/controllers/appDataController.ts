@@ -9,7 +9,7 @@ import { type Request, type Response } from "express";
 
 export async function saveAppData(request: Request, response: Response) {
     const appData = request.body as unknown;
-    if (!isAppDataBackup(appData)) {
+    if (!isAppDataBackup(appData)) {        
         throw new HttpError(400, "Invalid app data backup");
     }
     await saveAppDataBackup(appData);

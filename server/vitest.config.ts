@@ -44,6 +44,7 @@ export default defineConfig({
             // server/src/routes/itemRoutes.ts
 
             "@": path.resolve(dirname, "src"),
+            "@shared": path.resolve(dirname, "../shared"),
         },
     },
 
