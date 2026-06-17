@@ -14,6 +14,7 @@ export function isCreateFoodLogEntryRequestBody(
         typeof value.calories === "number" &&
         typeof value.foodItemId === "string" &&
         typeof value.date === "string" &&
-        typeof value.weight === "number"
+        typeof value.weight === "number" &&
+        (value.mealId === undefined || typeof value.mealId === "string")
     );
 }

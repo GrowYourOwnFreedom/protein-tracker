@@ -47,7 +47,7 @@ export const validFoodLogEntryBodyWithoutFoodItemId = {
 type SeedFoodLogEntryOverrides = Partial<CreateFoodLogEntryRequestBody> & {
     userId?:string
 }
-export async function seedValidFoodLogEntry(overrides:SeedFoodLogEntryOverrides = {}):Promise<FoodLogEntry>{
+ async function seedValidFoodLogEntry(overrides:SeedFoodLogEntryOverrides = {}):Promise<FoodLogEntry>{
     const foodItem = await seedValidFoodItem()
     const foodLogEntry = await prisma.foodLogEntry.create({
         data:{
@@ -59,4 +59,9 @@ export async function seedValidFoodLogEntry(overrides:SeedFoodLogEntryOverrides 
     })
 
     return mapFoodLogEntryFromDb(foodLogEntry)
+}
+
+export async function resetTestDatabase(){
+    await prisma.foodLogEntry.deleteMany()
+    await prisma.foodItem.deleteMany()
 }

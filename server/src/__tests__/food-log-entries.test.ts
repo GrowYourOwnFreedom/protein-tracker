@@ -3,6 +3,7 @@ import request from "supertest";
 import { app } from "@/app.js";
 import { prisma } from "@/db/prisma.js";
 import {
+    resetTestDatabase,
     seedValidFoodItem,
     validFoodItemBody,
     validFoodLogEntryBodyWithoutFoodItemId,
@@ -10,8 +11,7 @@ import {
 
 describe("/food-log-entries", () => {
     beforeEach(async () => {
-        await prisma.foodItem.deleteMany();
-        await prisma.foodLogEntry.deleteMany();
+       await resetTestDatabase()
     });
     describe("POST /food-log-entries", () => {
         it("returns new food log entry when passed correct body", async () => {
@@ -22,10 +22,7 @@ describe("/food-log-entries", () => {
                 }
             const response = await request(app)
                 .post("/food-log-entries")
-                .send(body);
-            console.log(response.body);
-            console.log(body);
-            
+                .send(body);            
             
             expect(response.status).toBe(201)
 

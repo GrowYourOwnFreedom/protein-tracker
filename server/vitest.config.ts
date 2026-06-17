@@ -60,5 +60,6 @@ export default defineConfig({
         // before the app/config files are imported during tests.
 
         setupFiles: ["src/test/setup.ts"],
+        fileParallelism:false
     },
 });

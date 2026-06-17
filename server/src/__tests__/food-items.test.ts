@@ -1,18 +1,13 @@
-import type {
-    UpdateFoodItemRequestBody,
-} from "@/types.js";
+import type { UpdateFoodItemRequestBody } from "@/types.js";
 import { beforeEach, describe, expect, it } from "vitest";
 import request from "supertest";
 import { app } from "@/app.js";
 import { prisma } from "@/db/prisma.js";
-import { seedValidFoodItem, validFoodItemBody } from "@/test/test-utils.js";
-
-
-
+import { resetTestDatabase, seedValidFoodItem, validFoodItemBody } from "@/test/test-utils.js";
 
 describe("/food-items", () => {
     beforeEach(async () => {
-        await prisma.foodItem.deleteMany();
+       await resetTestDatabase()
     });
 
     describe("POST /food-items", () => {
@@ -72,7 +67,9 @@ describe("/food-items", () => {
             expect(
                 Number.isNaN(Date.parse(response.body.data[0].dateCreated)),
             ).toBe(false);
-            expect(response.body.data).toEqual(expect.arrayContaining([expect.objectContaining(foodItem)]))
+            expect(response.body.data).toEqual(
+                expect.arrayContaining([expect.objectContaining(foodItem)]),
+            );
         });
     });
     describe("PATCH /food-items", () => {
