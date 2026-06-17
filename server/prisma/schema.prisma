@@ -11,6 +11,10 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+enum FoodItemType {
+  simple
+  composite
+}
 
 model FoodItem {
   foodItemId String @id @default(uuid())
@@ -18,7 +22,7 @@ model FoodItem {
   caloriesPer100g Float
   proteinPer100g Float
   foodItemCategoryId String
-  type String
+  type FoodItemType
   userId String
   dateCreated DateTime @default(now())
 }

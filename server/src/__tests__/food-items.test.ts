@@ -1,12 +1,12 @@
 import type {
     CreateFoodItemRequestBody,
-    FoodItem,
     UpdateFoodItemRequestBody,
 } from "@/types.js";
 import { beforeEach, describe, expect, it } from "vitest";
 import request from "supertest";
 import { app } from "@/app.js";
-import { resetStoredFoodItems } from "@/storage/foodItemStorage.js";
+import { mapFoodItemFromDb } from "@/storage/foodItemStorage.js";
+import { prisma } from "@/db/prisma.js";
 
 const validBody: CreateFoodItemRequestBody = {
     name: "turnip",
@@ -15,18 +15,30 @@ const validBody: CreateFoodItemRequestBody = {
     proteinPer100g: 5,
     type: "simple",
 };
-async function postValidBody() {
-    return request(app).post("/food-items").send(validBody);
+
+async function seedValidFoodItem() {
+    const foodItem = await prisma.foodItem.create({
+        data: {
+            name: "turnip",
+            foodItemCategoryId: "fresh-produce",
+            caloriesPer100g: 50,
+            proteinPer100g: 5,
+            type: "simple",
+            userId: "dev-user",
+        },
+    });
+    return mapFoodItemFromDb(foodItem);
 }
 describe("/food-items", () => {
-
-    beforeEach(() => {
-        resetStoredFoodItems();
+    beforeEach(async () => {
+        await prisma.foodItem.deleteMany();
     });
-    
+
     describe("POST /food-items", () => {
         it("returns new food item when passed correct body", async () => {
-            const response = await postValidBody();
+            const response = await request(app)
+                .post("/food-items")
+                .send(validBody);
 
             expect(response.status).toBe(201);
             expect(response.body.success).toBe(true);
@@ -37,11 +49,7 @@ describe("/food-items", () => {
             ).toBe(false);
 
             expect(response.body.data).toMatchObject({
-                name: "turnip",
-                foodItemCategoryId: "fresh-produce",
-                caloriesPer100g: 50,
-                proteinPer100g: 5,
-                type: "simple",
+                ...validBody,
                 foodItemId: expect.any(String),
                 userId: expect.any(String),
                 dateCreated: expect.any(String),
@@ -70,29 +78,20 @@ describe("/food-items", () => {
         });
 
         it("returns stored food item", async () => {
-            await postValidBody();
-            await postValidBody();
-            await postValidBody();
+            await seedValidFoodItem();
+            await seedValidFoodItem();
+            const foodItem = await seedValidFoodItem();
 
             const response = await request(app).get("/food-items");
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
-            expect(response.body.data.length).toBe(3);
+            expect(response.body.data).toHaveLength(3);
 
             expect(
                 Number.isNaN(Date.parse(response.body.data[0].dateCreated)),
             ).toBe(false);
-            expect(response.body.data[2]).toMatchObject({
-                name: "turnip",
-                foodItemCategoryId: "fresh-produce",
-                caloriesPer100g: 50,
-                proteinPer100g: 5,
-                type: "simple",
-                foodItemId: expect.any(String),
-                userId: expect.any(String),
-                dateCreated: expect.any(String),
-            });
+            expect(response.body.data).toEqual(expect.arrayContaining([expect.objectContaining(foodItem)]))
         });
     });
     describe("PATCH /food-items", () => {
@@ -101,9 +100,8 @@ describe("/food-items", () => {
                 name: "jack",
                 proteinPer100g: 50,
             };
-            const foodItem = await postValidBody();
-            const id = foodItem.body.data.foodItemId;
-            const dateCreated = foodItem.body.data.dateCreated;
+            const foodItem = await seedValidFoodItem();
+            const id = foodItem.foodItemId;
             const response = await request(app)
                 .patch(`/food-items/${id}`)
                 .send(update);
@@ -111,14 +109,8 @@ describe("/food-items", () => {
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
             expect(response.body.data).toMatchObject({
-                name: "jack",
-                foodItemCategoryId: "fresh-produce",
-                caloriesPer100g: 50,
-                proteinPer100g: 50,
-                type: "simple",
-                foodItemId: id,
-                userId: expect.any(String),
-                dateCreated,
+                ...foodItem,
+                ...update,
             });
         });
 
@@ -134,8 +126,8 @@ describe("/food-items", () => {
                 },
             };
 
-            const foodItem = await postValidBody();
-            const id = foodItem.body.data.foodItemId;
+            const foodItem = await seedValidFoodItem();
+            const id = foodItem.foodItemId;
 
             const response = await request(app)
                 .patch(`/food-items/${id}`)
@@ -158,7 +150,7 @@ describe("/food-items", () => {
                     statusCode: 404,
                 },
             };
-            await postValidBody();
+            await seedValidFoodItem();
 
             const response = await request(app)
                 .patch("/food-items/unknown")
@@ -171,8 +163,8 @@ describe("/food-items", () => {
 
     describe("GET /food-items/:foodItemId", () => {
         it("returns the food item for an existing ID", async () => {
-            const foodItem = await postValidBody();
-            const foodItemId = foodItem.body.data.foodItemId;
+            const foodItem = await seedValidFoodItem();
+            const foodItemId = foodItem.foodItemId;
             const response = await request(app).get(
                 `/food-items/${foodItemId}`,
             );
@@ -183,16 +175,7 @@ describe("/food-items", () => {
                 Number.isNaN(Date.parse(response.body.data.dateCreated)),
             ).toBe(false);
 
-            expect(response.body.data).toMatchObject({
-                name: "turnip",
-                foodItemCategoryId: "fresh-produce",
-                caloriesPer100g: 50,
-                proteinPer100g: 5,
-                type: "simple",
-                foodItemId,
-                userId: expect.any(String),
-                dateCreated: expect.any(String),
-            });
+            expect(response.body.data).toMatchObject(foodItem);
         });
 
         it("returns  404 when no food item exists with that ID", async () => {
@@ -203,7 +186,7 @@ describe("/food-items", () => {
                     statusCode: 404,
                 },
             };
-            await postValidBody();
+            await seedValidFoodItem();
             const response = await request(app).get("/food-items/unknown-item");
 
             expect(response.status).toBe(404);
@@ -213,8 +196,8 @@ describe("/food-items", () => {
 
     describe("DELETE /food-items/:foodItemId", () => {
         it("returns deleted food item if ID exists", async () => {
-            const foodItem = await postValidBody();
-            const foodItemId = foodItem.body.data.foodItemId;
+            const foodItem = await seedValidFoodItem();
+            const foodItemId = foodItem.foodItemId;
 
             const response = await request(app).delete(
                 `/food-items/${foodItemId}`,
@@ -226,16 +209,7 @@ describe("/food-items", () => {
                 Number.isNaN(Date.parse(response.body.data.dateCreated)),
             ).toBe(false);
 
-            expect(response.body.data).toMatchObject({
-                name: "turnip",
-                foodItemCategoryId: "fresh-produce",
-                caloriesPer100g: 50,
-                proteinPer100g: 5,
-                type: "simple",
-                foodItemId,
-                userId: expect.any(String),
-                dateCreated: expect.any(String),
-            });
+            expect(response.body.data).toMatchObject(foodItem);
         });
 
         it("returns 404 if id is not found", async () => {

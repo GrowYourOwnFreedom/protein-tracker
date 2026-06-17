@@ -18,10 +18,10 @@ export type FoodItem = {
     name: string;
     caloriesPer100g: number;
     proteinPer100g: number;
-    userId: string;
-    dateCreated: string;
     foodItemCategoryId: string;
     type: FoodItemType;
+    userId: string;
+    dateCreated: string;
 };
 
 export type FoodLogEntry = {

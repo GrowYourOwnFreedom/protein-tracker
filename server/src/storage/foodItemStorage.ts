@@ -1,3 +1,4 @@
+import { prisma } from "@/db/prisma.js";
 import { HttpError } from "@/errors/HttpError.js";
 import type {
     CreateFoodItemRequestBody,
@@ -5,76 +6,84 @@ import type {
     UpdateFoodItemRequestBody,
 } from "@/types.js";
 
+import type { FoodItem as DbFoodItem } from "@/generated/prisma/client.js";
+
+export function mapFoodItemFromDb(dbFoodItem:DbFoodItem):FoodItem{
+    return{
+        ...dbFoodItem,
+        dateCreated: dbFoodItem.dateCreated.toISOString()
+    }
+}
+
 const foodItemsArray: FoodItem[] = [];
 
-export function createFoodItem(
+export async function createFoodItem(
     foodItemRequestBody: CreateFoodItemRequestBody,
-): FoodItem {
+): Promise<FoodItem> {
     const { name, caloriesPer100g, proteinPer100g, foodItemCategoryId, type } =
         foodItemRequestBody;
-    const newFoodItem = {
+
+    const newFoodItem = await prisma.foodItem.create( {data: {
         foodItemId: crypto.randomUUID(),
         name,
         caloriesPer100g,
         proteinPer100g,
         userId: "dev-user",
-        dateCreated: new Date().toISOString(),
+        dateCreated: new Date(),
         foodItemCategoryId,
         type,
-    };
-    foodItemsArray.push(newFoodItem);
+    }})
+    
 
-    return newFoodItem;
+    return mapFoodItemFromDb(newFoodItem)
 }
-export function getStoredFoodItems(): FoodItem[] {
-    return [...foodItemsArray];
+export async function getStoredFoodItems(): Promise<FoodItem[]> {
+    const foodItems = await prisma.foodItem.findMany()
+    return foodItems.map(mapFoodItemFromDb)
 }
 export function resetStoredFoodItems(): void {
     foodItemsArray.length = 0;
 }
 
-export function updateStoredFoodItem(
+export async function updateStoredFoodItem(
     foodItemId: string,
     updates: UpdateFoodItemRequestBody,
-): FoodItem {
-    const index = foodItemsArray.findIndex(
-        (item) => item.foodItemId === foodItemId,
-    );
+): Promise<FoodItem> {
+    const existingFoodItem = await prisma.foodItem.findUnique({
+        where:{foodItemId}
+    })
+    if(!existingFoodItem){
+                throw new HttpError(404, "Food item not found");
 
-    if (index === -1) {
-        throw new HttpError(404, "Food item not found");
     }
-
-    const existingFoodItem = foodItemsArray[index];
-
-    if (!existingFoodItem) {
-        throw new HttpError(404, "Food item not found");
-    }
-    const updatedFoodItem:FoodItem = {
-        ...existingFoodItem,
-        ...updates,
-    };
-    foodItemsArray[index] = updatedFoodItem;
-    return updatedFoodItem;
+    const updatedFoodItem = await prisma.foodItem.update({
+        where:{foodItemId},
+        data:updates
+    })
+   
+ 
+    return mapFoodItemFromDb(updatedFoodItem)
 }
- export function getFoodItemByID(foodItemId:string):FoodItem{
-    const foodItem = foodItemsArray.find((item)=> item.foodItemId === foodItemId)
+ export async function getFoodItemByID(foodItemId:string):Promise<FoodItem>{
+    const foodItem = await prisma.foodItem.findUnique({
+        where:{foodItemId}
+    })
     if(!foodItem){
         throw new HttpError(404,"Food item not found")
     }
-    return foodItem
+    return mapFoodItemFromDb(foodItem)
  }
 
- export function removeFoodItemById(foodItemId:string):FoodItem{
-    const index = foodItemsArray.findIndex((item) => item.foodItemId === foodItemId)
-    
-    if(index === -1){
-                throw new HttpError(404,"Food item not found")
-
-    }
-    const deletedItem = foodItemsArray.splice(index,1)
-    if(!deletedItem[0]){
+ export async function removeFoodItemById(foodItemId:string):Promise<FoodItem>{
+   const foodItem = await prisma.foodItem.findUnique({
+        where:{foodItemId}
+    })
+    if(!foodItem){
         throw new HttpError(404,"Food item not found")
     }
-     return deletedItem[0]
+    const deletedItem = await prisma.foodItem.delete({
+        where:{foodItemId}
+    })
+    
+     return mapFoodItemFromDb(deletedItem)
  }
