@@ -20,18 +20,11 @@ const foodItemsArray: FoodItem[] = [];
 export async function createFoodItem(
     foodItemRequestBody: CreateFoodItemRequestBody,
 ): Promise<FoodItem> {
-    const { name, caloriesPer100g, proteinPer100g, foodItemCategoryId, type } =
-        foodItemRequestBody;
+    
 
     const newFoodItem = await prisma.foodItem.create( {data: {
-        foodItemId: crypto.randomUUID(),
-        name,
-        caloriesPer100g,
-        proteinPer100g,
+       ...foodItemRequestBody,
         userId: "dev-user",
-        dateCreated: new Date(),
-        foodItemCategoryId,
-        type,
     }})
     
 

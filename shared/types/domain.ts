@@ -25,17 +25,17 @@ export type FoodItem = {
 };
 
 export type FoodLogEntry = {
+    foodLogEntryId: string;
+    foodItemId: string;
     name: string;
     weight: number;
-    protein: number;
     calories: number;
-    foodLogEntryId: string;
-    userId: string;
+    protein: number;
     date: string;
     createdAt: string;
-    foodItemId: string;
+    userId: string
 
-    mealId?: string;
+    mealId?: string | null
 };
 
 export type Meal = {

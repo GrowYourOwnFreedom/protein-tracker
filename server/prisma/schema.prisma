@@ -25,4 +25,23 @@ model FoodItem {
   type FoodItemType
   userId String
   dateCreated DateTime @default(now())
+
+  foodLogEntries FoodLogEntry[]
+}
+
+model FoodLogEntry  {
+  foodLogEntryId String @id @default(uuid())
+  foodItemId String
+  name String
+  weight Float
+  calories Float
+  protein Float
+  date String
+  createdAt DateTime @default(now())
+  userId String
+  mealId String?
+
+  foodItem  FoodItem @relation(fields:[foodItemId], references:[foodItemId])
+
+
 }

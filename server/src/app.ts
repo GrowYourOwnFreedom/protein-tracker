@@ -12,6 +12,7 @@ import type {
 import { CLIENT_ORIGIN } from "@/config/env.js";
 import { notFoundHandler } from "@/middleware/notFoundHandler.js";
 import foodItemRouter from "@/routes/foodItemRoutes.js";
+import foodLogEntryRouter from "@/routes/foodLogEntryRoutes.js";
 
  const app = express();
 
@@ -38,6 +39,7 @@ app.get("/health", (_request: Request, response: Response) => {
 app.use("/examples/items", itemRouter);
 app.use("/app-data", appDataRouter);
 app.use("/food-items", foodItemRouter)
+app.use("/food-log-entries",foodLogEntryRouter)
 app.use(notFoundHandler)
 app.use(errorHandler);
 export {app}

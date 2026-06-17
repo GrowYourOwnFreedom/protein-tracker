@@ -1,34 +1,15 @@
 import type {
-    CreateFoodItemRequestBody,
     UpdateFoodItemRequestBody,
 } from "@/types.js";
 import { beforeEach, describe, expect, it } from "vitest";
 import request from "supertest";
 import { app } from "@/app.js";
-import { mapFoodItemFromDb } from "@/storage/foodItemStorage.js";
 import { prisma } from "@/db/prisma.js";
+import { seedValidFoodItem, validFoodItemBody } from "@/test/test-utils.js";
 
-const validBody: CreateFoodItemRequestBody = {
-    name: "turnip",
-    foodItemCategoryId: "fresh-produce",
-    caloriesPer100g: 50,
-    proteinPer100g: 5,
-    type: "simple",
-};
 
-async function seedValidFoodItem() {
-    const foodItem = await prisma.foodItem.create({
-        data: {
-            name: "turnip",
-            foodItemCategoryId: "fresh-produce",
-            caloriesPer100g: 50,
-            proteinPer100g: 5,
-            type: "simple",
-            userId: "dev-user",
-        },
-    });
-    return mapFoodItemFromDb(foodItem);
-}
+
+
 describe("/food-items", () => {
     beforeEach(async () => {
         await prisma.foodItem.deleteMany();
@@ -38,7 +19,7 @@ describe("/food-items", () => {
         it("returns new food item when passed correct body", async () => {
             const response = await request(app)
                 .post("/food-items")
-                .send(validBody);
+                .send(validFoodItemBody);
 
             expect(response.status).toBe(201);
             expect(response.body.success).toBe(true);
@@ -49,7 +30,7 @@ describe("/food-items", () => {
             ).toBe(false);
 
             expect(response.body.data).toMatchObject({
-                ...validBody,
+                ...validFoodItemBody,
                 foodItemId: expect.any(String),
                 userId: expect.any(String),
                 dateCreated: expect.any(String),

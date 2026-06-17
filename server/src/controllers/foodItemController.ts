@@ -20,7 +20,7 @@ export  async function addOne(request: Request, response: Response) {
         throw new HttpError(400, "Invalid food item data");
     }
     const newFoodItem = await  createFoodItem(body);
-    const responseBody = createSuccessResponse(
+    const responseBody = createSuccessResponse<FoodItem>(
         newFoodItem,
         "Food item created",
     );
