@@ -27,7 +27,7 @@ describe("/food-items", () => {
             expect(response.body.data).toMatchObject({
                 ...validFoodItemBody,
                 foodItemId: expect.any(String),
-                userId: expect.any(String),
+                userId: "dev-user",
                 dateCreated: expect.any(String),
             });
         });

@@ -22,3 +22,9 @@ export async function createFoodLogEntry(
     })
     return mapFoodLogEntryFromDb(foodLogEntry)
 }
+
+export async function getFoodLogEntries():Promise<FoodLogEntry[]>{
+    const foodLogEntries = await prisma.foodLogEntry.findMany()
+    return foodLogEntries.map(mapFoodLogEntryFromDb)
+} 
+
