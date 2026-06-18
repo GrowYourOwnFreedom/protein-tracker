@@ -72,7 +72,7 @@ describe("/food-items", () => {
             );
         });
     });
-    describe("PATCH /food-items", () => {
+    describe("PATCH /food-items:/foodItemId", () => {
         it("returns correctly updated food item when passed correct body", async () => {
             const update: UpdateFoodItemRequestBody = {
                 name: "jack",

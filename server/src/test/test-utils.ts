@@ -37,10 +37,10 @@ export async function seedValidFoodItem(overrides:SeedFoodItemOverrides = {}):Pr
     return mapFoodItemFromDb(foodItem);
 }
 export const validFoodLogEntryBodyWithoutFoodItemId = {
-    name:"turnip",
+    name:validFoodItemBody.name,
     weight: 100,
-    calories:50,
-    protein:5,
+    calories:validFoodItemBody.caloriesPer100g,
+    protein:validFoodItemBody.proteinPer100g,
     date:"2026-06-17",
     mealId:"test-meal"
 }

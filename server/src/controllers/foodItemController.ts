@@ -65,6 +65,6 @@ export async function deleteOne(request: Request, response: Response) {
         throw new HttpError(400, "Missing food item ID");
     }
     const deletedFoodItem = await removeFoodItemById(foodItemId)
-    const responseBody = createSuccessResponse(deletedFoodItem)
+    const responseBody = createSuccessResponse(deletedFoodItem,"Food item successfully deleted")
     response.status(200).send(responseBody)
 }

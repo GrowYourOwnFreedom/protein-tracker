@@ -12,19 +12,40 @@ function mapFoodLogEntryFromDb(dbFoodLogEntry: DbFoodLogEntry): FoodLogEntry {
 export async function createFoodLogEntry(
     foodLogEntryRequestBody: CreateFoodLogEntryRequestBody,
 ): Promise<FoodLogEntry> {
-    
     const foodLogEntry = await prisma.foodLogEntry.create({
-        data:{
+        data: {
             ...foodLogEntryRequestBody,
-            userId:"dev-user"
-
-        }
-    })
-    return mapFoodLogEntryFromDb(foodLogEntry)
+            userId: "dev-user",
+        },
+    });
+    return mapFoodLogEntryFromDb(foodLogEntry);
 }
 
-export async function getFoodLogEntries():Promise<FoodLogEntry[]>{
-    const foodLogEntries = await prisma.foodLogEntry.findMany()
-    return foodLogEntries.map(mapFoodLogEntryFromDb)
-} 
+export async function getFoodLogEntries(): Promise<FoodLogEntry[]> {
+    const foodLogEntries = await prisma.foodLogEntry.findMany();
+    return foodLogEntries.map(mapFoodLogEntryFromDb);
+}
 
+export async function getFoodLogEntriesByDate(
+    date: string,
+): Promise<FoodLogEntry[]> {
+    const foodLogEntries = await prisma.foodLogEntry.findMany({
+        where: {
+            date,
+        },
+    });
+    return foodLogEntries.map(mapFoodLogEntryFromDb);
+}
+
+export async function deleteFoodLogEntryById(
+    foodLogEntryId: string,
+): Promise<FoodLogEntry> {
+    const foodLogEntry = await prisma.foodLogEntry.findUnique({
+        where:{foodLogEntryId}
+    })
+    if(!foodLogEntry){
+        throw new HttpError(404,"Food log entry not found")
+    }
+    const entry = await  prisma.foodLogEntry.delete({ where: { foodLogEntryId } });
+    return mapFoodLogEntryFromDb(entry)
+}
