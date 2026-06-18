@@ -29,6 +29,16 @@ model FoodItem {
   foodLogEntries FoodLogEntry[]
 }
 
+model Meal {
+  mealId String @id @default(uuid())
+  name String
+  date String
+  createdAt DateTime @default(now())
+  userId String
+
+  foodLogEntries FoodLogEntry[]
+}
+
 model FoodLogEntry  {
   foodLogEntryId String @id @default(uuid())
   foodItemId String
@@ -42,6 +52,6 @@ model FoodLogEntry  {
   mealId String?
 
   foodItem  FoodItem @relation(fields:[foodItemId], references:[foodItemId])
-
-
+  meal Meal? @relation(fields:[mealId], references:[mealId])
 }
+

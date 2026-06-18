@@ -10,7 +10,9 @@
         "check": "tsc --noEmit",
         "test": "vitest",
         "test:run": "vitest run",
-        "db:migrate":"prisma migrate dev && DATABASE_URL=\"postgresql://jackbelcher@localhost:5432/protein_tracker_test\" prisma migrate deploy && prisma generate"
+        "db:studio:test": "DATABASE_URL=\"postgresql://jackbelcher@localhost:5432/protein_tracker_test\" prisma studio",
+        "db:migrate":"prisma migrate dev",
+        "db:test:migrate":" DATABASE_URL=\"postgresql://jackbelcher@localhost:5432/protein_tracker_test\" prisma migrate deploy"
     },
     "author": "",
     "license": "ISC",

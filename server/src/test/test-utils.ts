@@ -42,7 +42,6 @@ export const validFoodLogEntryBodyWithoutFoodItemId = {
     calories:validFoodItemBody.caloriesPer100g,
     protein:validFoodItemBody.proteinPer100g,
     date:"2026-06-17",
-    mealId:"test-meal"
 }
 type SeedFoodLogEntryOverrides = Partial<CreateFoodLogEntryRequestBody> & {
     userId?:string
