@@ -30,6 +30,7 @@ describe("/food-log-entries", () => {
             expect(response.body.data).toMatchObject({
                 ...body,
                 foodLogEntryId: expect.any(String),
+                createdAt: expect.any(String),
             });
             expect(Number.isNaN(Date.parse(response.body.data.createdAt))).toBe(
                 false,
@@ -90,7 +91,7 @@ describe("/food-log-entries", () => {
             const foodItem = await seedValidFoodItem();
             const { foodItemId } = foodItem;
             const foodLogEntry = await seedValidFoodLogEntry({ foodItemId });
-            const requestDate = foodLogEntry.date
+            const requestDate = foodLogEntry.date;
             await seedValidFoodLogEntry({ foodItemId });
             await seedValidFoodLogEntry({ foodItemId, date: "2026-06-01" });
 
@@ -161,23 +162,26 @@ describe("/food-log-entries", () => {
             const foodLogEntry = await seedValidFoodLogEntry({
                 foodItemId: foodItem.foodItemId,
             });
-            const entryInDbResponse = await request(app).get("/food-log-entries")
-            expect(entryInDbResponse.body.data[0]).toMatchObject(foodLogEntry)
+            const entryInDbResponse =
+                await request(app).get("/food-log-entries");
+            expect(entryInDbResponse.body.data[0]).toMatchObject(foodLogEntry);
             await request(app).delete(
                 `/food-log-entries/${foodLogEntry.foodLogEntryId}`,
             );
-            const response = await request(app).get(`/food-log-entries`)
+            const response = await request(app).get(`/food-log-entries`);
 
-            expect(response.body.data).toEqual([])
+            expect(response.body.data).toEqual([]);
         });
-        it("returns 404 if no matching entry is found", async ()=>{
+        it("returns 404 if no matching entry is found", async () => {
             const response = await request(app).delete(
                 `/food-log-entries/unknown`,
             );
-            
-            expect(response.body.success).toBe(false)
-            expect(response.status).toBe(404)
-            expect(response.body.error.message).toBe("Food log entry not found")
-        })
+
+            expect(response.body.success).toBe(false);
+            expect(response.status).toBe(404);
+            expect(response.body.error.message).toBe(
+                "Food log entry not found",
+            );
+        });
     });
 });
