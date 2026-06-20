@@ -6,12 +6,9 @@ export function isCreateMealRequestBody(
     if (!isRecord(value)) {
         return false;
     }
-    console.log(hasOnlyAllowedKeys(value,["name","date"])&&
-        isNonEmptyString(value.name) &&
-        isDateString(value.data));
     
     return (hasOnlyAllowedKeys(value,["name","date"])&&
         isNonEmptyString(value.name) &&
-        isDateString(value.data)
+        isDateString(value.date)
     );
 }
