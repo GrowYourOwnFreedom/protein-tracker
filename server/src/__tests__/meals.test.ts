@@ -1,8 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import request from "supertest";
 import { app } from "@/app.js";
+import { resetTestDatabase } from "@/test/test-utils.js";
 
 describe("/meals", () => {
+    beforeEach(async()=>{
+        await resetTestDatabase()
+    })
     describe("POST /meals", () => {
         it("creates meal when passed correct data object", async () => {
             const validBody = {
@@ -44,6 +48,19 @@ describe("/meals", () => {
                 .post("/meals")
                 .send(invalidDateBody);
             expect(response.status).toBe(400);
+            expect(response.body.success).toBe(false)
+            expect(response.body.error.message).toBe("Invalid meal data")
         });
+        it("returns 400 error when passed empty name string", async ()=>{
+            const invalidNameBody = {
+                name:"",
+                date:"2026-06-17"
+            }
+            const response = await request(app).post("/meals").send(invalidNameBody)
+
+            expect(response.status).toBe(400)
+            expect(response.body.success).toBe(false)
+            expect(response.body.error.message).toBe("Invalid meal data")
+        })
     });
 });

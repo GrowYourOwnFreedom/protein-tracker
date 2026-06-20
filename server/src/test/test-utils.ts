@@ -60,5 +60,6 @@ type SeedFoodLogEntryOverrides = Partial<CreateFoodLogEntryRequestBody> & {
 
 export async function resetTestDatabase(){
     await prisma.foodLogEntry.deleteMany()
+    await prisma.meal.deleteMany()
     await prisma.foodItem.deleteMany()
 }
