@@ -5,6 +5,7 @@ import {
     resetTestDatabase,
     seedValidFoodItem,
     seedValidFoodLogEntry,
+    seedValidMeal,
     validFoodLogEntryBodyWithoutFoodItemId,
 } from "@/test/test-utils.js";
 import type { FoodLogEntry } from "@/types.js";
@@ -14,7 +15,7 @@ describe("/food-log-entries", () => {
         await resetTestDatabase();
     });
     describe("POST /food-log-entries", () => {
-        it("returns new food log entry when passed correct body", async () => {
+        it("returns new food log entry when passed valid body without mealId", async () => {
             const fooditem = await seedValidFoodItem();
             const body = {
                 ...validFoodLogEntryBodyWithoutFoodItemId,
@@ -29,12 +30,37 @@ describe("/food-log-entries", () => {
             expect(response.body.message).toBe("Food log entry created");
             expect(response.body.data).toMatchObject({
                 ...body,
+                mealId: null,
                 foodLogEntryId: expect.any(String),
                 createdAt: expect.any(String),
+                userId: "dev-user",
             });
             expect(Number.isNaN(Date.parse(response.body.data.createdAt))).toBe(
                 false,
             );
+        });
+
+        it("returns entry when valid body with mealId is passed", async () => {
+            const { foodItemId } = await seedValidFoodItem();
+            const { mealId } = await seedValidMeal();
+            const body = {
+                ...validFoodLogEntryBodyWithoutFoodItemId,
+                foodItemId,
+                mealId,
+            };
+
+            const response = await request(app)
+                .post("/food-log-entries")
+                .send(body);
+
+            expect(response.status).toBe(201);
+            expect(response.body.success).toBe(true);
+            expect(response.body.data).toMatchObject({
+                ...body,
+                foodLogEntryId: expect.any(String),
+                createdAt: expect.any(String),
+                userId: "dev-user",
+            });
         });
 
         it("returns 400 error when passed bad body", async () => {
@@ -50,11 +76,25 @@ describe("/food-log-entries", () => {
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
+            expect(response.body.error.statusCode).toBe(400);
             expect(response.body.error.message).toBe(
                 "Invalid food log entry data",
             );
+        });
+        it("returns 404 with unknown foodItemId", async () => {
+            const response = await request(app)
+                .post("/food-log-entries")
+                .send({
+                    ...validFoodLogEntryBodyWithoutFoodItemId,
+                    foodItemId: "unknown",
+                });
+
+            expect(response.status).toBe(404);
             expect(response.body.success).toBe(false);
-            expect(response.body.error.statusCode).toBe(400);
+            expect(response.body.error.statusCode).toBe(404);
+            expect(response.body.error.message).toBe(
+                "Unable to create food log entry: food item not found",
+            );
         });
     });
 
