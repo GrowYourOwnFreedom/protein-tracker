@@ -6,8 +6,8 @@ import {
     getFoodLogEntriesByDate,
 } from "@/storage/foodLogEntryStorage.js";
 import type { FoodLogEntry } from "@/types.js";
-import { createSuccessResponse } from "@shared/apiResponseHelpers.js";
-import { isCreateFoodLogEntryRequestBody } from "@shared/validation/foodLogRequestValidationHelpers.js";
+import { createSuccessResponse } from "@/helpers/apiResponseHelpers.js";
+import { isCreateFoodLogEntryRequestBody } from "@/helpers/foodLogEntryRequestValidationHelpers.js";
 import type { Request, Response } from "express";
 
 export async function addOne(request: Request, response: Response) {

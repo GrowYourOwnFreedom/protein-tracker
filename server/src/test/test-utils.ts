@@ -6,11 +6,13 @@ import type {
     FoodItem,
     FoodLogEntry,
     Meal,
+    Targets,
 } from "@/types.js";
 import type {
     FoodItem as DbFoodItem,
     FoodLogEntry as DbFoodLogEntry,
-    Meal as DbMeal
+    Meal as DbMeal,
+    Targets as DbTargets,
 } from "@/generated/prisma/client.js";
 
 function mapFoodItemFromDb(dbFoodItem: DbFoodItem): FoodItem {
@@ -26,12 +28,15 @@ function mapFoodLogEntryFromDb(dbFoodLogEntry: DbFoodLogEntry): FoodLogEntry {
     };
 }
 
-
 function mapMealFromDb(dbMeal: DbMeal): Meal {
     return {
         ...dbMeal,
         createdAt: dbMeal.createdAt.toISOString(),
     };
+}
+
+function mapTargetsFromDb(dbTargets: DbTargets): Targets {
+    return { ...dbTargets, updatedAt: dbTargets.updatedAt.toISOString() };
 }
 export const validFoodItemBody: CreateFoodItemRequestBody = {
     name: "turnip",
@@ -87,7 +92,9 @@ type SeedMealOverrides = Partial<CreateMealRequestBody> & {
     userId?: string;
 };
 
-export async function seedValidMeal(overrides: SeedMealOverrides = {}): Promise<Meal> {
+export async function seedValidMeal(
+    overrides: SeedMealOverrides = {},
+): Promise<Meal> {
     const meal = await prisma.meal.create({
         data: {
             ...validMealBody,
@@ -95,11 +102,27 @@ export async function seedValidMeal(overrides: SeedMealOverrides = {}): Promise<
             ...overrides,
         },
     });
-    return mapMealFromDb(meal)
+    return mapMealFromDb(meal);
+}
+export const validTargetsBody = {
+    proteinTarget: 200,
+    calorieLimit: 1950,
+};
+export async function seedValidTargets(): Promise<Targets> {
+    const targets = await prisma.targets.create({
+        data: {
+            proteinTarget: 160,
+            calorieLimit: 2000,
+            userId: "dev-user",
+        },
+    });
+
+    return mapTargetsFromDb(targets);
 }
 
 export async function resetTestDatabase() {
     await prisma.foodLogEntry.deleteMany();
     await prisma.meal.deleteMany();
     await prisma.foodItem.deleteMany();
+    await prisma.targets.deleteMany();
 }

@@ -35,3 +35,5 @@ export type UpdateTargetsRequestBody = {
     proteinTarget?: number;
     calorieLimit?: number;
 };
+
+

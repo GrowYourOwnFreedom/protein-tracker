@@ -1,5 +1,5 @@
 import { createMeal, getMealsByDate } from "@/storage/mealStorage.js";
-import { createSuccessResponse } from "@shared/apiResponseHelpers.js";
+import { createSuccessResponse } from "@/helpers/apiResponseHelpers.js";
 import type { Request, Response } from "express";
 import { isCreateMealRequestBody } from "../helpers/validationHelpers.js";
 import { HttpError } from "@/errors/HttpError.js";

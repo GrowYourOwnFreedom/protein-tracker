@@ -14,13 +14,14 @@ import { notFoundHandler } from "@/middleware/notFoundHandler.js";
 import foodItemRouter from "@/routes/foodItemRoutes.js";
 import foodLogEntryRouter from "@/routes/foodLogEntryRoutes.js";
 import mealRouter from "@/routes/mealRoutes.js";
+import targetsRouter from "@/routes/targetsRoutes.js";
+import { dummyAuth } from "@/middleware/dummyAuth.js";
 
  const app = express();
 
 app.use(cors({ origin: CLIENT_ORIGIN}));
 app.use(express.json({ limit: "1mb" }));
-
-
+app.use(dummyAuth)
 
 app.get("/", (_request: Request, response: Response) => {
     const responseBody: ApiSuccessResponse<RootResponse> = {
@@ -42,6 +43,7 @@ app.use("/app-data", appDataRouter);
 app.use("/food-items", foodItemRouter)
 app.use("/food-log-entries",foodLogEntryRouter)
 app.use("/meals", mealRouter)
+app.use("/targets", targetsRouter)
 app.use(notFoundHandler)
 app.use(errorHandler);
 export {app}

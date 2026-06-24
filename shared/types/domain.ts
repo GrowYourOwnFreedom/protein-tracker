@@ -2,7 +2,7 @@
 
 export type NutritionTypes = "protein" | "calories";
 
-export type FoodItemType = "simple" | "composite"
+export type FoodItemType = "simple" | "composite";
 
 export type User = {
     userId: string;
@@ -33,9 +33,9 @@ export type FoodLogEntry = {
     protein: number;
     date: string;
     createdAt: string;
-    userId: string
+    userId: string;
 
-    mealId?: string | null
+    mealId?: string | null;
 };
 
 export type Meal = {
@@ -47,7 +47,8 @@ export type Meal = {
 };
 
 export type Targets = {
-    proteinTarget:number;
-    calorieLimit:number
-
-}
+    proteinTarget: number;
+    calorieLimit: number;
+    userId: string;
+    updatedAt: string;
+};

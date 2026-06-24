@@ -1,0 +1,4 @@
+export const defaults = {
+    DEFAULT_PROTEIN_TARGET:130,
+    DEFAULT_CALORIE_LIMIT:2000
+}

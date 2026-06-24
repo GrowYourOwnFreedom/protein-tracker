@@ -55,3 +55,10 @@ model FoodLogEntry  {
   meal Meal? @relation(fields:[mealId], references:[mealId])
 }
 
+model Targets{
+  userId String @id
+  proteinTarget Float
+  calorieLimit Float
+  updatedAt DateTime @updatedAt
+}
+

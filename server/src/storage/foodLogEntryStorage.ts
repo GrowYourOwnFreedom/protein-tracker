@@ -15,7 +15,6 @@ export async function createFoodLogEntry(
     const foodItem = await  prisma.foodItem.findFirst({where:{
         foodItemId:foodLogEntryRequestBody.foodItemId
     }})
-    console.log(foodItem);
     
     if(!foodItem){
         throw new HttpError(404,"Unable to create food log entry: food item not found")

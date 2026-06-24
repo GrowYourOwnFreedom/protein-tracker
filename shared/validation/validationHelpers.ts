@@ -26,11 +26,22 @@ export function hasOnlyAllowedKeys(
     return Object.keys(value).every((key) => allowedKeys.includes(key));
 }
 
-export function isNonEmptyString(value:unknown):value is string{
-    return typeof value === "string" && value.trim().length > 0
+export function hasAtLeastOneValidKey(
+    value: Record<string, unknown>,
+    validKeys: string[],
+): boolean {
+    return Object.keys(value).some((key) => validKeys.includes(key));
 }
 
-export function isDateString(value:unknown):value is string{
-    const dateStringRegex = /^\d{4}-\d{2}-\d{2}$/
-    return typeof value === "string" && dateStringRegex.test(value)
+export function isNonEmptyString(value: unknown): value is string {
+    return typeof value === "string" && value.trim().length > 0;
+}
+
+export function isDateString(value: unknown): value is string {
+    const dateStringRegex = /^\d{4}-\d{2}-\d{2}$/;
+    return typeof value === "string" && dateStringRegex.test(value);
+}
+
+export function isEveryValueANumber(value: Record<string, unknown>): boolean {
+    return Object.values(value).every((val) => !isNaN(Number(val)));
 }
