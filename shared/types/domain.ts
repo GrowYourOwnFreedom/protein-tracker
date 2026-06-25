@@ -2,7 +2,7 @@
 
 export type NutritionTypes = "protein" | "calories";
 
-export type FoodItemType = "simple" | "composite"
+export type FoodItemType = "simple" | "composite";
 
 export type User = {
     userId: string;
@@ -18,24 +18,24 @@ export type FoodItem = {
     name: string;
     caloriesPer100g: number;
     proteinPer100g: number;
-    userId: string;
-    dateCreated: string;
     foodItemCategoryId: string;
     type: FoodItemType;
+    userId: string;
+    dateCreated: string;
 };
 
 export type FoodLogEntry = {
+    foodLogEntryId: string;
+    foodItemId: string;
     name: string;
     weight: number;
-    protein: number;
     calories: number;
-    foodLogEntryId: string;
-    userId: string;
+    protein: number;
     date: string;
     createdAt: string;
-    foodItemId: string;
+    userId: string;
 
-    mealId?: string;
+    mealId?: string | null;
 };
 
 export type Meal = {
@@ -47,7 +47,8 @@ export type Meal = {
 };
 
 export type Targets = {
-    proteinTarget:number;
-    calorieLimit:number
-
-}
+    proteinTarget: number;
+    calorieLimit: number;
+    userId: string;
+    updatedAt: string;
+};

@@ -14,13 +14,14 @@ import {
 import type { FoodItem } from "@/types.js";
 import { type Request, type Response } from "express";
 
-export function addOne(request: Request, response: Response) {
-    const body: unknown = request.body;
-    if (!isCreateFoodItemRequestBody(body)) {
+export async function addOne(request: Request, response: Response) {
+    const data: unknown = request.body;
+    const { userId } = response.locals;
+    if (!isCreateFoodItemRequestBody(data)) {
         throw new HttpError(400, "Invalid food item data");
     }
-    const newFoodItem = createFoodItem(body);
-    const responseBody = createSuccessResponse(
+    const newFoodItem = await createFoodItem({ userId, data });
+    const responseBody = createSuccessResponse<FoodItem>(
         newFoodItem,
         "Food item created",
     );
@@ -28,43 +29,54 @@ export function addOne(request: Request, response: Response) {
     response.status(201).json(responseBody);
 }
 
-export function getAll(_request: Request, response: Response) {
-    const foodItems: FoodItem[] = getStoredFoodItems();
+export async function getAll(_request: Request, response: Response) {
+    const { userId } = response.locals;
+    const foodItems: FoodItem[] = await getStoredFoodItems(userId);
     response.status(200).json(createSuccessResponse(foodItems));
 }
 
-export function updateOne(request: Request, response: Response) {
-    const body: unknown = request.body;
-    const foodItemId = request.params.foodItemId;
+export async function updateOne(request: Request, response: Response) {
+    const data: unknown = request.body;
+    const { foodItemId } = request.params;
+    const { userId } = response.locals;
     if (typeof foodItemId !== "string") {
         throw new HttpError(400, "Missing food item ID");
     }
-    if (!isUpdateFoodItemRequestBody(body)) {
+    if (!isUpdateFoodItemRequestBody(data)) {
         throw new HttpError(400, "Invalid food item update data");
     }
-    const updatedFoodItem = updateStoredFoodItem(foodItemId, body);
+    const updatedFoodItem = await updateStoredFoodItem({
+        userId,
+        foodItemId,
+        data,
+    });
     const responseBody = createSuccessResponse(
         updatedFoodItem,
         "Food item updated",
     );
     response.status(200).json(responseBody);
 }
-export function getOne(request: Request, response: Response) {
+export async function getOne(request: Request, response: Response) {
     const foodItemId = request.params.foodItemId;
+    const { userId } = response.locals;
     if (typeof foodItemId !== "string") {
         throw new HttpError(400, "Missing food item ID");
     }
-    const foodItem = getFoodItemByID(foodItemId);
+    const foodItem = await getFoodItemByID({ userId, foodItemId });
     const responseBody = createSuccessResponse(foodItem);
     response.status(200).send(responseBody);
 }
 
-export function deleteOne(request: Request, response: Response) {
-    const foodItemId = request.params.foodItemId;
+export async function deleteOne(request: Request, response: Response) {
+    const {foodItemId} = request.params;
+    const {userId} = response.locals
     if (typeof foodItemId !== "string") {
         throw new HttpError(400, "Missing food item ID");
     }
-    const deletedFoodItem = removeFoodItemById(foodItemId)
-    const responseBody = createSuccessResponse(deletedFoodItem)
-    response.status(200).send(responseBody)
+    const deletedFoodItem = await removeFoodItemById({userId,foodItemId});
+    const responseBody = createSuccessResponse(
+        deletedFoodItem,
+        "Food item successfully deleted",
+    );
+    response.status(200).send(responseBody);
 }

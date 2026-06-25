@@ -9,15 +9,20 @@
         "start": "tsx -r tsconfig-paths/register src/server.ts",
         "check": "tsc --noEmit",
         "test": "vitest",
-        "test:run": "vitest run"
+        "test:run": "vitest run",
+        "db:studio:test": "DATABASE_URL=\"postgresql://jackbelcher@localhost:5432/protein_tracker_test\" prisma studio",
+        "db:migrate":"prisma migrate dev",
+        "db:test:migrate":" DATABASE_URL=\"postgresql://jackbelcher@localhost:5432/protein_tracker_test\" prisma migrate deploy"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@prisma/adapter-pg": "^7.8.0",
         "@prisma/client": "^7.8.0",
         "cors": "^2.8.6",
         "dotenv": "^17.4.2",
-        "express": "^5.2.1"
+        "express": "^5.2.1",
+        "pg": "^8.21.0"
     },
     "devDependencies": {
         "@types/cors": "^2.8.19",
