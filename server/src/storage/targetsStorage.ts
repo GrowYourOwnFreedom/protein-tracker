@@ -4,6 +4,11 @@ import type { Targets as DbTargets } from "@/generated/prisma/client.js";
 import { defaults } from "@/config/defaults.js";
 const { DEFAULT_PROTEIN_TARGET, DEFAULT_CALORIE_LIMIT } = defaults;
 
+type UpdateOrCreateTargetsArgs = {
+    userId: string;
+    data: UpdateTargetsRequestBody;
+};
+
 function mapTargetsFromDb(targets: DbTargets): Targets {
     return {
         ...targets,
@@ -33,18 +38,18 @@ export async function getOrCreateTargets(userId: string): Promise<Targets> {
     }
 }
 
-export async function updateOrCreateTargets(
-    userId: string,
-    targets: UpdateTargetsRequestBody,
-): Promise<Targets> {
-    const { proteinTarget, calorieLimit } = targets
+export async function updateOrCreateTargets({
+    userId,
+    data,
+}: UpdateOrCreateTargetsArgs): Promise<Targets> {
+    const { proteinTarget, calorieLimit } = data;
     const savedTargets = await prisma.targets.upsert({
         create: {
             proteinTarget: proteinTarget || DEFAULT_PROTEIN_TARGET,
             calorieLimit: calorieLimit || DEFAULT_CALORIE_LIMIT,
             userId,
         },
-        update: { ...targets },
+        update: { ...data },
         where: {
             userId,
         },

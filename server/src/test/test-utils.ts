@@ -104,10 +104,13 @@ export async function seedValidMeal(
     });
     return mapMealFromDb(meal);
 }
+
+
 export const validTargetsBody = {
     proteinTarget: 200,
     calorieLimit: 1950,
 };
+
 export async function seedValidTargets(): Promise<Targets> {
     const targets = await prisma.targets.create({
         data: {

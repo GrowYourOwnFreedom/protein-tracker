@@ -11,11 +11,12 @@ import { isCreateFoodLogEntryRequestBody } from "@/helpers/foodLogEntryRequestVa
 import type { Request, Response } from "express";
 
 export async function addOne(request: Request, response: Response) {
-    const body: unknown = request.body;
-    if (!isCreateFoodLogEntryRequestBody(body)) {
+    const data: unknown = request.body;
+    if (!isCreateFoodLogEntryRequestBody(data)) {
         throw new HttpError(400, "Invalid food log entry data");
     }
-    const newFoodLogEntry = await createFoodLogEntry(body);
+    const {userId} = response.locals
+    const newFoodLogEntry = await createFoodLogEntry({userId,data});
     const responseBody = createSuccessResponse<FoodLogEntry>(
         newFoodLogEntry,
         "Food log entry created",
@@ -26,6 +27,7 @@ export async function addOne(request: Request, response: Response) {
 
 export async function getAll(request: Request, response: Response) {
     const { date } = request.query;
+    const {userId} = response.locals
     if (date !== undefined) {
         if (typeof date !== "string") {
             throw new HttpError(400, "Date must be a string");
@@ -33,14 +35,14 @@ export async function getAll(request: Request, response: Response) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
             throw new HttpError(400, "Date must be in the format YYYY-MM-DD");
         }
-        const entriesForDate = await getFoodLogEntriesByDate(date);
+        const entriesForDate = await getFoodLogEntriesByDate({userId,date});
         const responseBody = createSuccessResponse<FoodLogEntry[]>(
             entriesForDate,
             `${entriesForDate.length} food log entries found`,
         );
         response.status(200).json(responseBody);
     } else {
-        const foodLogEntries = await getFoodLogEntries();
+        const foodLogEntries = await getFoodLogEntries(userId);
         const responseBody =
             createSuccessResponse<FoodLogEntry[]>(foodLogEntries,`${foodLogEntries.length} food log entries found`);
         response.status(200).send(responseBody);
@@ -49,10 +51,11 @@ export async function getAll(request: Request, response: Response) {
 
 export async function deleteOne(req:Request,res:Response){
     const {foodLogEntryId} = req.params
+    const{userId} = res.locals
     if (typeof foodLogEntryId !== "string") {
         throw new HttpError(400, "Missing food log entry ID");
     }
-    const deletedFoodLogEntry = await deleteFoodLogEntryById(foodLogEntryId)
+    const deletedFoodLogEntry = await deleteFoodLogEntryById(userId,foodLogEntryId)
     const responseBody = createSuccessResponse(deletedFoodLogEntry,"Food log entry successfully deleted")
 
     res.status(200).json(responseBody)

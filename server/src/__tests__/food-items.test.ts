@@ -3,11 +3,15 @@ import { beforeEach, describe, expect, it } from "vitest";
 import request from "supertest";
 import { app } from "@/app.js";
 import { prisma } from "@/db/prisma.js";
-import { resetTestDatabase, seedValidFoodItem, validFoodItemBody } from "@/test/test-utils.js";
+import {
+    resetTestDatabase,
+    seedValidFoodItem,
+    validFoodItemBody,
+} from "@/test/test-utils.js";
 
 describe("/food-items", () => {
     beforeEach(async () => {
-       await resetTestDatabase()
+        await resetTestDatabase();
     });
 
     describe("POST /food-items", () => {
@@ -71,8 +75,16 @@ describe("/food-items", () => {
                 expect.arrayContaining([expect.objectContaining(foodItem)]),
             );
         });
+        it("only returns items for logged in user", async () => {
+            await seedValidFoodItem();
+            await seedValidFoodItem({ userId: "other-user" });
+
+            const response = await request(app).get("/food-items");
+            expect(response.body.data).toHaveLength(1);
+            expect(response.body.data[0].userId).toBe("dev-user");
+        });
     });
-    describe("PATCH /food-items:/foodItemId", () => {
+    describe("PATCH /food-items/:foodItemId", () => {
         it("returns correctly updated food item when passed correct body", async () => {
             const update: UpdateFoodItemRequestBody = {
                 name: "jack",
@@ -137,6 +149,31 @@ describe("/food-items", () => {
             expect(response.status).toBe(404);
             expect(response.body).toEqual(expected);
         });
+        it("returns 404 if userId isnt a match", async () => {
+            const update: UpdateFoodItemRequestBody = {
+                name: "jack's food",
+                proteinPer100g: 100,
+            };
+            const { foodItemId } = await seedValidFoodItem({
+                userId: "other-user",
+            });
+            const response = await request(app)
+                .patch(`/food-items/${foodItemId}`)
+                .send(update);
+            expect(response.status).toBe(404);
+            expect(response.body.error.message).toBe("Food item not found");
+
+            const foodItem = await prisma.foodItem.findUnique({
+                where: {
+                    foodItemId,
+                },
+            });
+
+            expect(foodItem).toMatchObject({
+                ...validFoodItemBody,
+                userId: "other-user",
+            });
+        });
     });
 
     describe("GET /food-items/:foodItemId", () => {
@@ -170,6 +207,15 @@ describe("/food-items", () => {
             expect(response.status).toBe(404);
             expect(response.body).toEqual(expected);
         });
+
+        it("returns 404 if userId is not a match", async ()=>{
+            const {foodItemId} = await seedValidFoodItem({userId:"other-user"})
+
+            const response = await request(app).get(`/food-items/${foodItemId}`)
+            expect(response.status).toBe(404)
+            expect(response.body.error.message).toBe("Food item not found")
+
+        })
     });
 
     describe("DELETE /food-items/:foodItemId", () => {
@@ -188,6 +234,23 @@ describe("/food-items", () => {
             ).toBe(false);
 
             expect(response.body.data).toMatchObject(foodItem);
+        });
+
+        it("returns 404 when userId is not a match", async () => {
+            const { foodItemId } = await seedValidFoodItem({
+                userId: "other-user",
+            });
+
+            const response = await request(app).delete(
+                `/food-items/${foodItemId}`,
+            );
+            expect(response.status).toBe(404);
+
+            const otherUserFoodItem = await prisma.foodItem.findUnique({
+                where: { foodItemId },
+            });
+            expect(otherUserFoodItem).not.toBe(null);
+            expect(otherUserFoodItem?.userId).toBe("other-user");
         });
 
         it("returns 404 if id is not found", async () => {

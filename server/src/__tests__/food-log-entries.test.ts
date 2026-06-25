@@ -9,6 +9,7 @@ import {
     validFoodLogEntryBodyWithoutFoodItemId,
 } from "@/test/test-utils.js";
 import type { FoodLogEntry } from "@/types.js";
+import { prisma } from "@/db/prisma.js";
 
 describe("/food-log-entries", () => {
     beforeEach(async () => {
@@ -125,6 +126,21 @@ describe("/food-log-entries", () => {
                 expect.arrayContaining([expect.objectContaining(foodLogEntry)]),
             );
         });
+        it("returns [] if userId isnt a match", async () => {
+            const { foodItemId } = await seedValidFoodItem({
+                userId: "other-user",
+            });
+            const entry = await seedValidFoodLogEntry({
+                foodItemId,
+                userId: "other-user",
+            });
+            const response = await request(app).get("/food-log-entries");
+
+            expect(response.body.data).toHaveLength(0);
+            response.body.data.forEach((entry: FoodLogEntry) => {
+                expect(entry.userId).toBe("dev-user");
+            });
+        });
     });
     describe("GET /food-log-entries?date=:YYYY-MM-DD", () => {
         it("returns entries for the specified date", async () => {
@@ -163,6 +179,23 @@ describe("/food-log-entries", () => {
             expect(response.body.data).toHaveLength(0);
             expect(response.body.data).toEqual([]);
             expect(response.body.message).toBe("0 food log entries found");
+        });
+        it("returns 404 if userId id not a match", async () => {
+            const { foodItemId } = await seedValidFoodItem({
+                userId: "other-user",
+            });
+            const { foodLogEntryId } = await seedValidFoodLogEntry({
+                foodItemId,
+                userId: "other-user",
+            });
+            const response = await request(app).get(
+                `/food-log-entries?date=2026-06-17`,
+            );
+            
+            expect(response.body.message).toBe(
+                "0 food log entries found",
+            );
+            expect(response.body.data).toEqual([])
         });
 
         it("returns 400 error when date is wrong format", async () => {
@@ -222,6 +255,30 @@ describe("/food-log-entries", () => {
             expect(response.body.error.message).toBe(
                 "Food log entry not found",
             );
+        });
+        it("returns 404 if userId does not match", async () => {
+            await seedValidFoodItem();
+            const { foodItemId } = await seedValidFoodItem({
+                userId: "other-user",
+            });
+            const { foodLogEntryId } = await seedValidFoodLogEntry({
+                foodItemId,
+                userId: "other-user",
+            });
+            const response = await request(app).delete(
+                `/food-log-entries/${foodLogEntryId}`,
+            );
+            expect(response.status).toBe(404);
+            expect(response.body.error.message).toBe(
+                "Food log entry not found",
+            );
+
+            const foodLogEntry = await prisma.foodLogEntry.findUnique({
+                where: { foodLogEntryId },
+            });
+
+            expect(foodLogEntry).not.toBe(null);
+            expect(foodLogEntry?.userId).toBe("other-user");
         });
     });
 });

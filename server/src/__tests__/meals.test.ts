@@ -79,15 +79,18 @@ describe("/meals", () => {
             expect(response.body.message).toBe("0 meals found");
         });
         it("returns all and only meals for the specified date", async () => {
-            const meal = await seedValidMeal({name:"breakfast", date:"2026-06-17"});
-            await seedValidMeal({name:"lunch", date:"2026-06-17"});
+            const meal = await seedValidMeal({
+                name: "breakfast",
+                date: "2026-06-17",
+            });
+            await seedValidMeal({ name: "lunch", date: "2026-06-17" });
             await seedValidMeal({ name: "breakfast", date: "2026-06-01" });
 
             const response = await request(app).get("/meals?date=2026-06-17");
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
-            expect(response.body.data).toHaveLength(2)
+            expect(response.body.data).toHaveLength(2);
             expect(response.body.message).toBe("2 meals found");
             expect(response.body.data).toEqual(
                 expect.arrayContaining([expect.objectContaining(meal)]),
@@ -95,6 +98,14 @@ describe("/meals", () => {
             response.body.data.forEach((meal: Meal) => {
                 expect(meal.date).toBe("2026-06-17");
             });
+        });
+        it("only returns meal for logged in user", async () => {
+            await seedValidMeal();
+            await seedValidMeal({userId:"other-user"})
+            const response = await request(app).get("/meals?date=2026-06-17");
+
+            expect(response.body.data).toHaveLength(1);
+            expect(response.body.data[0].userId).toBe("dev-user")
         });
         it("returns 400 error when date is in the wrong format", async () => {
             const response = await request(app).get("/meals?date=17-06-2026");

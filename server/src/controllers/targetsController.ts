@@ -13,11 +13,11 @@ export async function getTargets(req:Request, res:Response){
 }
 export async function updateTargets(req:Request,res:Response){
         const {userId} = res.locals
-        const body:unknown = req.body
-        if(!isUpdateTargetsRequestBody(body)){
+        const data:unknown = req.body
+        if(!isUpdateTargetsRequestBody(data)){
             throw new HttpError(400,"Invalid targets data")
         }
-        const targets = await updateOrCreateTargets(userId,body)
+        const targets = await updateOrCreateTargets({userId,data})
         const responseBody =createSuccessResponse(targets)
         res.status(200).json(responseBody)
 

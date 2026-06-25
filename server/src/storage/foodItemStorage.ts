@@ -8,75 +8,97 @@ import type {
 
 import type { FoodItem as DbFoodItem } from "@/generated/prisma/client.js";
 
-export function mapFoodItemFromDb(dbFoodItem:DbFoodItem):FoodItem{
-    return{
+type CreateFoodItemArgs = {
+    userId: string;
+    data: CreateFoodItemRequestBody;
+};
+type UpdateStoredFoodItemArgs = {
+    userId: string;
+    foodItemId: string;
+    data: UpdateFoodItemRequestBody;
+};
+type GetFoodItemByIDArgs = {
+    userId: string;
+    foodItemId: string;
+};
+type RemoveFoodItemByIdArgs = {
+    userId: string;
+    foodItemId: string;
+};
+
+export function mapFoodItemFromDb(dbFoodItem: DbFoodItem): FoodItem {
+    return {
         ...dbFoodItem,
-        dateCreated: dbFoodItem.dateCreated.toISOString()
-    }
+        dateCreated: dbFoodItem.dateCreated.toISOString(),
+    };
 }
 
 const foodItemsArray: FoodItem[] = [];
 
-export async function createFoodItem(
-    foodItemRequestBody: CreateFoodItemRequestBody,
-): Promise<FoodItem> {
-    
+export async function createFoodItem({
+    userId,
+    data,
+}: CreateFoodItemArgs): Promise<FoodItem> {
+    const newFoodItem = await prisma.foodItem.create({
+        data: {
+            ...data,
+            userId,
+        },
+    });
 
-    const newFoodItem = await prisma.foodItem.create( {data: {
-       ...foodItemRequestBody,
-        userId: "dev-user",
-    }})
-    
-
-    return mapFoodItemFromDb(newFoodItem)
-}
-export async function getStoredFoodItems(): Promise<FoodItem[]> {
-    const foodItems = await prisma.foodItem.findMany()
-    return foodItems.map(mapFoodItemFromDb)
-}
-export function resetStoredFoodItems(): void {
-    foodItemsArray.length = 0;
+    return mapFoodItemFromDb(newFoodItem);
 }
 
-export async function updateStoredFoodItem(
-    foodItemId: string,
-    updates: UpdateFoodItemRequestBody,
-): Promise<FoodItem> {
+export async function getStoredFoodItems(userId: string): Promise<FoodItem[]> {
+    const foodItems = await prisma.foodItem.findMany({ where: { userId } });
+    return foodItems.map(mapFoodItemFromDb);
+}
+
+export async function updateStoredFoodItem({
+    userId,
+    foodItemId,
+    data,
+}: UpdateStoredFoodItemArgs): Promise<FoodItem> {
     const existingFoodItem = await prisma.foodItem.findUnique({
-        where:{foodItemId}
-    })
-    if(!existingFoodItem){
-                throw new HttpError(404, "Food item not found");
-
+        where: { userId, foodItemId },
+    });
+    if (!existingFoodItem) {
+        throw new HttpError(404, "Food item not found");
     }
     const updatedFoodItem = await prisma.foodItem.update({
-        where:{foodItemId},
-        data:updates
-    })
-   
- 
-    return mapFoodItemFromDb(updatedFoodItem)
-}
- export async function getFoodItemByID(foodItemId:string):Promise<FoodItem>{
-    const foodItem = await prisma.foodItem.findUnique({
-        where:{foodItemId}
-    })
-    if(!foodItem){
-        throw new HttpError(404,"Food item not found")
-    }
-    return mapFoodItemFromDb(foodItem)
- }
+        where: { userId, foodItemId },
+        data,
+    });
 
- export async function removeFoodItemById(foodItemId:string):Promise<FoodItem>{
-   const foodItem = await prisma.foodItem.findUnique({
-        where:{foodItemId}
-    })
-    if(!foodItem){
-        throw new HttpError(404,"Food item not found")
+    return mapFoodItemFromDb(updatedFoodItem);
+}
+
+export async function getFoodItemByID({
+    userId,
+    foodItemId,
+}: GetFoodItemByIDArgs): Promise<FoodItem> {
+    const foodItem = await prisma.foodItem.findUnique({
+        where: { userId, foodItemId },
+    });
+    if (!foodItem) {
+        throw new HttpError(404, "Food item not found");
+    }
+    return mapFoodItemFromDb(foodItem);
+}
+
+export async function removeFoodItemById({
+    userId,
+    foodItemId,
+}: RemoveFoodItemByIdArgs): Promise<FoodItem> {
+    const foodItem = await prisma.foodItem.findUnique({
+        where: { userId, foodItemId },
+    });
+    if (!foodItem) {
+        throw new HttpError(404, "Food item not found");
     }
     const deletedItem = await prisma.foodItem.delete({
-        where:{foodItemId}
-    })
-    
-     return mapFoodItemFromDb(deletedItem)
- }
+        where: { userId, foodItemId },
+    });
+
+    return mapFoodItemFromDb(deletedItem);
+}

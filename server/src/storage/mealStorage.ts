@@ -9,19 +9,35 @@ function mapMealFromDb(dbMeal: DbMeal): Meal {
     };
 }
 
-export async function createMeal(data: CreateMealRequestBody): Promise<Meal> {
+type CreateMealArgs = {
+    userId: string;
+    data: CreateMealRequestBody;
+};
+type GetMealsByDateArgs = {
+    userId: string;
+    date: string;
+};
+
+export async function createMeal({
+    userId,
+    data,
+}: CreateMealArgs): Promise<Meal> {
     const meal = await prisma.meal.create({
         data: {
             ...data,
-            userId: "dev-user",
+            userId,
         },
     });
     return mapMealFromDb(meal);
 }
 
-export async function getMealsByDate(date: string): Promise<Meal[]> {
+
+export async function getMealsByDate({
+    userId,
+    date,
+}: GetMealsByDateArgs): Promise<Meal[]> {
     const meals = await prisma.meal.findMany({
-        where: { date },
+        where: { userId, date },
     });
     return meals.map(mapMealFromDb);
 }
