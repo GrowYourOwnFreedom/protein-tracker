@@ -17,6 +17,8 @@ type AddFoodLogEntryFormProps = {
     selectedDate: string;
     meals: Meal[];
     onFoodItemChange: (foodItem: FoodItem) => void;
+    selectedMealId:string
+    setSelectedMealId:(mealId :string)=> void
 };
 
 type ValidateFoodLogEntryFormDetailsValues = {
@@ -59,10 +61,11 @@ export default function AddFoodLogEntryForm({
     selectedDate,
     meals,
     onFoodItemChange,
+    selectedMealId,
+    setSelectedMealId
 }: AddFoodLogEntryFormProps) {
     const [amountText, setAmountText] = useState<string>("");
     const [amountError, setAmountError] = useState<string>("");
-    const [selectedMealId, setSelectedMealId] = useState<string>("");
     const inputRef = useRef<HTMLInputElement | null>(null);
     const shouldFocusInputRef = useRef(false);
     const [foodItemSelectError, setFoodItemSelectError] = useState<string>("");

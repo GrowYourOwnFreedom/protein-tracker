@@ -21,7 +21,7 @@ export default function MealSelectField({
     selectedMealId,
     onChange,
 }: MealSelectFieldProps) {
-    function handleMealChange(value) {
+    function handleMealChange(value:string) {
         if (value === "none") {
             onChange("");
             return;
@@ -35,7 +35,7 @@ export default function MealSelectField({
             <Select
                 name="select-meal-id"
                 value={selectedMealId}
-                onValueChange={onChange}
+                onValueChange={handleMealChange}
             >
                 <SelectTrigger
                     id="meal-select"
