@@ -11,6 +11,7 @@ import { isCreateFoodLogEntryRequestBody } from "@/helpers/foodLogEntryRequestVa
 import type { Request, Response } from "express";
 
 export async function addOne(request: Request, response: Response) {
+    // entries should eventually be checked to see if the mealId matches a mealId on the same date and for the same user
     const data: unknown = request.body;
     if (!isCreateFoodLogEntryRequestBody(data)) {
         throw new HttpError(400, "Invalid food log entry data");
