@@ -16,6 +16,8 @@ type AddFoodLogEntryPanelProps = {
     onCreateMeal: (newMeal: Meal) => void;
     meals: Meal[];
     onAddFoodItem: (foodItem: FoodItem) => void;
+    selectedMealId:string
+    setSelectedMealId:(mealId:string) => void
 
     className?: string;
 };
@@ -30,6 +32,8 @@ export default function AddFoodLogEntryPanel({
     onCreateMeal: createMeal,
     meals,
     onAddFoodItem,
+    selectedMealId,
+    setSelectedMealId
 }: AddFoodLogEntryPanelProps) {
     const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem | null>(
         null,
@@ -75,6 +79,8 @@ export default function AddFoodLogEntryPanel({
                 onAddFoodLogEntry={onAddFoodLogEntry}
                 onFoodItemChange={setSelectedFoodItem}
                 selectedDate={selectedDate}
+                selectedMealId={selectedMealId}
+                setSelectedMealId={setSelectedMealId}
             />
             <div className="grid  grid-cols-2 gap-4 ">
                 <Button

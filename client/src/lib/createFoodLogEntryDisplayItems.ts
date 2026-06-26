@@ -42,6 +42,7 @@ export default function createFoodLogEntryDisplayItems(
     foodLogEntries: FoodLogEntry[],
     meals: Meal[],
 ): DisplayItem[] {
+    const mealIdsForThisDate = new Set(meals.map((meal)=> meal.mealId))
     const mealDisplayItems: MealDisplayItem[] = meals
         .map((meal): MealDisplayItem => {
             const foodLogEntriesForMeal = foodLogEntries
@@ -75,7 +76,7 @@ export default function createFoodLogEntryDisplayItems(
     const looseFoodLogEntryDisplayItems: FoodLogEntryDisplayItem[] =
         foodLogEntries
             .filter((foodLogEntry) => {
-                return !foodLogEntry.mealId;
+                return !foodLogEntry.mealId || !mealIdsForThisDate.has(foodLogEntry.mealId)
             })
             .map((foodLogEntry): FoodLogEntryDisplayItem => {
                 return {

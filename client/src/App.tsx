@@ -38,6 +38,8 @@ function App() {
     const [foodLogEntries, setFoodLogEntries] = useState<FoodLogEntry[]>([]);
     const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>(() => getToday());
+    const [selectedMealId, setSelectedMealId] = useState<string>("");
+
     const [calorieLimit, setCalorieLimit] = useState<number>(() =>
         fetchStoredCalorieLimit(),
     );
@@ -162,6 +164,10 @@ function App() {
 
     function updateSelectedDate(date: string): void {
         setSelectedDate(date);
+        setSelectedMealId("");
+    }
+    function updateSelectedMealId(mealId: string): void {
+        setSelectedMealId(mealId);
     }
 
     function createMeal(newMeal: Meal): void {
@@ -206,9 +212,11 @@ function App() {
                         onCreateMeal={createMeal}
                         meals={meals}
                         onAddFoodItem={addFoodItem}
+                        selectedMealId={selectedMealId}
+                        setSelectedMealId={updateSelectedMealId}
                     />
-                    {DEV_ENVIRONMENT && <ExampleServerTest/>}
-                    
+                    {DEV_ENVIRONMENT && <ExampleServerTest />}
+
                     <ServerBackupTest />
                 </div>
                 <FoodLogPanel
