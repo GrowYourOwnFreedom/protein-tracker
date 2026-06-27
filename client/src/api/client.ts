@@ -2,9 +2,6 @@ import { API_BASE_URL, BACKUP_KEY } from "@/config/env";
 import {
     ApiErrorResponse,
     ApiSuccessResponse,
-    AppDataBackup,
-    ExampleItem,
-    HealthResponse,
 } from "@/types";
 
 type ApiRequestOptions = {
@@ -13,7 +10,7 @@ type ApiRequestOptions = {
     includeBackupKey?: boolean;
 };
 
-async function proteinTrackerApiRequest<TResponse>(
+export async function proteinTrackerApiRequest<TResponse>(
     path: string,
     options?: ApiRequestOptions,
 ): Promise<TResponse> {
@@ -44,46 +41,3 @@ async function proteinTrackerApiRequest<TResponse>(
     return successData.data;
 }
 
-export function getCollection(): Promise<ExampleItem[]> {
-    return proteinTrackerApiRequest<ExampleItem[]>("/examples/items");
-}
-
-export function createItem(name: string): Promise<ExampleItem> {
-    return proteinTrackerApiRequest("/examples/items", {
-        method: "POST",
-        body: {name}
-    });
-}
-
-export function deleteItem(id: string): Promise<ExampleItem> {
-    return proteinTrackerApiRequest(`/examples/items/${id}`, {
-        method: "DELETE",
-    });
-}
-
-export function updateItem(id: string, name: string): Promise<ExampleItem> {
-    return proteinTrackerApiRequest(`/examples/items/${id}`, {
-        method: "PATCH",
-        body: {name},
-    });
-}
-
-export function saveAppDataBackup(
-    appData: AppDataBackup,
-): Promise<{ message: string; data: AppDataBackup }> {
-    return proteinTrackerApiRequest("/app-data", {
-        method: "POST",
-        body: appData,
-        includeBackupKey: true
-    });
-}
-export function getAppDataBackup(): Promise<AppDataBackup> {
-    return proteinTrackerApiRequest("/app-data", {
-        includeBackupKey:true
-    });
-}
-
-export function getServerHealth(): Promise<HealthResponse> {
-    return proteinTrackerApiRequest<HealthResponse>("/health");
-    
-}

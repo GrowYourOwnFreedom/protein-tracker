@@ -1,9 +1,5 @@
-import {
-    createItem,
-    deleteItem,
-    getCollection,
-    updateItem,
-} from "@/api/client";
+
+import { createItem, deleteItem, getCollection, updateItem } from "@/api/dev";
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
 import {
