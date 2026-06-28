@@ -2,7 +2,11 @@ import { FieldGroup, FieldSeparator } from "@/components/ui/field";
 
 import { useRef, useState } from "react";
 import { defaultFoodItemCategories } from "@/data/defaultFoodItemCategories";
-import { FoodItem } from "@/types";
+import {
+    CreateFoodItemRequestBody,
+    FoodItem,
+    UpdateFoodItemRequestBody,
+} from "@/types";
 import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import FoodItemNameField from "@/components/food-items/FoodItemNameField";
@@ -12,7 +16,9 @@ import buildFoodItem from "@/lib/buildFoodItem";
 import hasErrors from "@/lib/hasErrors";
 
 type FoodItemDetailsFormProps = {
-    onSubmit: (newFoodItem: FoodItem) => void;
+    onSubmit: (
+        newFoodItem: CreateFoodItemRequestBody | UpdateFoodItemRequestBody,
+    ) => void;
     isEdit: boolean;
 
     existingFoodItem?: FoodItem;
@@ -136,18 +142,28 @@ export default function FoodItemDetailsForm({
             return;
         }
 
-        const user = await getCurrentUser();
-        const userId = user.userId;
-        const newFoodItem: FoodItem = buildFoodItem({
+        const newFoodItemBody:
+            | CreateFoodItemRequestBody
+            | UpdateFoodItemRequestBody = buildFoodItem({
             foodItem: existingFoodItem,
             name,
             calories,
             protein,
-            userId,
             categoryId,
         });
-        onSubmit(newFoodItem);
-        resetForm();
+        if (isEdit) {
+            onSubmit(newFoodItemBody);
+            resetForm();
+        } else {
+            const type = existingFoodItem?.type ?? "simple";
+
+            const createBody = (data): CreateFoodItemRequestBody => {
+                return { ...data, type };
+            };
+            const bodyWithType = createBody(newFoodItemBody);
+            onSubmit(bodyWithType);
+            resetForm();
+        }
     }
 
     const submitButtonText = isEdit ? "Save Food Item" : "Add Food Item";

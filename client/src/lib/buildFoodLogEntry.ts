@@ -1,10 +1,9 @@
 import createNewId from "@/lib/createNewId";
-import { FoodItem, FoodLogEntry } from "@/types";
+import { CreateFoodLogEntryRequestBody, FoodItem, FoodLogEntry } from "@/types";
 
 type buildFoodLogEntryArgs = {
     foodItem: FoodItem;
     date: string;
-    userId: string;
     mealId: string;
     weight: number;
 };
@@ -12,25 +11,21 @@ type buildFoodLogEntryArgs = {
 export default function buildFoodLogEntry({
     foodItem,
     date,
-    userId,
     mealId,
     weight,
-}: buildFoodLogEntryArgs): FoodLogEntry {
+}: buildFoodLogEntryArgs): CreateFoodLogEntryRequestBody {
     const protein = (weight / 100) * foodItem.proteinPer100g;
     const calories = (weight / 100) * foodItem.caloriesPer100g;
     const createdAt = new Date().toISOString();
     const foodLogEntryId = createNewId();
     const name = foodItem.name;
     const foodItemId = foodItem.foodItemId;
-    const newFoodLogEntryObject: FoodLogEntry = {
+    const newFoodLogEntryObject: CreateFoodLogEntryRequestBody = {
         name,
         weight,
         calories,
         protein,
         date,
-        createdAt,
-        foodLogEntryId,
-        userId,
         foodItemId,
     };
 

@@ -8,11 +8,11 @@ import {
     PopoverTitle,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { FoodItem } from "@/types";
+import { CreateFoodItemRequestBody, FoodItem } from "@/types";
 import { useState } from "react";
 
 type FoodItemFormPopoverProps = {
-    onSubmit: (updatedFoodItem: FoodItem) => void;
+    onSubmit: (updatedFoodItem: CreateFoodItemRequestBody) => void;
     isEdit: boolean;
 
     selectedFoodItem?: FoodItem;
@@ -31,8 +31,9 @@ export default function FoodItemFormPopover({
         ? "Update details for this food item."
         : "Add a missing food item.";
     const isDisabled = isEdit ? !selectedFoodItem : false;
-    function handleSubmitFoodItem(foodItem: FoodItem): void {
-        onSubmit(foodItem);
+
+    function handleSubmitFoodItem(data: CreateFoodItemRequestBody): void {
+        onSubmit(data);
         setPopoverOpen(false);
     }
 

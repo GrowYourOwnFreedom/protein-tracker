@@ -46,13 +46,13 @@ describe("/targets", () => {
             });
         });
     });
-    describe("PATCH /targets/:userId", () => {
+    describe("PATCH /targets", () => {
         it("updates correct  one target if userId exists", async () => {
             const targets = await seedValidTargets();
             const { userId } = targets;
             const newProteinTargetBody = { proteinTarget: 200 };
             const response = await request(app)
-                .patch(`/targets/${userId}`)
+                .patch(`/targets`)
                 .send(newProteinTargetBody);
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -71,7 +71,7 @@ describe("/targets", () => {
             const { userId } = targets;
 
             const response = await request(app)
-                .patch(`/targets/${userId}`)
+                .patch(`/targets`)
                 .send(validTargetsBody);
 
             expect(response.status).toBe(200);
@@ -89,7 +89,7 @@ describe("/targets", () => {
 
         it("returns 400 error if bad body is  passed", async () => {
             const response = await request(app)
-                .patch("/targets/unknownUser")
+                .patch("/targets")
                 .send({banana:"yellow"});
 
             expect(response.status).toBe(400);

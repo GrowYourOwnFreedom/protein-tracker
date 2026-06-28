@@ -1,40 +1,32 @@
 import createNewId from "@/lib/createNewId";
 import { getToday } from "@/lib/getToday";
-import { FoodItem } from "@/types";
+import { CreateFoodItemRequestBody, FoodItem, UpdateFoodItemRequestBody } from "@/types";
 
 type buildFoodItemArgs = {
     name: string;
     calories: string;
     protein: string;
-    userId: string;
     categoryId: string;
     
     foodItem?: FoodItem;
 };
 
-export default function buildFoodItem({
+export default function buildFoodItemRequestBody({
     foodItem,
     name,
     calories,
     protein,
-    userId,
     categoryId,
-}: buildFoodItemArgs): FoodItem {
-    const foodItemId = foodItem?.foodItemId ?? createNewId();
-    const dateCreated = foodItem?.dateCreated ?? getToday();
-    const type = foodItem?.type ?? "simple";
+    
+}: buildFoodItemArgs): CreateFoodItemRequestBody |UpdateFoodItemRequestBody {
     const caloriesPer100g = Number(calories);
     const proteinPer100g = Number(protein);
 
-    const foodItemObj: FoodItem = {
-        foodItemId,
+    const foodItemObj: CreateFoodItemRequestBody | UpdateFoodItemRequestBody = {
         name: name.trim(),
         caloriesPer100g,
         proteinPer100g,
-        userId,
-        dateCreated,
         foodItemCategoryId: categoryId,
-        type,
     };
 
     return foodItemObj;

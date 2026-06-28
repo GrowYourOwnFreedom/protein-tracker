@@ -1,7 +1,7 @@
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
 
-import { FoodItem, FoodLogEntry, Meal } from "@/types";
+import { CreateFoodLogEntryRequestBody, FoodItem, FoodLogEntry, Meal, UpdateFoodItemRequestBody } from "@/types";
 import CreateMealPopover from "@/components/food-log/CreateMealPopover";
 import AddFoodLogEntryForm from "@/components/food-log/AddFoodLogEntryForm";
 import { useEffect, useState } from "react";
@@ -9,10 +9,10 @@ import FoodItemFormPopover from "@/components/food-items/FoodItemFormPopover";
 
 type AddFoodLogEntryPanelProps = {
     foodItems: FoodItem[];
-    onAddFoodLogEntry: (newEntry: FoodLogEntry) => void;
+    onAddFoodLogEntry: (newEntry: CreateFoodLogEntryRequestBody) => void;
     onDeleteFoodItem: (foodItemId: string) => void;
     selectedDate: string;
-    onEditFoodItem: (updatedFoodItem: FoodItem) => void;
+    onEditFoodItem: (id:string, data: UpdateFoodItemRequestBody) => void;
     onCreateMeal: (newMeal: Meal) => void;
     meals: Meal[];
     onAddFoodItem: (foodItem: FoodItem) => void;
@@ -35,39 +35,35 @@ export default function AddFoodLogEntryPanel({
     selectedMealId,
     setSelectedMealId
 }: AddFoodLogEntryPanelProps) {
-    const [selectedFoodItem, setSelectedFoodItem] = useState<FoodItem | null>(
-        null,
-    );
+    const [selectedFoodItemId, setSelectedFoodItemId] = useState<string>("");
 
 
     function handleDeleteFoodItemClick() {
-        if (!selectedFoodItem) {
+        if (selectedFoodItemId === "") {
             return;
         }
         const deletedFoodItem = foodItems.find((foodItem) => {
-            return foodItem.foodItemId === selectedFoodItem.foodItemId;
+            return foodItem.foodItemId === selectedFoodItemId;
         });
         if (
             confirm(
                 `Are you sure you want to permanently delete the FoodItem ${deletedFoodItem.name} from your list?`,
             )
         ) {
-            onDeleteFoodItem(selectedFoodItem.foodItemId);
-            setSelectedFoodItem(null);
+            onDeleteFoodItem(selectedFoodItemId);
+            setSelectedFoodItemId("");
         }
     }
 
     const selectedFoodItemToEdit = foodItems.find((foodItem) => {
-        if (selectedFoodItem) {
-            return foodItem.foodItemId === selectedFoodItem.foodItemId;
+        if (selectedFoodItemId) {
+            return foodItem.foodItemId === selectedFoodItemId;
         }
         return;
     });
 
     function handleEditFoodItem(updatedFoodItem:FoodItem):void {
-        setSelectedFoodItem(updatedFoodItem)
-        onEditFoodItem(updatedFoodItem)
-
+        onEditFoodItem(selectedFoodItemId,updatedFoodItem)
     }
 
     return (
@@ -75,16 +71,16 @@ export default function AddFoodLogEntryPanel({
             <AddFoodLogEntryForm
                 foodItems={foodItems}
                 meals={meals}
-                selectedFoodItem={selectedFoodItem}
+                selectedFoodItemId={selectedFoodItemId}
                 onAddFoodLogEntry={onAddFoodLogEntry}
-                onFoodItemChange={setSelectedFoodItem}
+                onFoodItemChange={setSelectedFoodItemId}
                 selectedDate={selectedDate}
                 selectedMealId={selectedMealId}
                 setSelectedMealId={setSelectedMealId}
             />
             <div className="grid  grid-cols-2 gap-4 ">
                 <Button
-                    disabled={!selectedFoodItem}
+                    disabled={selectedFoodItemId === ""}
                     className="rounded-full"
                     type="button"
                     variant="destructive"

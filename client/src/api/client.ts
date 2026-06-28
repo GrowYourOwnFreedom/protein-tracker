@@ -6,7 +6,7 @@ import {
 
 type ApiRequestOptions = {
     method?: "GET" | "POST" | "PATCH" | "DELETE";
-    body?: unknown;
+    data?: unknown;
     includeBackupKey?: boolean;
 };
 
@@ -18,15 +18,15 @@ export async function proteinTrackerApiRequest<TResponse>(
     if (options?.includeBackupKey) {
         headers["X-Backup-Key"] = BACKUP_KEY;
     }
-    if (options?.body !== undefined) {
+    if (options?.data !== undefined) {
         headers["Content-Type"] = "application/json";
     }
     const fetchOptions: RequestInit = {
         method: options?.method,
         headers,
         body:
-            options?.body !== undefined
-                ? JSON.stringify(options.body)
+            options?.data !== undefined
+                ? JSON.stringify(options.data)
                 : undefined,
     };
     
@@ -34,6 +34,8 @@ export async function proteinTrackerApiRequest<TResponse>(
 
     const data = await response.json();
     if (!response.ok) {
+        console.log(data);
+        
         const errorData = data as Partial<ApiErrorResponse>;
         throw new Error(errorData.error?.message ?? "Request failed");
     }

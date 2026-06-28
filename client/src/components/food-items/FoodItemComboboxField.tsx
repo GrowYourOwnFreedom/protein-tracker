@@ -23,8 +23,8 @@ type FoodItemComboboxGroup = {
 
 type FoodItemComboboxProps = {
     foodItems: FoodItem[];
-    selectedFoodItem: FoodItem | null;
-    onChange: (value: FoodItem) => void;
+    selectedFoodItemId: string | null;
+    onChange: (id: string | null) => void;
     onOpenChange: (open: boolean) => void;
     selectError: string;
 
@@ -56,7 +56,7 @@ function getFoodItemSelectLabel(foodItem: FoodItem): string {
 
 export default function FoodItemComboboxField({
     foodItems,
-    selectedFoodItem,
+    selectedFoodItemId,
     onChange,
     onOpenChange,
     selectError,
@@ -67,6 +67,11 @@ export default function FoodItemComboboxField({
         defaultFoodItemCategories,
     );
 
+    const selectedFoodItem =
+        foodItems.find(
+            (foodItem) => foodItem.foodItemId === selectedFoodItemId,
+        ) ?? null;
+
     return (
         <Field className={className}>
             <Combobox
@@ -76,7 +81,9 @@ export default function FoodItemComboboxField({
                     return getFoodItemSelectLabel(foodItem);
                 }}
                 value={selectedFoodItem}
-                onValueChange={onChange}
+                onValueChange={(foodItem) => {
+                    onChange(foodItem ? foodItem.foodItemId : null);
+                }}
                 onOpenChange={onOpenChange}
             >
                 <ComboboxInput placeholder="Select a food item" showClear />

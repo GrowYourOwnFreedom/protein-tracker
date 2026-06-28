@@ -7,23 +7,23 @@ import buildFoodLogEntry from "@/lib/buildFoodLogEntry";
 import hasErrors from "@/lib/hasErrors";
 
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { FoodLogEntry, FoodItem, Meal } from "@/types";
+import { FoodLogEntry, FoodItem, Meal, CreateFoodLogEntryRequestBody } from "@/types";
 import React, { useRef, useState } from "react";
 
 type AddFoodLogEntryFormProps = {
     foodItems: FoodItem[];
-    selectedFoodItem: FoodItem | null;
-    onAddFoodLogEntry: (entry: FoodLogEntry) => void;
+    selectedFoodItemId: string
+    onAddFoodLogEntry: (entry: CreateFoodLogEntryRequestBody) => void;
     selectedDate: string;
     meals: Meal[];
-    onFoodItemChange: (foodItem: FoodItem) => void;
+    onFoodItemChange: (id: string) => void;
     selectedMealId:string
     setSelectedMealId:(mealId :string)=> void
 };
 
 type ValidateFoodLogEntryFormDetailsValues = {
     amount: string;
-    foodItem: FoodItem | null;
+    id: string
 };
 type ValidateFoodLogEntryFormDetailsErrors = {
     amount: string;
@@ -32,7 +32,7 @@ type ValidateFoodLogEntryFormDetailsErrors = {
 
 function validateFoodLogEntryFormDetails({
     amount,
-    foodItem,
+    id,
 }: ValidateFoodLogEntryFormDetailsValues): ValidateFoodLogEntryFormDetailsErrors {
     const formErrors = {
         amount: "",
@@ -48,7 +48,7 @@ function validateFoodLogEntryFormDetails({
         formErrors.amount = "Weight must be above 0g";
     }
 
-    if (!foodItem) {
+    if (id = "") {
         formErrors.foodItem = "Please select a food item";
     }
     return formErrors;
@@ -56,7 +56,7 @@ function validateFoodLogEntryFormDetails({
 
 export default function AddFoodLogEntryForm({
     foodItems,
-    selectedFoodItem,
+    selectedFoodItemId,
     onAddFoodLogEntry,
     selectedDate,
     meals,
@@ -84,7 +84,7 @@ export default function AddFoodLogEntryForm({
 
         const errors = validateFoodLogEntryFormDetails({
             amount: amountText,
-            foodItem: selectedFoodItem,
+            id: selectedFoodItemId,
         });
 
         setAmountError(errors.amount);
@@ -93,12 +93,11 @@ export default function AddFoodLogEntryForm({
             return;
         }
 
-        const userId = (await getCurrentUser()).userId;
+        const selectedFoodItem = foodItems.filter((f)=> f.foodItemId === selectedFoodItemId)
 
-        const newFoodLogEntry: FoodLogEntry = buildFoodLogEntry({
-            foodItem: selectedFoodItem,
+        const newFoodLogEntry: CreateFoodLogEntryRequestBody = buildFoodLogEntry({
+            foodItem: selectedFoodItem[0],
             date: selectedDate,
-            userId,
             mealId: selectedMealId,
             weight,
         });
@@ -107,9 +106,9 @@ export default function AddFoodLogEntryForm({
         resetForm();
     }
 
-    function handleFoodItemSelectValueChange(foodItem: FoodItem): void {
+    function handleFoodItemSelectValueChange(id: string): void {
         shouldFocusInputRef.current = true;
-        onFoodItemChange(foodItem);
+        onFoodItemChange(id);
         setFoodItemSelectError("");
     }
     function handleFoodItemSelectOpenChange(open: boolean): void {
@@ -130,7 +129,7 @@ export default function AddFoodLogEntryForm({
             <FieldGroup>
                 <FoodItemComboboxField
                     foodItems={foodItems}
-                    selectedFoodItem={selectedFoodItem}
+                    selectedFoodItemId={selectedFoodItemId}
                     onChange={handleFoodItemSelectValueChange}
                     onOpenChange={handleFoodItemSelectOpenChange}
                     selectError={foodItemSelectError}

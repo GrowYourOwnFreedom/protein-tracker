@@ -21,7 +21,15 @@ import {
     setDataVersion,
     runMigration,
 } from "@/lib/storageCrudHelpers";
-import { FoodItem, FoodLogEntry, Meal, User } from "@/types";
+import {
+    CreateFoodItemRequestBody,
+    FoodItem,
+    FoodLogEntry,
+    Meal,
+    Targets,
+    UpdateFoodItemRequestBody,
+    User,
+} from "@/types";
 import FoodLogPanel from "@/components/food-log/FoodLogPanel";
 import { getToday } from "@/lib/getToday";
 import CreateCompositeFoodItemPanel from "@/components/food-items/CreateCompositeFoodItemPanel";
@@ -29,6 +37,8 @@ import ExampleServerTest from "@/components/ExampleServerTest";
 import ServerBackupTest from "@/components/ServerBackupTest";
 import DevBackupRestore from "@/components/DevBackupRestore";
 import { DATA_VERSION, DEV_ENVIRONMENT } from "@/config/env";
+import { getTargets, updateTargets } from "@/api/targets";
+import { getFoodItems, patchFoodItem, postFoodItem } from "@/api/food-items";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -40,13 +50,12 @@ function App() {
     const [selectedDate, setSelectedDate] = useState<string>(() => getToday());
     const [selectedMealId, setSelectedMealId] = useState<string>("");
 
-    const [calorieLimit, setCalorieLimit] = useState<number>(() =>
-        fetchStoredCalorieLimit(),
-    );
     const [meals, setMeals] = useState<Meal[]>([]);
-    const [proteinTarget, setProteinTarget] = useState<number>(() =>
-        fetchStoredProteinTarget(),
-    );
+
+    const [targets, setTargets] = useState<Targets | null>(null);
+
+    const proteinTarget = targets?.proteinTarget ?? 0;
+    const calorieLimit = targets?.calorieLimit ?? 0;
 
     useEffect(() => {
         async function initialiseApp() {
@@ -57,10 +66,6 @@ function App() {
                 }
                 const storedDataVersion = getDataVersion();
                 if (storedDataVersion !== DATA_VERSION) {
-                    const savedFoodItems = fetchStoredFoodItems(
-                        currentUser.userId,
-                    );
-
                     const migration = runMigration(currentUser.userId);
                     if (migration) {
                         console.log("migration success");
@@ -70,10 +75,9 @@ function App() {
                         throw new Error("Migration failed");
                     }
                 }
-                const fetchedFoodItems = fetchStoredFoodItems(
-                    currentUser.userId,
-                );
-
+                const fetchedFoodItems = await getFoodItems();
+                const fetchedTargets = await getTargets();
+                setTargets(fetchedTargets);
                 setFoodItems(fetchedFoodItems);
                 setUser(currentUser);
                 setStartupStatus("ready");
@@ -115,22 +119,21 @@ function App() {
         updateStoredProteinTarget(proteinTarget);
     }, [proteinTarget, startupStatus]);
 
-    function addFoodItem(newFoodItem: FoodItem): void {
-        const newFoodItems = [...foodItems, newFoodItem];
-        setFoodItems(newFoodItems);
-        createStoredFoodItem(newFoodItem);
+    async function addFoodItem(data: CreateFoodItemRequestBody) {
+        const newFoodItem = await postFoodItem(data);
+
+        setFoodItems((currFoodItems) => [...currFoodItems, newFoodItem]);
     }
 
-    function updateFoodItem(updatedFoodItem: FoodItem) {
-        const updatedFoodItems = foodItems.map((foodItem) => {
-            if (foodItem.foodItemId === updatedFoodItem.foodItemId) {
-                return updatedFoodItem;
-            }
-            return foodItem;
-        });
-
-        setFoodItems(updatedFoodItems);
-        updateStoredFoodItem(updatedFoodItem);
+    async function updateFoodItem(id: string, data: UpdateFoodItemRequestBody) {
+        const updatedFoodItem = await patchFoodItem(id, data);
+        setFoodItems((currFoodItems) =>
+            currFoodItems.map((foodItem) =>
+                foodItem.foodItemId === updatedFoodItem.foodItemId
+                    ? updatedFoodItem
+                    : foodItem,
+            ),
+        );
     }
 
     function deleteFoodItem(foodItemId: string): void {
@@ -155,11 +158,13 @@ function App() {
         deleteStoredFoodLogEntry(foodLogEntryId);
     }
 
-    function updateCalorieLimit(newCalorieLimit: number): void {
-        setCalorieLimit(newCalorieLimit);
+    async function updateCalorieLimit(calorieLimit: number) {
+        const updatedTargets = await updateTargets({ calorieLimit });
+        setTargets(updatedTargets);
     }
-    function updateProteinTarget(newProteinTarget: number): void {
-        setProteinTarget(newProteinTarget);
+    async function updateProteinTarget(proteinTarget: number) {
+        const updatedTargets = await updateTargets({ proteinTarget });
+        setTargets(updatedTargets);
     }
 
     function updateSelectedDate(date: string): void {
@@ -199,6 +204,7 @@ function App() {
                     proteinTarget={proteinTarget}
                     onProteinTargetChange={updateProteinTarget}
                     selectedDate={selectedDate}
+                    targets={targets}
                 />
                 <div className="space-y-4">
                     <CreateCompositeFoodItemPanel />
@@ -216,6 +222,7 @@ function App() {
                         setSelectedMealId={updateSelectedMealId}
                     />
                     {DEV_ENVIRONMENT && <ExampleServerTest />}
+                    {DEV_ENVIRONMENT && <DevBackupRestore />}
 
                     <ServerBackupTest />
                 </div>
