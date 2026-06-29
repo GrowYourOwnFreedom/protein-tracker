@@ -1,5 +1,5 @@
 import createNewId from "@/lib/createNewId";
-import { CreateFoodLogEntryRequestBody, FoodItem, FoodLogEntry } from "@/types";
+import { CreateFoodLogEntryRequestBody, FoodItem } from "@/types";
 
 type buildFoodLogEntryArgs = {
     foodItem: FoodItem;

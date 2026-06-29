@@ -1,7 +1,7 @@
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
 
-import { CreateFoodLogEntryRequestBody, FoodItem, FoodLogEntry, Meal, UpdateFoodItemRequestBody } from "@/types";
+import { CreateFoodLogEntryRequestBody, CreateMealRequestBody, FoodItem, FoodLogEntry, Meal, UpdateFoodItemRequestBody } from "@/types";
 import CreateMealPopover from "@/components/food-log/CreateMealPopover";
 import AddFoodLogEntryForm from "@/components/food-log/AddFoodLogEntryForm";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ type AddFoodLogEntryPanelProps = {
     onDeleteFoodItem: (foodItemId: string) => void;
     selectedDate: string;
     onEditFoodItem: (id:string, data: UpdateFoodItemRequestBody) => void;
-    onCreateMeal: (newMeal: Meal) => void;
+    onCreateMeal: (data: CreateMealRequestBody) => void;
     meals: Meal[];
     onAddFoodItem: (foodItem: FoodItem) => void;
     selectedMealId:string

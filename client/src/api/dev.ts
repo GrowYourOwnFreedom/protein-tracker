@@ -8,7 +8,7 @@ export function getCollection(): Promise<ExampleItem[]> {
 export function createItem(name: string): Promise<ExampleItem> {
     return proteinTrackerApiRequest("/examples/items", {
         method: "POST",
-        body: {name}
+        data: { name },
     });
 }
 
@@ -21,7 +21,7 @@ export function deleteItem(id: string): Promise<ExampleItem> {
 export function updateItem(id: string, name: string): Promise<ExampleItem> {
     return proteinTrackerApiRequest(`/examples/items/${id}`, {
         method: "PATCH",
-        body: {name},
+        data: { name },
     });
 }
 
@@ -30,17 +30,16 @@ export function saveAppDataBackup(
 ): Promise<{ message: string; data: AppDataBackup }> {
     return proteinTrackerApiRequest("/app-data", {
         method: "POST",
-        body: appData,
-        includeBackupKey: true
+        data: appData,
+        includeBackupKey: true,
     });
 }
 export function getAppDataBackup(): Promise<AppDataBackup> {
     return proteinTrackerApiRequest("/app-data", {
-        includeBackupKey:true
+        includeBackupKey: true,
     });
 }
 
 export function getServerHealth(): Promise<HealthResponse> {
     return proteinTrackerApiRequest<HealthResponse>("/health");
-    
 }

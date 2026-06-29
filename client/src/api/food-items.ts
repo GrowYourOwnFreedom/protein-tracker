@@ -1,30 +1,35 @@
 import { proteinTrackerApiRequest } from "@/api/client";
-import { CreateFoodItemRequestBody, FoodItem, UpdateFoodItemRequestBody } from "@shared/types";
+import {
+    CreateFoodItemRequestBody,
+    FoodItem,
+    UpdateFoodItemRequestBody,
+} from "@shared/types";
 
 export async function getFoodItems(): Promise<FoodItem[]> {
     return proteinTrackerApiRequest<FoodItem[]>("/food-items");
 }
 
-export async function postFoodItem(data:CreateFoodItemRequestBody):Promise<FoodItem>{
-    const response = proteinTrackerApiRequest<FoodItem>("/food-Items", {
+export async function postFoodItem(
+    data: CreateFoodItemRequestBody,
+): Promise<FoodItem> {
+    return proteinTrackerApiRequest<FoodItem>("/food-Items", {
         method: "POST",
         data,
-      });
-      return response
+    });
 }
 
-export async function patchFoodItem(id:string,data:UpdateFoodItemRequestBody):Promise<FoodItem>{
-    
-    const response = proteinTrackerApiRequest<FoodItem>(`/food-Items/${id}`, {
+export async function patchFoodItem(
+    id: string,
+    data: UpdateFoodItemRequestBody,
+): Promise<FoodItem> {
+    return proteinTrackerApiRequest<FoodItem>(`/food-Items/${id}`, {
         method: "PATCH",
         data,
-      });
-      return response
+    });
 }
 
-export async function deleteFoodItem(id:string):Promise<FoodItem>{
-    const response = proteinTrackerApiRequest<FoodItem>(`/food-items/${id}`,{
-        method: "DELETE"
-    })
-    return response
+export async function deleteFoodItem(id: string): Promise<FoodItem> {
+    return proteinTrackerApiRequest<FoodItem>(`/food-items/${id}`, {
+        method: "DELETE",
+    });
 }

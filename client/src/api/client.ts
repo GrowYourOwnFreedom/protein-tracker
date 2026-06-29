@@ -1,8 +1,5 @@
 import { API_BASE_URL, BACKUP_KEY } from "@/config/env";
-import {
-    ApiErrorResponse,
-    ApiSuccessResponse,
-} from "@/types";
+import { ApiErrorResponse, ApiSuccessResponse } from "@/types";
 
 type ApiRequestOptions = {
     method?: "GET" | "POST" | "PATCH" | "DELETE";
@@ -29,17 +26,16 @@ export async function proteinTrackerApiRequest<TResponse>(
                 ? JSON.stringify(options.data)
                 : undefined,
     };
-    
+
     const response = await fetch(`${API_BASE_URL}${path}`, fetchOptions);
 
     const data = await response.json();
     if (!response.ok) {
         console.log(data);
-        
+
         const errorData = data as Partial<ApiErrorResponse>;
         throw new Error(errorData.error?.message ?? "Request failed");
     }
     const successData = data as ApiSuccessResponse<TResponse>;
     return successData.data;
 }
-

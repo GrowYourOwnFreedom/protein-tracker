@@ -38,7 +38,13 @@ import ServerBackupTest from "@/components/ServerBackupTest";
 import DevBackupRestore from "@/components/DevBackupRestore";
 import { DATA_VERSION, DEV_ENVIRONMENT } from "@/config/env";
 import { getTargets, updateTargets } from "@/api/targets";
-import { deleteFoodItem, getFoodItems, patchFoodItem, postFoodItem } from "@/api/food-items";
+import {
+    deleteFoodItem,
+    getFoodItems,
+    patchFoodItem,
+    postFoodItem,
+} from "@/api/food-items";
+import { getMeals, postMeal } from "@/api/meals";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -98,11 +104,14 @@ function App() {
     }, [selectedDate, startupStatus]);
 
     useEffect(() => {
-        if (startupStatus !== "ready") {
-            return;
-        }
-        const mealsToDisplay = fetchStoredMeals(selectedDate);
-        setMeals(mealsToDisplay);
+        const loadMeals = async () => {
+            if (startupStatus !== "ready") {
+                return;
+            }
+            const mealsToDisplay = await getMeals(selectedDate);
+            setMeals(mealsToDisplay);
+        };
+        loadMeals()
     }, [selectedDate, startupStatus]);
 
     useEffect(() => {
@@ -177,10 +186,9 @@ function App() {
         setSelectedMealId(mealId);
     }
 
-    function createMeal(newMeal: Meal): void {
-        const updatedMeals = [...meals, newMeal];
-        setMeals(updatedMeals);
-        createStoredMeal(newMeal);
+    async function createMeal(data: Meal) {
+        const newMeal = await postMeal(data)
+        setMeals((currMeals)=>[...currMeals,newMeal]);
     }
 
     if (startupStatus === "loading") {

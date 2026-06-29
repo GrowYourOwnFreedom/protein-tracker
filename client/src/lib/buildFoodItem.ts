@@ -1,5 +1,3 @@
-import createNewId from "@/lib/createNewId";
-import { getToday } from "@/lib/getToday";
 import { CreateFoodItemRequestBody, FoodItem, UpdateFoodItemRequestBody } from "@/types";
 
 type buildFoodItemArgs = {
@@ -7,12 +5,9 @@ type buildFoodItemArgs = {
     calories: string;
     protein: string;
     categoryId: string;
-    
-    foodItem?: FoodItem;
-};
+    };
 
 export default function buildFoodItemRequestBody({
-    foodItem,
     name,
     calories,
     protein,
