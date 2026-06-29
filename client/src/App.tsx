@@ -38,7 +38,7 @@ import ServerBackupTest from "@/components/ServerBackupTest";
 import DevBackupRestore from "@/components/DevBackupRestore";
 import { DATA_VERSION, DEV_ENVIRONMENT } from "@/config/env";
 import { getTargets, updateTargets } from "@/api/targets";
-import { getFoodItems, patchFoodItem, postFoodItem } from "@/api/food-items";
+import { deleteFoodItem, getFoodItems, patchFoodItem, postFoodItem } from "@/api/food-items";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -136,12 +136,14 @@ function App() {
         );
     }
 
-    function deleteFoodItem(foodItemId: string): void {
-        const updatedFoodItems = foodItems.filter((foodItem) => {
-            return foodItem.foodItemId !== foodItemId;
-        });
-        setFoodItems(updatedFoodItems);
-        deleteStoredFoodItem(foodItemId);
+    async function removeFoodItem(foodItemId: string): Promise<void> {
+        const deletedFoodItem = await deleteFoodItem(foodItemId);
+
+        if (deletedFoodItem) {
+            setFoodItems((currFoodItems) =>
+                currFoodItems.filter((item) => item.foodItemId !== foodItemId),
+            );
+        }
     }
 
     function addFoodLogEntry(newFoodLogEntry: FoodLogEntry): void {
@@ -212,7 +214,7 @@ function App() {
                         className="h-fit"
                         foodItems={foodItems}
                         onAddFoodLogEntry={addFoodLogEntry}
-                        onDeleteFoodItem={deleteFoodItem}
+                        onDeleteFoodItem={removeFoodItem}
                         selectedDate={selectedDate}
                         onEditFoodItem={updateFoodItem}
                         onCreateMeal={createMeal}

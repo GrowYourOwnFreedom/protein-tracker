@@ -21,3 +21,10 @@ export async function patchFoodItem(id:string,data:UpdateFoodItemRequestBody):Pr
       });
       return response
 }
+
+export async function deleteFoodItem(id:string):Promise<FoodItem>{
+    const response = proteinTrackerApiRequest<FoodItem>(`/food-items/${id}`,{
+        method: "DELETE"
+    })
+    return response
+}
