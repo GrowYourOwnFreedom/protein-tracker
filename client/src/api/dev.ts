@@ -1,29 +1,6 @@
 import { proteinTrackerApiRequest } from "@/api/client";
-import { AppDataBackup, ExampleItem, HealthResponse } from "@/types";
+import { AppDataBackup, HealthResponse } from "@/types";
 
-export function getCollection(): Promise<ExampleItem[]> {
-    return proteinTrackerApiRequest<ExampleItem[]>("/examples/items");
-}
-
-export function createItem(name: string): Promise<ExampleItem> {
-    return proteinTrackerApiRequest("/examples/items", {
-        method: "POST",
-        data: { name },
-    });
-}
-
-export function deleteItem(id: string): Promise<ExampleItem> {
-    return proteinTrackerApiRequest(`/examples/items/${id}`, {
-        method: "DELETE",
-    });
-}
-
-export function updateItem(id: string, name: string): Promise<ExampleItem> {
-    return proteinTrackerApiRequest(`/examples/items/${id}`, {
-        method: "PATCH",
-        data: { name },
-    });
-}
 
 export function saveAppDataBackup(
     appData: AppDataBackup,

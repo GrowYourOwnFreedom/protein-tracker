@@ -9,7 +9,7 @@ import FoodItemFormPopover from "@/components/food-items/FoodItemFormPopover";
 
 type AddFoodLogEntryPanelProps = {
     foodItems: FoodItem[];
-    onAddFoodLogEntry: (newEntry: CreateFoodLogEntryRequestBody) => void;
+    onAddFoodLogEntry: (data: CreateFoodLogEntryRequestBody) => void;
     onDeleteFoodItem: (foodItemId: string) => void;
     selectedDate: string;
     onEditFoodItem: (id:string, data: UpdateFoodItemRequestBody) => void;

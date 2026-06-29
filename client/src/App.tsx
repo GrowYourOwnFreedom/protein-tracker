@@ -23,6 +23,7 @@ import {
 } from "@/lib/storageCrudHelpers";
 import {
     CreateFoodItemRequestBody,
+    CreateFoodLogEntryRequestBody,
     FoodItem,
     FoodLogEntry,
     Meal,
@@ -33,7 +34,6 @@ import {
 import FoodLogPanel from "@/components/food-log/FoodLogPanel";
 import { getToday } from "@/lib/getToday";
 import CreateCompositeFoodItemPanel from "@/components/food-items/CreateCompositeFoodItemPanel";
-import ExampleServerTest from "@/components/ExampleServerTest";
 import ServerBackupTest from "@/components/ServerBackupTest";
 import DevBackupRestore from "@/components/DevBackupRestore";
 import { DATA_VERSION, DEV_ENVIRONMENT } from "@/config/env";
@@ -45,6 +45,11 @@ import {
     postFoodItem,
 } from "@/api/food-items";
 import { getMeals, postMeal } from "@/api/meals";
+import {
+    deleteFoodLogEntry,
+    getFoodLogEntries,
+    postFoodLogEntry,
+} from "@/api/food-log-entries";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -96,11 +101,15 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (startupStatus !== "ready") {
-            return;
-        }
-        const foodLogEntriesToDisplay = fetchStoredFoodLogEntries(selectedDate);
-        setFoodLogEntries(foodLogEntriesToDisplay);
+        const loadFoodLogEntries = async () => {
+            if (startupStatus !== "ready") {
+                return;
+            }
+            const foodLogEntriesToDisplay =
+                await getFoodLogEntries(selectedDate);
+            setFoodLogEntries(foodLogEntriesToDisplay);
+        };
+        loadFoodLogEntries();
     }, [selectedDate, startupStatus]);
 
     useEffect(() => {
@@ -111,7 +120,7 @@ function App() {
             const mealsToDisplay = await getMeals(selectedDate);
             setMeals(mealsToDisplay);
         };
-        loadMeals()
+        loadMeals();
     }, [selectedDate, startupStatus]);
 
     useEffect(() => {
@@ -155,18 +164,18 @@ function App() {
         }
     }
 
-    function addFoodLogEntry(newFoodLogEntry: FoodLogEntry): void {
-        const newEntries = [newFoodLogEntry, ...foodLogEntries];
-        setFoodLogEntries(newEntries);
-        createStoredFoodLogEntry(newFoodLogEntry);
+    async function addFoodLogEntry(data: CreateFoodLogEntryRequestBody) {
+        const newEntry = await postFoodLogEntry(data);
+        setFoodLogEntries((currEntries) => [newEntry, ...currEntries]);
     }
 
-    function deleteEntry(foodLogEntryId: string): void {
-        const filteredEntries = foodLogEntries.filter((entry) => {
-            return entry.foodLogEntryId !== foodLogEntryId;
-        });
-        setFoodLogEntries(filteredEntries);
-        deleteStoredFoodLogEntry(foodLogEntryId);
+    async function removeEntry(id: string) {
+        const deletedEntry = await deleteFoodLogEntry(id);
+        if (deletedEntry) {
+            setFoodLogEntries((currEntries) =>
+                currEntries.filter((entry) => entry.foodLogEntryId !== id),
+            );
+        }
     }
 
     async function updateCalorieLimit(calorieLimit: number) {
@@ -187,8 +196,8 @@ function App() {
     }
 
     async function createMeal(data: Meal) {
-        const newMeal = await postMeal(data)
-        setMeals((currMeals)=>[...currMeals,newMeal]);
+        const newMeal = await postMeal(data);
+        setMeals((currMeals) => [...currMeals, newMeal]);
     }
 
     if (startupStatus === "loading") {
@@ -231,7 +240,6 @@ function App() {
                         selectedMealId={selectedMealId}
                         setSelectedMealId={updateSelectedMealId}
                     />
-                    {DEV_ENVIRONMENT && <ExampleServerTest />}
                     {DEV_ENVIRONMENT && <DevBackupRestore />}
 
                     <ServerBackupTest />
@@ -239,7 +247,7 @@ function App() {
                 <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"
                     foodLogEntries={foodLogEntries}
-                    onDeleteFoodLogEntry={deleteEntry}
+                    onDeleteFoodLogEntry={removeEntry}
                     calorieLimit={calorieLimit}
                     proteinTarget={proteinTarget}
                     onSelectedDateChange={updateSelectedDate}
