@@ -23,6 +23,14 @@ export async function createFoodLogEntry({
     userId,
     data,
 }: CreateFoodLogEntryArgs): Promise<FoodLogEntry> {
+    console.log("server ISO time:", new Date().toISOString());
+
+    console.log(
+        "server UK time:",
+        new Date().toLocaleString("en-GB", {
+            timeZone: "Europe/London",
+        }),
+    );
     const foodItem = await prisma.foodItem.findFirst({
         where: { userId, foodItemId: data.foodItemId },
     });
