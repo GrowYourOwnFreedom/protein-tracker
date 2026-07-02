@@ -1,0 +1,11 @@
+-- AlterTable
+ALTER TABLE "FoodItem" ALTER COLUMN "dateCreated" SET DATA TYPE TIMESTAMPTZ(3);
+
+-- AlterTable
+ALTER TABLE "FoodLogEntry" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMPTZ(3);
+
+-- AlterTable
+ALTER TABLE "Meal" ALTER COLUMN "createdAt" SET DATA TYPE TIMESTAMPTZ(3);
+
+-- AlterTable
+ALTER TABLE "Targets" ALTER COLUMN "updatedAt" SET DATA TYPE TIMESTAMPTZ(3);

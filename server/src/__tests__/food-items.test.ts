@@ -25,14 +25,14 @@ describe("/food-items", () => {
             expect(response.body.message).toBe("Food item created");
 
             expect(
-                Number.isNaN(Date.parse(response.body.data.dateCreated)),
+                Number.isNaN(Date.parse(response.body.data.createdAt)),
             ).toBe(false);
 
             expect(response.body.data).toMatchObject({
                 ...validFoodItemBody,
                 foodItemId: expect.any(String),
                 userId: "dev-user",
-                dateCreated: expect.any(String),
+                createdAt: expect.any(String),
             });
         });
 
@@ -69,7 +69,7 @@ describe("/food-items", () => {
             expect(response.body.data).toHaveLength(3);
 
             expect(
-                Number.isNaN(Date.parse(response.body.data[0].dateCreated)),
+                Number.isNaN(Date.parse(response.body.data[0].createdAt)),
             ).toBe(false);
             expect(response.body.data).toEqual(
                 expect.arrayContaining([expect.objectContaining(foodItem)]),
@@ -187,7 +187,7 @@ describe("/food-items", () => {
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
             expect(
-                Number.isNaN(Date.parse(response.body.data.dateCreated)),
+                Number.isNaN(Date.parse(response.body.data.createdAt)),
             ).toBe(false);
 
             expect(response.body.data).toMatchObject(foodItem);
@@ -230,7 +230,7 @@ describe("/food-items", () => {
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
             expect(
-                Number.isNaN(Date.parse(response.body.data.dateCreated)),
+                Number.isNaN(Date.parse(response.body.data.createdAt)),
             ).toBe(false);
 
             expect(response.body.data).toMatchObject(foodItem);

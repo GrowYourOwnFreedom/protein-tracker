@@ -24,7 +24,7 @@ model FoodItem {
   foodItemCategoryId String
   type FoodItemType
   userId String
-  dateCreated DateTime @default(now())
+  createdAt DateTime @default(now())  @db.Timestamptz(3)
 
   foodLogEntries FoodLogEntry[]
 }
@@ -33,7 +33,7 @@ model Meal {
   mealId String @id @default(uuid())
   name String
   date String
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now())  @db.Timestamptz(3)
   userId String
 
   foodLogEntries FoodLogEntry[]
@@ -47,7 +47,7 @@ model FoodLogEntry  {
   calories Float
   protein Float
   date String
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
   userId String
   mealId String?
 
@@ -59,6 +59,6 @@ model Targets{
   userId String @id
   proteinTarget Float
   calorieLimit Float
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @updatedAt  @db.Timestamptz(3)
 }
 
