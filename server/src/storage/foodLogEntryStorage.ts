@@ -31,6 +31,8 @@ export async function createFoodLogEntry({
             timeZone: "Europe/London",
         }),
     );
+    console.log("food log body:",data);
+    
     const foodItem = await prisma.foodItem.findFirst({
         where: { userId, foodItemId: data.foodItemId },
     });
