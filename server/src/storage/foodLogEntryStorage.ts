@@ -36,7 +36,7 @@ export async function createFoodLogEntry({
     const foodItem = await prisma.foodItem.findFirst({
         where: { userId, foodItemId: data.foodItemId },
     });
-
+    
     if (!foodItem) {
         throw new HttpError(
             404,
@@ -49,6 +49,7 @@ export async function createFoodLogEntry({
             userId,
         },
     });
+    console.log("food entry:",foodLogEntry)
     return mapFoodLogEntryFromDb(foodLogEntry);
 }
 
