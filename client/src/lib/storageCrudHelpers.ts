@@ -71,7 +71,7 @@ function normaliseFoodItem(oldFoodItem: OldFoodItem, userId: string): FoodItem {
         caloriesPer100g: oldFoodItem.caloriesPer100g,
         proteinPer100g: oldFoodItem.proteinPer100g,
         userId: oldFoodItem.userId ?? userId,
-        dateCreated:
+        createdAt:
             (oldFoodItem.createdAt || oldFoodItem.dateCreated) ?? getToday(),
         foodItemCategoryId:
             oldFoodItem.foodItemCategoryId ||

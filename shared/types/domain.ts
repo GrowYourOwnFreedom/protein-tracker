@@ -21,7 +21,7 @@ export type FoodItem = {
     foodItemCategoryId: string;
     type: FoodItemType;
     userId: string;
-    dateCreated: string;
+    createdAt: string;
 };
 
 export type FoodLogEntry = {
