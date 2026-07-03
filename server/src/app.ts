@@ -19,6 +19,7 @@ import { devCacheControl, devLogger } from "@/middleware/dev.js";
 
 const app = express();
 if (isDevelopment) {
+    // prevent web page caching during development
     app.set("etag", false);
 }
 
