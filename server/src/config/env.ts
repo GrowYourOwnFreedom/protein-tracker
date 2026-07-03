@@ -8,6 +8,8 @@ function getRequiredEnv(name:string):string{
 
 export const BACKUP_KEY = getRequiredEnv("BACKUP_KEY")
 export const CLIENT_ORIGIN = getRequiredEnv("CLIENT_ORIGIN")
+console.log(`CLIENT_ORIGIN=${CLIENT_ORIGIN}`);
+
 export const PORT = process.env.PORT ?? 3000
 export const BACKUP_FILE_PATH = getRequiredEnv("BACKUP_FILE_PATH")
 export const NODE_ENV = process.env.NODE_ENV ?? "development"
