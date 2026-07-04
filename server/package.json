@@ -11,8 +11,8 @@
         "test": "NODE_ENV=test vitest",
         "test:run": "NODE_ENV=test vitest run",
         "db:studio:test": "DATABASE_URL=\"postgresql://jackbelcher@localhost:5432/protein_tracker_test\" prisma studio",
-        "db:migrate":"prisma migrate dev",
-        "db:test:migrate":" DATABASE_URL=\"postgresql://jackbelcher@localhost:5432/protein_tracker_test\" prisma migrate deploy"
+        "db:migrate": "prisma migrate dev",
+        "db:test:migrate": " DATABASE_URL=\"postgresql://jackbelcher@localhost:5432/protein_tracker_test\" prisma migrate deploy"
     },
     "author": "",
     "license": "ISC",
@@ -33,7 +33,7 @@
         "prisma": "^7.8.0",
         "supertest": "^7.2.2",
         "tsconfig-paths": "^4.2.0",
-        "tsx": "^4.22.3",
+        "tsx": "^4.23.0",
         "typescript": "^6.0.3",
         "vitest": "^4.1.8"
     }
