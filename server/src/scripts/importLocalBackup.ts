@@ -32,7 +32,6 @@ console.log("backup loaded");
 console.log("Is data backup?", isBackup);
 console.log("database:", databaseUrl);
 console.log("Food items", backup.ingredients.length);
-const foodItemIdsFromBackup =  backup.ingredients
 console.log("Food log entries", backup.entries.length);
 console.log("Meals", backup.meals.length);
 console.log("Calorie limit", backup.calorieLimit);
@@ -60,7 +59,7 @@ const mappedFoodItems = backup.ingredients.map((ingredient: FoodItem) => {
         caloriesPer100g,
         proteinPer100g,
         type,
-        dateCreated,
+        createdAt,
         name,
     } = ingredient;
     return {
@@ -71,7 +70,7 @@ const mappedFoodItems = backup.ingredients.map((ingredient: FoodItem) => {
         foodItemCategoryId,
         type,
         userId: DEV_USER_ID,
-        dateCreated: new Date(dateCreated),
+        createdAt: new Date(createdAt),
     };
 });
 
@@ -151,4 +150,4 @@ const dbEntries = await prisma.foodLogEntry.createMany({
 });
 
 
-console.log(`migrated ${dbEntries.count}`);
+console.log(`migrated ${dbEntries.count} food log entries`);

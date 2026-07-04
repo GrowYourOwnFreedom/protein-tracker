@@ -2,7 +2,7 @@ import {
     getAppDataBackup,
     getServerHealth,
     saveAppDataBackup,
-} from "@/api/client";
+} from "@/api/dev";
 import Panel from "@/components/app/Panel";
 import { Button } from "@/components/ui/button";
 import downloadJsonBackup from "@/lib/downloadJsonBackup";

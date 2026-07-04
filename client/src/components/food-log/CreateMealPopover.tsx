@@ -12,11 +12,11 @@ import {
 import buildMealObject from "@/lib/buildMealObject";
 import createNewId from "@/lib/createNewId";
 import { getCurrentUser } from "@/lib/storageCrudHelpers";
-import { Meal } from "@/types";
+import { CreateMealRequestBody, Meal } from "@/types";
 import { useState } from "react";
 
 type CreateMealPopoverProps = {
-    onCreateMeal: (newMeal: Meal) => void;
+    onCreateMeal: (data: CreateMealRequestBody) => void;
     selectedDate: string;
 
     className?: string;
@@ -40,9 +40,7 @@ export default function CreateMealPopover({
         }
         setInputError("");
 
-        const userId = (await getCurrentUser()).userId;
-
-        const newMeal = buildMealObject(selectedDate, userId, mealName);
+        const newMeal = buildMealObject({ date: selectedDate, name: mealName });
 
         createMeal(newMeal);
         setMealName("");

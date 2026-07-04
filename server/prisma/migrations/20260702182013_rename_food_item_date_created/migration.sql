@@ -1,0 +1,1 @@
+ALTER TABLE "FoodItem" RENAME COLUMN "dateCreated" TO "createdAt";

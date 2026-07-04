@@ -8,8 +8,8 @@ import {
     FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { FoodLogEntry } from "@/types";
-import React, { useState } from "react";
+import { FoodLogEntry, Targets } from "@/types";
+import React, { useEffect, useState } from "react";
 
 export type NutritionSummaryPanelProps = {
     foodLogEntries: FoodLogEntry[];
@@ -18,6 +18,7 @@ export type NutritionSummaryPanelProps = {
     proteinTarget: number;
     onProteinTargetChange: (newProteinTarget: number) => void;
     selectedDate: string;
+    targets: Targets;
 
     className?: string;
 };
@@ -30,9 +31,19 @@ export default function NutritionSummaryPanel({
     onProteinTargetChange,
     selectedDate,
     className,
+    targets,
 }: NutritionSummaryPanelProps) {
     const [proteinError, setProteinError] = useState<string>("");
     const [calorieError, setCalorieError] = useState<string>("");
+    const [draftCalorieLimit, setDraftCalorieLimit] = useState<string>("");
+    const [draftProteinTarget, setDraftProteinTarget] = useState<string>("");
+
+    useEffect(() => {
+        if (!targets) return;
+
+        setDraftCalorieLimit(String(targets.calorieLimit));
+        setDraftProteinTarget(String(targets.proteinTarget));
+    },[]);
 
     type NutritionTotals = {
         weight: number;
@@ -68,10 +79,11 @@ export default function NutritionSummaryPanel({
             setProteinError("please enter a valid number");
             return;
         } else {
-            onProteinTargetChange(proteinNumber);
+            setDraftProteinTarget(event.target.value);
             setProteinError("");
         }
     }
+
     function handleUdateCalorieLimit(
         event: React.ChangeEvent<HTMLInputElement>,
     ) {
@@ -80,9 +92,15 @@ export default function NutritionSummaryPanel({
             setCalorieError("please enter a valid number");
             return;
         } else {
-            onCalorieLimitChange(calorieNumber);
+            setDraftCalorieLimit(event.target.value);
             setCalorieError("");
         }
+    }
+    function saveProteinTarget() {
+        onProteinTargetChange(Number(draftProteinTarget));
+    }
+    function saveCalorieLimit() {
+        onCalorieLimitChange(Number(draftCalorieLimit));
     }
 
     return (
@@ -96,8 +114,9 @@ export default function NutritionSummaryPanel({
                         </FieldLabel>
                         <Input
                             id="calorie-limit"
-                            value={calorieLimit}
+                            value={draftCalorieLimit}
                             onChange={handleUdateCalorieLimit}
+                            onBlur={saveCalorieLimit}
                         />
                         {calorieError && (
                             <FieldError>{calorieError}</FieldError>
@@ -109,8 +128,9 @@ export default function NutritionSummaryPanel({
                         </FieldLabel>
                         <Input
                             id="protein-target"
-                            value={proteinTarget}
+                            value={draftProteinTarget}
                             onChange={handleUdateProteinTarget}
+                            onBlur={saveProteinTarget}
                         />
                         {proteinError && (
                             <FieldError>{proteinError}</FieldError>

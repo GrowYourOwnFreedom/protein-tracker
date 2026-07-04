@@ -1,6 +1,5 @@
 export * from "@shared/types/api.js"
 export * from "@shared/types/backup.js"
 export * from "@shared/types/domain.js"
-export * from "@shared/types/examples.js"
 export * from "@shared/types/legacy.js"
 export * from "@shared/types/requests.js"

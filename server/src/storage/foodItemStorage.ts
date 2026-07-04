@@ -29,7 +29,7 @@ type RemoveFoodItemByIdArgs = {
 export function mapFoodItemFromDb(dbFoodItem: DbFoodItem): FoodItem {
     return {
         ...dbFoodItem,
-        dateCreated: dbFoodItem.dateCreated.toISOString(),
+        createdAt: dbFoodItem.createdAt.toISOString(),
     };
 }
 

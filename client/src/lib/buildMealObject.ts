@@ -1,18 +1,17 @@
-import createNewId from "@/lib/createNewId";
-import { Meal } from "@/types";
+import { CreateMealRequestBody } from "@/types";
 
-export default function buildMealObject(
-    date: string,
-    userId: string,
-    name: string,
-): Meal {
-    const mealId = createNewId();
-    const newMeal: Meal = {
+type BuildMealObjectArgs = {
+    date: string;
+    name: string;
+};
+
+export default function buildMealObject({
+    date,
+    name,
+}: BuildMealObjectArgs): CreateMealRequestBody {
+    const newMeal: CreateMealRequestBody = {
         name: name.trim(),
-        mealId,
         date,
-        createdAt: new Date().toISOString(),
-        userId,
     };
     return newMeal;
 }

@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { HttpError } from "@/errors/HttpError.js";
 import type { ApiErrorResponse } from "@/types.js";
+import { isDevelopment } from "@/config/env.js";
 
 export function errorHandler(
     error: unknown,
@@ -14,6 +15,9 @@ export function errorHandler(
             error: { message: error.message, statusCode: error.statusCode },
         };
         response.status(error.statusCode).json(expectedErrorResponse);
+        if (isDevelopment) {
+            console.error(error);
+        }
         return;
     }
 
@@ -23,5 +27,8 @@ export function errorHandler(
         error: { message: "Internal server error", statusCode: 500 },
     };
     response.status(500).json(internalrrorResponse);
+    if (isDevelopment) {
+        console.error(error);
+    }
     return;
 }

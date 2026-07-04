@@ -4,6 +4,6 @@ import express from "express"
 const targetsRouter = express.Router()
 
 targetsRouter.get("/",getTargets)
-targetsRouter.patch("/:userId",updateTargets)
+targetsRouter.patch("/",updateTargets)
 
 export default targetsRouter

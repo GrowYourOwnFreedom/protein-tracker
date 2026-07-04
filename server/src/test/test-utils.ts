@@ -18,7 +18,7 @@ import type {
 function mapFoodItemFromDb(dbFoodItem: DbFoodItem): FoodItem {
     return {
         ...dbFoodItem,
-        dateCreated: dbFoodItem.dateCreated.toISOString(),
+        createdAt: dbFoodItem.createdAt.toISOString(),
     };
 }
 function mapFoodLogEntryFromDb(dbFoodLogEntry: DbFoodLogEntry): FoodLogEntry {

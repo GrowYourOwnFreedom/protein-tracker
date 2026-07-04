@@ -21,14 +21,35 @@ import {
     setDataVersion,
     runMigration,
 } from "@/lib/storageCrudHelpers";
-import { FoodItem, FoodLogEntry, Meal, User } from "@/types";
+import {
+    CreateFoodItemRequestBody,
+    CreateFoodLogEntryRequestBody,
+    FoodItem,
+    FoodLogEntry,
+    Meal,
+    Targets,
+    UpdateFoodItemRequestBody,
+    User,
+} from "@/types";
 import FoodLogPanel from "@/components/food-log/FoodLogPanel";
 import { getToday } from "@/lib/getToday";
 import CreateCompositeFoodItemPanel from "@/components/food-items/CreateCompositeFoodItemPanel";
-import ExampleServerTest from "@/components/ExampleServerTest";
 import ServerBackupTest from "@/components/ServerBackupTest";
 import DevBackupRestore from "@/components/DevBackupRestore";
 import { DATA_VERSION, DEV_ENVIRONMENT } from "@/config/env";
+import { getTargets, updateTargets } from "@/api/targets";
+import {
+    deleteFoodItem,
+    getFoodItems,
+    patchFoodItem,
+    postFoodItem,
+} from "@/api/food-items";
+import { getMeals, postMeal } from "@/api/meals";
+import {
+    deleteFoodLogEntry,
+    getFoodLogEntries,
+    postFoodLogEntry,
+} from "@/api/food-log-entries";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -40,13 +61,12 @@ function App() {
     const [selectedDate, setSelectedDate] = useState<string>(() => getToday());
     const [selectedMealId, setSelectedMealId] = useState<string>("");
 
-    const [calorieLimit, setCalorieLimit] = useState<number>(() =>
-        fetchStoredCalorieLimit(),
-    );
     const [meals, setMeals] = useState<Meal[]>([]);
-    const [proteinTarget, setProteinTarget] = useState<number>(() =>
-        fetchStoredProteinTarget(),
-    );
+
+    const [targets, setTargets] = useState<Targets | null>(null);
+
+    const proteinTarget = targets?.proteinTarget ?? 0;
+    const calorieLimit = targets?.calorieLimit ?? 0;
 
     useEffect(() => {
         async function initialiseApp() {
@@ -57,10 +77,6 @@ function App() {
                 }
                 const storedDataVersion = getDataVersion();
                 if (storedDataVersion !== DATA_VERSION) {
-                    const savedFoodItems = fetchStoredFoodItems(
-                        currentUser.userId,
-                    );
-
                     const migration = runMigration(currentUser.userId);
                     if (migration) {
                         console.log("migration success");
@@ -70,10 +86,9 @@ function App() {
                         throw new Error("Migration failed");
                     }
                 }
-                const fetchedFoodItems = fetchStoredFoodItems(
-                    currentUser.userId,
-                );
-
+                const fetchedFoodItems = await getFoodItems();
+                const fetchedTargets = await getTargets();
+                setTargets(fetchedTargets);
                 setFoodItems(fetchedFoodItems);
                 setUser(currentUser);
                 setStartupStatus("ready");
@@ -86,19 +101,26 @@ function App() {
     }, []);
 
     useEffect(() => {
-        if (startupStatus !== "ready") {
-            return;
-        }
-        const foodLogEntriesToDisplay = fetchStoredFoodLogEntries(selectedDate);
-        setFoodLogEntries(foodLogEntriesToDisplay);
+        const loadFoodLogEntries = async () => {
+            if (startupStatus !== "ready") {
+                return;
+            }
+            const foodLogEntriesToDisplay =
+                await getFoodLogEntries(selectedDate);
+            setFoodLogEntries(foodLogEntriesToDisplay);
+        };
+        loadFoodLogEntries();
     }, [selectedDate, startupStatus]);
 
     useEffect(() => {
-        if (startupStatus !== "ready") {
-            return;
-        }
-        const mealsToDisplay = fetchStoredMeals(selectedDate);
-        setMeals(mealsToDisplay);
+        const loadMeals = async () => {
+            if (startupStatus !== "ready") {
+                return;
+            }
+            const mealsToDisplay = await getMeals(selectedDate);
+            setMeals(mealsToDisplay);
+        };
+        loadMeals();
     }, [selectedDate, startupStatus]);
 
     useEffect(() => {
@@ -115,51 +137,54 @@ function App() {
         updateStoredProteinTarget(proteinTarget);
     }, [proteinTarget, startupStatus]);
 
-    function addFoodItem(newFoodItem: FoodItem): void {
-        const newFoodItems = [...foodItems, newFoodItem];
-        setFoodItems(newFoodItems);
-        createStoredFoodItem(newFoodItem);
+    async function addFoodItem(data: CreateFoodItemRequestBody) {
+        const newFoodItem = await postFoodItem(data);
+
+        setFoodItems((currFoodItems) => [...currFoodItems, newFoodItem]);
     }
 
-    function updateFoodItem(updatedFoodItem: FoodItem) {
-        const updatedFoodItems = foodItems.map((foodItem) => {
-            if (foodItem.foodItemId === updatedFoodItem.foodItemId) {
-                return updatedFoodItem;
-            }
-            return foodItem;
-        });
-
-        setFoodItems(updatedFoodItems);
-        updateStoredFoodItem(updatedFoodItem);
+    async function updateFoodItem(id: string, data: UpdateFoodItemRequestBody) {
+        const updatedFoodItem = await patchFoodItem(id, data);
+        setFoodItems((currFoodItems) =>
+            currFoodItems.map((foodItem) =>
+                foodItem.foodItemId === updatedFoodItem.foodItemId
+                    ? updatedFoodItem
+                    : foodItem,
+            ),
+        );
     }
 
-    function deleteFoodItem(foodItemId: string): void {
-        const updatedFoodItems = foodItems.filter((foodItem) => {
-            return foodItem.foodItemId !== foodItemId;
-        });
-        setFoodItems(updatedFoodItems);
-        deleteStoredFoodItem(foodItemId);
+    async function removeFoodItem(foodItemId: string): Promise<void> {
+        const deletedFoodItem = await deleteFoodItem(foodItemId);
+
+        if (deletedFoodItem) {
+            setFoodItems((currFoodItems) =>
+                currFoodItems.filter((item) => item.foodItemId !== foodItemId),
+            );
+        }
     }
 
-    function addFoodLogEntry(newFoodLogEntry: FoodLogEntry): void {
-        const newEntries = [newFoodLogEntry, ...foodLogEntries];
-        setFoodLogEntries(newEntries);
-        createStoredFoodLogEntry(newFoodLogEntry);
+    async function addFoodLogEntry(data: CreateFoodLogEntryRequestBody) {
+        const newEntry = await postFoodLogEntry(data);
+        setFoodLogEntries((currEntries) => [newEntry, ...currEntries]);
     }
 
-    function deleteEntry(foodLogEntryId: string): void {
-        const filteredEntries = foodLogEntries.filter((entry) => {
-            return entry.foodLogEntryId !== foodLogEntryId;
-        });
-        setFoodLogEntries(filteredEntries);
-        deleteStoredFoodLogEntry(foodLogEntryId);
+    async function removeEntry(id: string) {
+        const deletedEntry = await deleteFoodLogEntry(id);
+        if (deletedEntry) {
+            setFoodLogEntries((currEntries) =>
+                currEntries.filter((entry) => entry.foodLogEntryId !== id),
+            );
+        }
     }
 
-    function updateCalorieLimit(newCalorieLimit: number): void {
-        setCalorieLimit(newCalorieLimit);
+    async function updateCalorieLimit(calorieLimit: number) {
+        const updatedTargets = await updateTargets({ calorieLimit });
+        setTargets(updatedTargets);
     }
-    function updateProteinTarget(newProteinTarget: number): void {
-        setProteinTarget(newProteinTarget);
+    async function updateProteinTarget(proteinTarget: number) {
+        const updatedTargets = await updateTargets({ proteinTarget });
+        setTargets(updatedTargets);
     }
 
     function updateSelectedDate(date: string): void {
@@ -170,10 +195,9 @@ function App() {
         setSelectedMealId(mealId);
     }
 
-    function createMeal(newMeal: Meal): void {
-        const updatedMeals = [...meals, newMeal];
-        setMeals(updatedMeals);
-        createStoredMeal(newMeal);
+    async function createMeal(data: Meal) {
+        const newMeal = await postMeal(data);
+        setMeals((currMeals) => [...currMeals, newMeal]);
     }
 
     if (startupStatus === "loading") {
@@ -199,6 +223,7 @@ function App() {
                     proteinTarget={proteinTarget}
                     onProteinTargetChange={updateProteinTarget}
                     selectedDate={selectedDate}
+                    targets={targets}
                 />
                 <div className="space-y-4">
                     <CreateCompositeFoodItemPanel />
@@ -206,7 +231,7 @@ function App() {
                         className="h-fit"
                         foodItems={foodItems}
                         onAddFoodLogEntry={addFoodLogEntry}
-                        onDeleteFoodItem={deleteFoodItem}
+                        onDeleteFoodItem={removeFoodItem}
                         selectedDate={selectedDate}
                         onEditFoodItem={updateFoodItem}
                         onCreateMeal={createMeal}
@@ -215,14 +240,14 @@ function App() {
                         selectedMealId={selectedMealId}
                         setSelectedMealId={updateSelectedMealId}
                     />
-                    {DEV_ENVIRONMENT && <ExampleServerTest />}
+                    {DEV_ENVIRONMENT && <DevBackupRestore />}
 
                     <ServerBackupTest />
                 </div>
                 <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"
                     foodLogEntries={foodLogEntries}
-                    onDeleteFoodLogEntry={deleteEntry}
+                    onDeleteFoodLogEntry={removeEntry}
                     calorieLimit={calorieLimit}
                     proteinTarget={proteinTarget}
                     onSelectedDateChange={updateSelectedDate}

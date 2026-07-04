@@ -71,13 +71,13 @@ function normaliseFoodItem(oldFoodItem: OldFoodItem, userId: string): FoodItem {
         caloriesPer100g: oldFoodItem.caloriesPer100g,
         proteinPer100g: oldFoodItem.proteinPer100g,
         userId: oldFoodItem.userId ?? userId,
+        type: oldFoodItem.type || "simple",
         createdAt:
             (oldFoodItem.createdAt || oldFoodItem.dateCreated) ?? getToday(),
         foodItemCategoryId:
             oldFoodItem.foodItemCategoryId ||
             oldFoodItem.ingredientCategoryId ||
             "other",
-        type: oldFoodItem.type || "simple",
     };
 }
 
@@ -183,22 +183,24 @@ function replaceLocalFoodLogEntries(foodLogEntry: FoodLogEntry[]): void {
 }
 function normaliseFoodLogEntry(foodLogEntry: OldFoodLogEntry): FoodLogEntry {
     return {
+        foodLogEntryId: foodLogEntry.foodLogEntryId ?? foodLogEntry.foodEntryId,
         name: foodLogEntry.name,
         weight: foodLogEntry.weight,
         protein: foodLogEntry.protein,
         calories: foodLogEntry.calories,
-        userId: foodLogEntry.userId,
         date: foodLogEntry.date,
-        createdAt: foodLogEntry.createdAt,
-        foodLogEntryId: foodLogEntry.foodLogEntryId ?? foodLogEntry.foodEntryId,
         foodItemId: foodLogEntry.foodItemId ?? foodLogEntry.ingredientId,
         mealId: foodLogEntry.mealId || undefined,
+        createdAt: foodLogEntry.createdAt,
+        userId: foodLogEntry.userId,
     };
 }
 
 function normaliseFoodLogEntries(
     foodLogEntries: OldFoodLogEntry[],
 ): FoodLogEntry[] {
+    console.log("normalising food logs");
+    
     const normalisedFoodEntries = foodLogEntries.map((foodLogEntry) => {
         return normaliseFoodLogEntry(foodLogEntry);
     });
