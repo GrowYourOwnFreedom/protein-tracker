@@ -23,20 +23,10 @@ export async function createFoodLogEntry({
     userId,
     data,
 }: CreateFoodLogEntryArgs): Promise<FoodLogEntry> {
-    console.log("server ISO time:", new Date().toISOString());
-
-    console.log(
-        "server UK time:",
-        new Date().toLocaleString("en-GB", {
-            timeZone: "Europe/London",
-        }),
-    );
-    console.log("food log body:",data);
-    
     const foodItem = await prisma.foodItem.findFirst({
         where: { userId, foodItemId: data.foodItemId },
     });
-    
+
     if (!foodItem) {
         throw new HttpError(
             404,
@@ -49,7 +39,6 @@ export async function createFoodLogEntry({
             userId,
         },
     });
-    console.log("food entry:",foodLogEntry)
     return mapFoodLogEntryFromDb(foodLogEntry);
 }
 

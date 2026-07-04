@@ -5,17 +5,6 @@ import { prisma } from "@/db/prisma.js";
 import type { FoodItem, FoodLogEntry, Meal } from "@/types.js";
 import { DEV_USER_ID } from "@/middleware/dummyAuth.js";
 const databaseUrl = process.env.DATABASE_URL;
-function getEntryDate(entry: FoodLogEntry): string {
-    if (entry.date) {
-        return entry.date;
-    }
-
-    if (entry.createdAt) {
-        return entry.createdAt.slice(0, 10);
-    }
-
-    throw new Error(`Food log entry is missing both date and createdAt`);
-}
 
 if (!databaseUrl) {
     throw new Error("DATABASE_URL is not set");

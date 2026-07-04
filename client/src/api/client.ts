@@ -1,4 +1,4 @@
-import { API_BASE_URL, BACKUP_KEY } from "@/config/env";
+import { API_BASE_URL } from "@/config/env";
 import { ApiErrorResponse, ApiSuccessResponse } from "@/types";
 
 type ApiRequestOptions = {
@@ -12,9 +12,6 @@ export async function proteinTrackerApiRequest<TResponse>(
     options?: ApiRequestOptions,
 ): Promise<TResponse> {
     const headers: HeadersInit = {};
-    if (options?.includeBackupKey) {
-        headers["X-Backup-Key"] = BACKUP_KEY;
-    }
     if (options?.data !== undefined) {
         headers["Content-Type"] = "application/json";
     }

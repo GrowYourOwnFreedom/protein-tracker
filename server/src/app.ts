@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import type { Request, Response } from "express";
 import { errorHandler } from "@/middleware/errorHandler.js";
-import appDataRouter from "@/routes/appDataRoutes.js";
 import type {
     ApiSuccessResponse,
     HealthResponse,
@@ -15,7 +14,7 @@ import foodLogEntryRouter from "@/routes/foodLogEntryRoutes.js";
 import mealRouter from "@/routes/mealRoutes.js";
 import targetsRouter from "@/routes/targetsRoutes.js";
 import { dummyAuth } from "@/middleware/dummyAuth.js";
-import { devCacheControl, devLogger } from "@/middleware/dev.js";
+import { devLogger } from "@/middleware/dev.js";
 
 const app = express();
 if (isDevelopment) {
@@ -45,7 +44,6 @@ app.get("/health", (_request: Request, response: Response) => {
     response.json(responseBody);
 });
 
-app.use("/app-data", appDataRouter);
 app.use("/food-items", foodItemRouter);
 app.use("/food-log-entries", foodLogEntryRouter);
 app.use("/meals", mealRouter);

@@ -3,25 +3,6 @@ import NutritionSummaryPanel from "@/components/nutrition-summary/NutritionSumma
 import { useState, useEffect } from "react";
 import AddFoodLogEntryPanel from "@/components/food-log/AddFoodLogEntryPanel";
 import {
-    getCurrentUser,
-    createStoredFoodItem,
-    fetchStoredFoodItems,
-    updateStoredFoodItem,
-    deleteStoredFoodItem,
-    createStoredFoodLogEntry,
-    fetchStoredFoodLogEntries,
-    deleteStoredFoodLogEntry,
-    createStoredMeal,
-    fetchStoredMeals,
-    fetchStoredCalorieLimit,
-    updateStoredCalorieLimit,
-    fetchStoredProteinTarget,
-    updateStoredProteinTarget,
-    getDataVersion,
-    setDataVersion,
-    runMigration,
-} from "@/lib/storageCrudHelpers";
-import {
     CreateFoodItemRequestBody,
     CreateFoodLogEntryRequestBody,
     FoodItem,
@@ -29,14 +10,10 @@ import {
     Meal,
     Targets,
     UpdateFoodItemRequestBody,
-    User,
 } from "@/types";
 import FoodLogPanel from "@/components/food-log/FoodLogPanel";
 import { getToday } from "@/lib/getToday";
 import CreateCompositeFoodItemPanel from "@/components/food-items/CreateCompositeFoodItemPanel";
-import ServerBackupTest from "@/components/ServerBackupTest";
-import DevBackupRestore from "@/components/DevBackupRestore";
-import { DATA_VERSION, DEV_ENVIRONMENT } from "@/config/env";
 import { getTargets, updateTargets } from "@/api/targets";
 import {
     deleteFoodItem,
@@ -52,7 +29,6 @@ import {
 } from "@/api/food-log-entries";
 
 function App() {
-    const [user, setUser] = useState<User | null>(null);
     const [startupStatus, setStartupStatus] = useState<
         "loading" | "ready" | "error"
     >("loading");
@@ -71,26 +47,10 @@ function App() {
     useEffect(() => {
         async function initialiseApp() {
             try {
-                const currentUser = await getCurrentUser();
-                if (!DATA_VERSION) {
-                    throw new Error("VITE_DATA_VERSION is not set");
-                }
-                const storedDataVersion = getDataVersion();
-                if (storedDataVersion !== DATA_VERSION) {
-                    const migration = runMigration(currentUser.userId);
-                    if (migration) {
-                        console.log("migration success");
-
-                        setDataVersion(DATA_VERSION);
-                    } else {
-                        throw new Error("Migration failed");
-                    }
-                }
                 const fetchedFoodItems = await getFoodItems();
                 const fetchedTargets = await getTargets();
                 setTargets(fetchedTargets);
                 setFoodItems(fetchedFoodItems);
-                setUser(currentUser);
                 setStartupStatus("ready");
             } catch (error) {
                 console.error(error);
@@ -122,20 +82,6 @@ function App() {
         };
         loadMeals();
     }, [selectedDate, startupStatus]);
-
-    useEffect(() => {
-        if (startupStatus !== "ready") {
-            return;
-        }
-        updateStoredCalorieLimit(calorieLimit);
-    }, [calorieLimit, startupStatus]);
-
-    useEffect(() => {
-        if (startupStatus !== "ready") {
-            return;
-        }
-        updateStoredProteinTarget(proteinTarget);
-    }, [proteinTarget, startupStatus]);
 
     async function addFoodItem(data: CreateFoodItemRequestBody) {
         const newFoodItem = await postFoodItem(data);
@@ -240,9 +186,6 @@ function App() {
                         selectedMealId={selectedMealId}
                         setSelectedMealId={updateSelectedMealId}
                     />
-                    {DEV_ENVIRONMENT && <DevBackupRestore />}
-
-                    <ServerBackupTest />
                 </div>
                 <FoodLogPanel
                     className="lg:h-auto lg:min-h-0"
