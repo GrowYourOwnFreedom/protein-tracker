@@ -56,7 +56,7 @@ export default defineConfig({
         // so the tests need their own setup step to load environment variables.
         // This setup file can contain:
         // import "dotenv/config";
-        // That makes variables like CLIENT_ORIGIN and BACKUP_KEY available
+        // That makes variables like CLIENT_ORIGIN  available
         // before the app/config files are imported during tests.
 
         setupFiles: ["src/test/setup.ts"],
