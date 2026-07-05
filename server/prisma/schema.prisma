@@ -61,4 +61,22 @@ model Targets{
   calorieLimit Float
   updatedAt DateTime @updatedAt  @db.Timestamptz(3)
 }
+ model User{
+  userId String @id @default(uuid())
+  email String @unique
+  passwordHash String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
+  sessions Session[]
+ }
+
+ model Session {
+  sessionId String @id @default(uuid())
+  userId String
+  tokenHash String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references:[userId], onDelete:Cascade)
+ }
