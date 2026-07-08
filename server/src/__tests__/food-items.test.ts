@@ -11,9 +11,8 @@ import {
 } from "@/test/test-utils.js";
 
 describe("/food-items", () => {
-
     let agent: request.Agent;
-    
+
     beforeEach(async () => {
         await resetTestDatabase();
         agent = await getLoggedInAgent();
@@ -87,6 +86,12 @@ describe("/food-items", () => {
             const response = await agent.get("/food-items");
             expect(response.body.data).toHaveLength(1);
             expect(response.body.data[0].userId).toBe("dev-user");
+        });
+        it("returns 401 if not logged in", async () => {
+            const response = await request(app).get("/food-items");
+
+            expect(response.status).toBe(401);
+            expect(response.body.error.message).toBe("Not logged in");
         });
     });
     describe("PATCH /food-items/:foodItemId", () => {

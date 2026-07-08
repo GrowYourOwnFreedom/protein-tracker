@@ -144,6 +144,12 @@ describe("/food-log-entries", () => {
                 expect(entry.userId).toBe("dev-user");
             });
         });
+         it("returns 401 if not logged in", async () => {
+                    const response = await request(app).get("/food-log-entries");
+        
+                    expect(response.status).toBe(401);
+                    expect(response.body.error.message).toBe("Not logged in");
+                });
     });
     describe("GET /food-log-entries?date=:YYYY-MM-DD", () => {
         it("returns entries for the specified date", async () => {

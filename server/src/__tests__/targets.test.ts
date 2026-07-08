@@ -50,11 +50,16 @@ describe("/targets", () => {
                 updatedAt: expect.any(String),
             });
         });
+        it("returns 401 if not logged in", async () => {
+            const response = await request(app).get("/targets");
+
+            expect(response.status).toBe(401);
+            expect(response.body.error.message).toBe("Not logged in");
+        });
     });
     describe("PATCH /targets", () => {
         it("updates correct  one target if userId exists", async () => {
             const targets = await seedValidTargets();
-            const { userId } = targets;
             const newProteinTargetBody = { proteinTarget: 200 };
             const response = await agent
                 .patch(`/targets`)
@@ -73,8 +78,6 @@ describe("/targets", () => {
 
         it("updates both targets corrcetly if userId exists", async () => {
             const targets = await seedValidTargets();
-            const { userId } = targets;
-
             const response = await agent
                 .patch(`/targets`)
                 .send(validTargetsBody);

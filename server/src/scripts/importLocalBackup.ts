@@ -3,7 +3,7 @@ import { readAppDataBackup } from "@/helpers/appDataStorage.js";
 import { isAppDataBackup } from "@shared/validation/appDataValidationHelpers.js";
 import { prisma } from "@/db/prisma.js";
 import type { FoodItem, FoodLogEntry, Meal } from "@/types.js";
-import { DEV_USER_ID } from "@/middleware/dummyAuth.js";
+const DEV_USER_ID = "dev-user"
 const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) {

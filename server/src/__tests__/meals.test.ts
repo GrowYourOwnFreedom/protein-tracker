@@ -10,19 +10,16 @@ import {
 import type { Meal } from "@/types.js";
 
 describe("/meals", () => {
-
     let agent: request.Agent;
-        
-        beforeEach(async () => {
-            await resetTestDatabase();
-            agent = await getLoggedInAgent();
-        });
+
+    beforeEach(async () => {
+        await resetTestDatabase();
+        agent = await getLoggedInAgent();
+    });
 
     describe("POST /meals", () => {
         it("creates meal when passed correct data object", async () => {
-            const response = await agent
-                .post("/meals")
-                .send(validMealBody);
+            const response = await agent.post("/meals").send(validMealBody);
             expect(response.status).toBe(201);
             expect(response.body.success).toBe(true);
             expect(response.body.message).toBe("New meal created");
@@ -38,9 +35,7 @@ describe("/meals", () => {
         });
 
         it("returns expected error when passed bad body", async () => {
-            const response = await agent
-                .post("/meals")
-                .send({ banana: true });
+            const response = await agent.post("/meals").send({ banana: true });
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
@@ -53,9 +48,7 @@ describe("/meals", () => {
                 name: "test-meal",
                 date: "17-06-2026",
             };
-            const response = await agent
-                .post("/meals")
-                .send(invalidDateBody);
+            const response = await agent.post("/meals").send(invalidDateBody);
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
             expect(response.body.error.message).toBe("Invalid meal data");
@@ -65,9 +58,7 @@ describe("/meals", () => {
                 name: "",
                 date: "2026-06-17",
             };
-            const response = await agent
-                .post("/meals")
-                .send(invalidNameBody);
+            const response = await agent.post("/meals").send(invalidNameBody);
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);
@@ -106,11 +97,11 @@ describe("/meals", () => {
         });
         it("only returns meal for logged in user", async () => {
             await seedValidMeal();
-            await seedValidMeal({userId:"other-user"})
+            await seedValidMeal({ userId: "other-user" });
             const response = await agent.get("/meals?date=2026-06-17");
 
             expect(response.body.data).toHaveLength(1);
-            expect(response.body.data[0].userId).toBe("dev-user")
+            expect(response.body.data[0].userId).toBe("dev-user");
         });
         it("returns 400 error when date is in the wrong format", async () => {
             const response = await agent.get("/meals?date=17-06-2026");
@@ -120,6 +111,12 @@ describe("/meals", () => {
             expect(response.body.error.message).toBe(
                 "Date must be in the format YYYY-MM-DD",
             );
+        });
+        it("returns 401 if not logged in", async () => {
+            const response = await request(app).get("/meals?date=2026-06-17");
+
+            expect(response.status).toBe(401);
+            expect(response.body.error.message).toBe("Not logged in");
         });
     });
 });
