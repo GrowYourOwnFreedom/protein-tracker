@@ -2,6 +2,7 @@ import {
     isRecord,
     isFoodItemType,
     isfoodItemCategoryId,
+    hasOnlyAllowedKeys,
 } from "./validationHelpers.js";
 import type {
     CreateFoodItemRequestBody,
@@ -41,10 +42,8 @@ export function isUpdateFoodItemRequestBody(
         return false;
     }
 
-    const hasOnlyAllowedKeys = keys.every((key) => {
-        return allowedKeys.includes(key);
-    });
-    if (!hasOnlyAllowedKeys) {
+    
+    if (!hasOnlyAllowedKeys(value,allowedKeys)) {
         return false;
     }
 

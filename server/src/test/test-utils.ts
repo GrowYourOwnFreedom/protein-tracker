@@ -14,6 +14,7 @@ import type {
     Meal as DbMeal,
     Targets as DbTargets,
 } from "@/generated/prisma/client.js";
+import type  request  from "supertest";
 
 function mapFoodItemFromDb(dbFoodItem: DbFoodItem): FoodItem {
     return {
@@ -105,7 +106,6 @@ export async function seedValidMeal(
     return mapMealFromDb(meal);
 }
 
-
 export const validTargetsBody = {
     proteinTarget: 200,
     calorieLimit: 1950,
@@ -123,9 +123,47 @@ export async function seedValidTargets(): Promise<Targets> {
     return mapTargetsFromDb(targets);
 }
 
+export const validLoginCredentials = {
+    email: "test@example.com",
+    password: "password123",
+};
+
 export async function resetTestDatabase() {
     await prisma.foodLogEntry.deleteMany();
     await prisma.meal.deleteMany();
     await prisma.foodItem.deleteMany();
     await prisma.targets.deleteMany();
+    await prisma.session.deleteMany();
+}
+
+export function getCookieValue(response: request.Response, cookieName: string) {
+    const rawSetCookieHeader = response.headers["set-cookie"];
+
+    const setCookieHeaders = Array.isArray(rawSetCookieHeader)
+        ? rawSetCookieHeader
+        : rawSetCookieHeader
+          ? [rawSetCookieHeader]
+          : [];
+
+    const cookie = setCookieHeaders.find((header) =>
+        header.startsWith(`${cookieName}=`),
+    );
+
+    if (!cookie) {
+        throw new Error(`Cookie not found: ${cookieName}`);
+    }
+
+    const cookieNameAndValue = cookie.split(";")[0];
+
+    if (!cookieNameAndValue) {
+        throw new Error(`Invalid cookie header: ${cookie}`);
+    }
+
+    const cookieValue = cookieNameAndValue.split("=")[1];
+
+    if (!cookieValue) {
+        throw new Error(`Cookie had no value: ${cookie}`);
+    }
+
+    return cookieValue;
 }

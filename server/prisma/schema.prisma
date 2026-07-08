@@ -74,7 +74,7 @@ model Targets{
  model Session {
   sessionId String @id @default(uuid())
   userId String
-  tokenHash String
+  tokenHash String @unique
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   expiresAt DateTime @db.Timestamptz(3)
 
