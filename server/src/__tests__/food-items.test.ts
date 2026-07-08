@@ -4,19 +4,24 @@ import request from "supertest";
 import { app } from "@/app.js";
 import { prisma } from "@/db/prisma.js";
 import {
+    getLoggedInAgent,
     resetTestDatabase,
     seedValidFoodItem,
     validFoodItemBody,
 } from "@/test/test-utils.js";
 
 describe("/food-items", () => {
+
+    let agent: request.Agent;
+    
     beforeEach(async () => {
         await resetTestDatabase();
+        agent = await getLoggedInAgent();
     });
 
     describe("POST /food-items", () => {
         it("returns new food item when passed correct body", async () => {
-            const response = await request(app)
+            const response = await agent
                 .post("/food-items")
                 .send(validFoodItemBody);
 
@@ -24,9 +29,9 @@ describe("/food-items", () => {
             expect(response.body.success).toBe(true);
             expect(response.body.message).toBe("Food item created");
 
-            expect(
-                Number.isNaN(Date.parse(response.body.data.createdAt)),
-            ).toBe(false);
+            expect(Number.isNaN(Date.parse(response.body.data.createdAt))).toBe(
+                false,
+            );
 
             expect(response.body.data).toMatchObject({
                 ...validFoodItemBody,
@@ -37,7 +42,7 @@ describe("/food-items", () => {
         });
 
         it("returns expected error when passed bad body", async () => {
-            const response = await request(app)
+            const response = await agent
                 .post("/food-items")
                 .send({ banana: true });
 
@@ -50,7 +55,7 @@ describe("/food-items", () => {
 
     describe("GET /food-items", () => {
         it("returns an empty array when no food items exist", async () => {
-            const response = await request(app).get("/food-items");
+            const response = await agent.get("/food-items");
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -62,7 +67,7 @@ describe("/food-items", () => {
             await seedValidFoodItem();
             const foodItem = await seedValidFoodItem();
 
-            const response = await request(app).get("/food-items");
+            const response = await agent.get("/food-items");
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -79,7 +84,7 @@ describe("/food-items", () => {
             await seedValidFoodItem();
             await seedValidFoodItem({ userId: "other-user" });
 
-            const response = await request(app).get("/food-items");
+            const response = await agent.get("/food-items");
             expect(response.body.data).toHaveLength(1);
             expect(response.body.data[0].userId).toBe("dev-user");
         });
@@ -92,7 +97,7 @@ describe("/food-items", () => {
             };
             const foodItem = await seedValidFoodItem();
             const id = foodItem.foodItemId;
-            const response = await request(app)
+            const response = await agent
                 .patch(`/food-items/${id}`)
                 .send(update);
 
@@ -119,7 +124,7 @@ describe("/food-items", () => {
             const foodItem = await seedValidFoodItem();
             const id = foodItem.foodItemId;
 
-            const response = await request(app)
+            const response = await agent
                 .patch(`/food-items/${id}`)
                 .send(update);
 
@@ -142,7 +147,7 @@ describe("/food-items", () => {
             };
             await seedValidFoodItem();
 
-            const response = await request(app)
+            const response = await agent
                 .patch("/food-items/unknown")
                 .send(update);
 
@@ -157,7 +162,7 @@ describe("/food-items", () => {
             const { foodItemId } = await seedValidFoodItem({
                 userId: "other-user",
             });
-            const response = await request(app)
+            const response = await agent
                 .patch(`/food-items/${foodItemId}`)
                 .send(update);
             expect(response.status).toBe(404);
@@ -180,15 +185,13 @@ describe("/food-items", () => {
         it("returns the food item for an existing ID", async () => {
             const foodItem = await seedValidFoodItem();
             const foodItemId = foodItem.foodItemId;
-            const response = await request(app).get(
-                `/food-items/${foodItemId}`,
-            );
+            const response = await agent.get(`/food-items/${foodItemId}`);
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
-            expect(
-                Number.isNaN(Date.parse(response.body.data.createdAt)),
-            ).toBe(false);
+            expect(Number.isNaN(Date.parse(response.body.data.createdAt))).toBe(
+                false,
+            );
 
             expect(response.body.data).toMatchObject(foodItem);
         });
@@ -202,20 +205,21 @@ describe("/food-items", () => {
                 },
             };
             await seedValidFoodItem();
-            const response = await request(app).get("/food-items/unknown-item");
+            const response = await agent.get("/food-items/unknown-item");
 
             expect(response.status).toBe(404);
             expect(response.body).toEqual(expected);
         });
 
-        it("returns 404 if userId is not a match", async ()=>{
-            const {foodItemId} = await seedValidFoodItem({userId:"other-user"})
+        it("returns 404 if userId is not a match", async () => {
+            const { foodItemId } = await seedValidFoodItem({
+                userId: "other-user",
+            });
 
-            const response = await request(app).get(`/food-items/${foodItemId}`)
-            expect(response.status).toBe(404)
-            expect(response.body.error.message).toBe("Food item not found")
-
-        })
+            const response = await agent.get(`/food-items/${foodItemId}`);
+            expect(response.status).toBe(404);
+            expect(response.body.error.message).toBe("Food item not found");
+        });
     });
 
     describe("DELETE /food-items/:foodItemId", () => {
@@ -223,15 +227,13 @@ describe("/food-items", () => {
             const foodItem = await seedValidFoodItem();
             const foodItemId = foodItem.foodItemId;
 
-            const response = await request(app).delete(
-                `/food-items/${foodItemId}`,
-            );
+            const response = await agent.delete(`/food-items/${foodItemId}`);
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
-            expect(
-                Number.isNaN(Date.parse(response.body.data.createdAt)),
-            ).toBe(false);
+            expect(Number.isNaN(Date.parse(response.body.data.createdAt))).toBe(
+                false,
+            );
 
             expect(response.body.data).toMatchObject(foodItem);
         });
@@ -241,9 +243,7 @@ describe("/food-items", () => {
                 userId: "other-user",
             });
 
-            const response = await request(app).delete(
-                `/food-items/${foodItemId}`,
-            );
+            const response = await agent.delete(`/food-items/${foodItemId}`);
             expect(response.status).toBe(404);
 
             const otherUserFoodItem = await prisma.foodItem.findUnique({
@@ -254,9 +254,7 @@ describe("/food-items", () => {
         });
 
         it("returns 404 if id is not found", async () => {
-            const response = await request(app).delete(
-                "/food-items/unknown-id",
-            );
+            const response = await agent.delete("/food-items/unknown-id");
             const expected = {
                 success: false,
                 error: {

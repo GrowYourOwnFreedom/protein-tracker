@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import request from "supertest";
 import { app } from "@/app.js";
 import {
+    getLoggedInAgent,
     resetTestDatabase,
     seedValidMeal,
     validMealBody,
@@ -9,13 +10,17 @@ import {
 import type { Meal } from "@/types.js";
 
 describe("/meals", () => {
-    beforeEach(async () => {
-        await resetTestDatabase();
-    });
+
+    let agent: request.Agent;
+        
+        beforeEach(async () => {
+            await resetTestDatabase();
+            agent = await getLoggedInAgent();
+        });
 
     describe("POST /meals", () => {
         it("creates meal when passed correct data object", async () => {
-            const response = await request(app)
+            const response = await agent
                 .post("/meals")
                 .send(validMealBody);
             expect(response.status).toBe(201);
@@ -33,7 +38,7 @@ describe("/meals", () => {
         });
 
         it("returns expected error when passed bad body", async () => {
-            const response = await request(app)
+            const response = await agent
                 .post("/meals")
                 .send({ banana: true });
 
@@ -48,7 +53,7 @@ describe("/meals", () => {
                 name: "test-meal",
                 date: "17-06-2026",
             };
-            const response = await request(app)
+            const response = await agent
                 .post("/meals")
                 .send(invalidDateBody);
             expect(response.status).toBe(400);
@@ -60,7 +65,7 @@ describe("/meals", () => {
                 name: "",
                 date: "2026-06-17",
             };
-            const response = await request(app)
+            const response = await agent
                 .post("/meals")
                 .send(invalidNameBody);
 
@@ -72,7 +77,7 @@ describe("/meals", () => {
 
     describe("GET /meals?date=:YYYY-MM-DD", () => {
         it("returns empty array when no meals are found", async () => {
-            const response = await request(app).get("/meals?date=2026-06-17");
+            const response = await agent.get("/meals?date=2026-06-17");
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
             expect(response.body.data).toEqual([]);
@@ -86,7 +91,7 @@ describe("/meals", () => {
             await seedValidMeal({ name: "lunch", date: "2026-06-17" });
             await seedValidMeal({ name: "breakfast", date: "2026-06-01" });
 
-            const response = await request(app).get("/meals?date=2026-06-17");
+            const response = await agent.get("/meals?date=2026-06-17");
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -102,13 +107,13 @@ describe("/meals", () => {
         it("only returns meal for logged in user", async () => {
             await seedValidMeal();
             await seedValidMeal({userId:"other-user"})
-            const response = await request(app).get("/meals?date=2026-06-17");
+            const response = await agent.get("/meals?date=2026-06-17");
 
             expect(response.body.data).toHaveLength(1);
             expect(response.body.data[0].userId).toBe("dev-user")
         });
         it("returns 400 error when date is in the wrong format", async () => {
-            const response = await request(app).get("/meals?date=17-06-2026");
+            const response = await agent.get("/meals?date=17-06-2026");
 
             expect(response.status).toBe(400);
             expect(response.body.success).toBe(false);

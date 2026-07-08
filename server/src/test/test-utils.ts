@@ -14,7 +14,8 @@ import type {
     Meal as DbMeal,
     Targets as DbTargets,
 } from "@/generated/prisma/client.js";
-import type  request  from "supertest";
+import  request  from "supertest";
+import { app } from "@/app.js";
 
 function mapFoodItemFromDb(dbFoodItem: DbFoodItem): FoodItem {
     return {
@@ -166,4 +167,15 @@ export function getCookieValue(response: request.Response, cookieName: string) {
     }
 
     return cookieValue;
+}
+
+export async function getLoggedInAgent() {
+    const agent = request.agent(app)
+
+    await agent
+        .post("/auth/login")
+        .send(validLoginCredentials)
+        .expect(200)
+
+    return agent
 }

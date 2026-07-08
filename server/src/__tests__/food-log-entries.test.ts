@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import request from "supertest";
 import { app } from "@/app.js";
 import {
+    getLoggedInAgent,
     resetTestDatabase,
     seedValidFoodItem,
     seedValidFoodLogEntry,
@@ -12,8 +13,10 @@ import type { FoodLogEntry } from "@/types.js";
 import { prisma } from "@/db/prisma.js";
 
 describe("/food-log-entries", () => {
+    let agent: request.Agent;
     beforeEach(async () => {
         await resetTestDatabase();
+        agent = await getLoggedInAgent();
     });
     describe("POST /food-log-entries", () => {
         it("returns new food log entry when passed valid body without mealId", async () => {
@@ -22,7 +25,7 @@ describe("/food-log-entries", () => {
                 ...validFoodLogEntryBodyWithoutFoodItemId,
                 foodItemId: fooditem.foodItemId,
             };
-            const response = await request(app)
+            const response = await agent
                 .post("/food-log-entries")
                 .send(body);
 
@@ -50,7 +53,7 @@ describe("/food-log-entries", () => {
                 mealId,
             };
 
-            const response = await request(app)
+            const response = await agent
                 .post("/food-log-entries")
                 .send(body);
 
@@ -71,7 +74,7 @@ describe("/food-log-entries", () => {
                 foodItemId: fooditem.foodItemId,
             };
 
-            const response = await request(app)
+            const response = await agent
                 .post("/food-log-entries")
                 .send(body);
 
@@ -83,7 +86,7 @@ describe("/food-log-entries", () => {
             );
         });
         it("returns 404 with unknown foodItemId", async () => {
-            const response = await request(app)
+            const response = await agent
                 .post("/food-log-entries")
                 .send({
                     ...validFoodLogEntryBodyWithoutFoodItemId,
@@ -101,7 +104,7 @@ describe("/food-log-entries", () => {
 
     describe("GET /food-log-entries", () => {
         it("returns empty array when there are no food log entries", async () => {
-            const response = await request(app).get("/food-log-entries");
+            const response = await agent.get("/food-log-entries");
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -113,7 +116,7 @@ describe("/food-log-entries", () => {
             const foodLogEntry = await seedValidFoodLogEntry({ foodItemId });
             await seedValidFoodLogEntry({ foodItemId });
             await seedValidFoodLogEntry({ foodItemId });
-            const response = await request(app).get("/food-log-entries");
+            const response = await agent.get("/food-log-entries");
 
             expect(response.status).toBe(200);
             expect(response.body.success).toBe(true);
@@ -134,7 +137,7 @@ describe("/food-log-entries", () => {
                 foodItemId,
                 userId: "other-user",
             });
-            const response = await request(app).get("/food-log-entries");
+            const response = await agent.get("/food-log-entries");
 
             expect(response.body.data).toHaveLength(0);
             response.body.data.forEach((entry: FoodLogEntry) => {
@@ -151,7 +154,7 @@ describe("/food-log-entries", () => {
             await seedValidFoodLogEntry({ foodItemId });
             await seedValidFoodLogEntry({ foodItemId, date: "2026-06-01" });
 
-            const response = await request(app).get(
+            const response = await agent.get(
                 `/food-log-entries?date=${requestDate}`,
             );
 
@@ -171,7 +174,7 @@ describe("/food-log-entries", () => {
         });
 
         it("returns empty array when no entries are found for that date", async () => {
-            const response = await request(app).get(
+            const response = await agent.get(
                 `/food-log-entries?date=2026-06-17`,
             );
             expect(response.status).toBe(200);
@@ -188,18 +191,16 @@ describe("/food-log-entries", () => {
                 foodItemId,
                 userId: "other-user",
             });
-            const response = await request(app).get(
+            const response = await agent.get(
                 `/food-log-entries?date=2026-06-17`,
             );
-            
-            expect(response.body.message).toBe(
-                "0 food log entries found",
-            );
-            expect(response.body.data).toEqual([])
+
+            expect(response.body.message).toBe("0 food log entries found");
+            expect(response.body.data).toEqual([]);
         });
 
         it("returns 400 error when date is wrong format", async () => {
-            const response = await request(app).get(
+            const response = await agent.get(
                 `/food-log-entries?date=06-17-2026`,
             );
             expect(response.status).toBe(400);
@@ -216,7 +217,7 @@ describe("/food-log-entries", () => {
                 foodItemId: foodItem.foodItemId,
             });
 
-            const response = await request(app).delete(
+            const response = await agent.delete(
                 `/food-log-entries/${foodLogEntry.foodLogEntryId}`,
             );
 
@@ -236,17 +237,17 @@ describe("/food-log-entries", () => {
                 foodItemId: foodItem.foodItemId,
             });
             const entryInDbResponse =
-                await request(app).get("/food-log-entries");
+                await agent.get("/food-log-entries");
             expect(entryInDbResponse.body.data[0]).toMatchObject(foodLogEntry);
-            await request(app).delete(
+            await agent.delete(
                 `/food-log-entries/${foodLogEntry.foodLogEntryId}`,
             );
-            const response = await request(app).get(`/food-log-entries`);
+            const response = await agent.get(`/food-log-entries`);
 
             expect(response.body.data).toEqual([]);
         });
         it("returns 404 if no matching entry is found", async () => {
-            const response = await request(app).delete(
+            const response = await agent.delete(
                 `/food-log-entries/unknown`,
             );
 
@@ -265,7 +266,7 @@ describe("/food-log-entries", () => {
                 foodItemId,
                 userId: "other-user",
             });
-            const response = await request(app).delete(
+            const response = await agent.delete(
                 `/food-log-entries/${foodLogEntryId}`,
             );
             expect(response.status).toBe(404);
