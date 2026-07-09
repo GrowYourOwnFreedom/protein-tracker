@@ -5,15 +5,12 @@ import {
 } from "@/auth/session.js";
 import { prisma } from "@/db/prisma.js";
 import { HttpError } from "@/errors/HttpError.js";
+import type { AuthUser } from "@/types.js";
 import bcrypt from "bcryptjs";
 
 type DbLoginArgs = {
     email: string;
     password: string;
-};
-type AuthUser = {
-    userId: string;
-    email: string;
 };
 type DbLoginResult = {
     userDetails: AuthUser;

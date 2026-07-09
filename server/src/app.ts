@@ -23,8 +23,8 @@ if (isDevelopment) {
     // prevent web page caching during development
     app.set("etag", false);
 }
-app.use(cookieParser())
-app.use(cors({ origin: CLIENT_ORIGIN }));
+app.use(cookieParser());
+app.use(cors({ origin: CLIENT_ORIGIN, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 if (!isTest) {
     app.use(devLogger);
@@ -44,8 +44,8 @@ app.get("/health", (_request: Request, response: Response) => {
     };
     response.json(responseBody);
 });
-app.use("/auth",authRouter)
-app.use(requireAuth)
+app.use("/auth", authRouter);
+app.use(requireAuth);
 app.use("/food-items", foodItemRouter);
 app.use("/food-log-entries", foodLogEntryRouter);
 app.use("/meals", mealRouter);
