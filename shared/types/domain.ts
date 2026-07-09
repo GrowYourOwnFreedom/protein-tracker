@@ -4,10 +4,10 @@ export type NutritionTypes = "protein" | "calories";
 
 export type FoodItemType = "simple" | "composite";
 
-export type User = {
-    userId: string;
-    name: string;
-};
+// export type User = {
+//     userId: string;
+//     name: string;
+// };
 export type FoodItemCategory = {
     foodItemCategoryId: string;
     foodItemCategoryName: string;

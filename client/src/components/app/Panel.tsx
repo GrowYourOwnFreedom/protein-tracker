@@ -12,7 +12,7 @@ function Panel({ title, children, className }:PanelProps) {
     return (
         <section
             className={cn(
-                "border w-full rounded-xl bg-card text-card-foreground p-6 flex flex-col gap-6",
+                "border w-full rounded-xl bg-card text-card-foreground p-6 flex flex-col gap-6 ",
                 className,
             )}
         >
