@@ -37,6 +37,7 @@ model Meal {
   userId String
 
   foodLogEntries FoodLogEntry[]
+  portions Portion[]
 }
 
 model FoodLogEntry  {
@@ -79,5 +80,16 @@ model Targets{
   expiresAt DateTime @db.Timestamptz(3)
 
   user User @relation(fields: [userId], references:[userId], onDelete:Cascade)
+ }
+
+ model Portion {
+  portionId String @id @default(uuid())
+  foodItemId String
+  weight Float
+  name String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+
+  foodItem FoodItem @relation(fields:[foodItemId], references:[foodItemId], onDelete:Cascade)
+
  }
 

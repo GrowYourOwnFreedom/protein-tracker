@@ -43,6 +43,26 @@ describe("/food-log-entries", () => {
                 false,
             );
         });
+        it("returns new food log entry when passed valid body without foodItemId", async ()=>{
+              const response = await agent
+                .post("/food-log-entries")
+                .send(validFoodLogEntryBodyWithoutFoodItemId);
+
+            expect(response.status).toBe(201);
+            expect(response.body.success).toBe(true);
+            expect(response.body.message).toBe("Food log entry created");
+            expect(response.body.data).toMatchObject({
+                ...validFoodLogEntryBodyWithoutFoodItemId,
+                foodItemId:null,
+                mealId: null,
+                foodLogEntryId: expect.any(String),
+                createdAt: expect.any(String),
+                userId: "dev-user",
+            });
+            expect(Number.isNaN(Date.parse(response.body.data.createdAt))).toBe(
+                false,
+            );
+        })
 
         it("returns entry when valid body with mealId is passed", async () => {
             const { foodItemId } = await seedValidFoodItem();
