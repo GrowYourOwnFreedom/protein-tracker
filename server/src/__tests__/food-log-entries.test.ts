@@ -85,21 +85,6 @@ describe("/food-log-entries", () => {
                 "Invalid food log entry data",
             );
         });
-        it("returns 404 with unknown foodItemId", async () => {
-            const response = await agent
-                .post("/food-log-entries")
-                .send({
-                    ...validFoodLogEntryBodyWithoutFoodItemId,
-                    foodItemId: "unknown",
-                });
-
-            expect(response.status).toBe(404);
-            expect(response.body.success).toBe(false);
-            expect(response.body.error.statusCode).toBe(404);
-            expect(response.body.error.message).toBe(
-                "Unable to create food log entry: food item not found",
-            );
-        });
     });
 
     describe("GET /food-log-entries", () => {

@@ -26,7 +26,6 @@ export type FoodItem = {
 
 export type FoodLogEntry = {
     foodLogEntryId: string;
-    foodItemId: string;
     name: string;
     weight: number;
     calories: number;
@@ -34,7 +33,8 @@ export type FoodLogEntry = {
     date: string;
     createdAt: string;
     userId: string;
-
+    
+    foodItemId?: string | null
     mealId?: string | null;
 };
 

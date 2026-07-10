@@ -101,7 +101,7 @@ const mappedEntries = backup.entries.map((entry: FoodLogEntry) => {
     } = entry;
     return {
         foodLogEntryId,
-        foodItemId,
+        foodItemId:foodItemId || null,
         name,
         weight,
         calories,
@@ -112,26 +112,26 @@ const mappedEntries = backup.entries.map((entry: FoodLogEntry) => {
         mealId: mealId || null,
     };
 });
-const foodItemsInDb = await prisma.foodItem.findMany({
-    where: { userId: DEV_USER_ID },
-    select: { foodItemId: true },
-});
-const foodItemIdsInDb = new Set(
-    foodItemsInDb.map((item) => {
-        return item.foodItemId;
-    }),
-);
-const missingFoodItemIds = [
-    ...new Set(
-        mappedEntries
-            .map((entry) => entry.foodItemId)
-            .filter((id) => !foodItemIdsInDb.has(id)),
-    ),
-];
-console.log(missingFoodItemIds);
-if(missingFoodItemIds.length > 0){
-    throw new Error("missing item ids")
-}
+// const foodItemsInDb = await prisma.foodItem.findMany({
+//     where: { userId: DEV_USER_ID },
+//     select: { foodItemId: true },
+// });
+// const foodItemIdsInDb = new Set(
+//     foodItemsInDb.map((item) => {
+//         return item.foodItemId;
+//     }),
+// );
+// const missingFoodItemIds = [
+//     ...new Set(
+//         mappedEntries
+//             .map((entry) => entry.foodItemId)
+//             .filter((id) => !foodItemIdsInDb.has(id)),
+//     ),
+// ];
+// console.log(missingFoodItemIds);
+// if(missingFoodItemIds.length > 0){
+//     throw new Error("missing item ids")
+// }
 
 const dbEntries = await prisma.foodLogEntry.createMany({
     data: mappedEntries,

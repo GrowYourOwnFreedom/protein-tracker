@@ -41,7 +41,7 @@ model Meal {
 
 model FoodLogEntry  {
   foodLogEntryId String @id @default(uuid())
-  foodItemId String
+  foodItemId String?
   name String
   weight Float
   calories Float
@@ -51,7 +51,7 @@ model FoodLogEntry  {
   userId String
   mealId String?
 
-  foodItem  FoodItem @relation(fields:[foodItemId], references:[foodItemId])
+  foodItem  FoodItem? @relation(fields:[foodItemId], references:[foodItemId])
   meal Meal? @relation(fields:[mealId], references:[mealId])
 }
 
@@ -80,3 +80,4 @@ model Targets{
 
   user User @relation(fields: [userId], references:[userId], onDelete:Cascade)
  }
+

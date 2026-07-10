@@ -17,13 +17,13 @@ export type UpdateFoodItemRequestBody = {
 };
 
 export type CreateFoodLogEntryRequestBody = {
-    foodItemId: string;
     name: string;
     weight: number;
     calories: number;
     protein: number;
     date: string;
-
+    
+    foodItemId?: string;
     mealId?: string;
 };
 

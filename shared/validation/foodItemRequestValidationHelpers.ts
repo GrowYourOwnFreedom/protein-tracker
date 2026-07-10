@@ -15,7 +15,15 @@ export function isCreateFoodItemRequestBody(
     if (!isRecord(value)) {
         return false;
     }
+    const allowedKeys = [
+        "name",
+        "proteinPer100g",
+        "caloriesPer100g",
+        "foodItemCategoryId",
+        "type",
+    ];
     return (
+        hasOnlyAllowedKeys(value, allowedKeys) &&
         typeof value.name === "string" &&
         typeof value.proteinPer100g === "number" &&
         typeof value.caloriesPer100g === "number" &&
@@ -42,8 +50,7 @@ export function isUpdateFoodItemRequestBody(
         return false;
     }
 
-    
-    if (!hasOnlyAllowedKeys(value,allowedKeys)) {
+    if (!hasOnlyAllowedKeys(value, allowedKeys)) {
         return false;
     }
 
@@ -76,9 +83,10 @@ export function isUpdateFoodItemRequestBody(
         }
     }
     if (value.foodItemCategoryId) {
-        if(typeof value.foodItemCategoryId !== "string" ||
-        !isfoodItemCategoryId(value.foodItemCategoryId)){
-
+        if (
+            typeof value.foodItemCategoryId !== "string" ||
+            !isfoodItemCategoryId(value.foodItemCategoryId)
+        ) {
             return false;
         }
     }

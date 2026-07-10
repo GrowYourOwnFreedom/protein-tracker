@@ -23,16 +23,6 @@ export async function createFoodLogEntry({
     userId,
     data,
 }: CreateFoodLogEntryArgs): Promise<FoodLogEntry> {
-    const foodItem = await prisma.foodItem.findFirst({
-        where: { userId, foodItemId: data.foodItemId },
-    });
-
-    if (!foodItem) {
-        throw new HttpError(
-            404,
-            "Unable to create food log entry: food item not found",
-        );
-    }
     const foodLogEntry = await prisma.foodLogEntry.create({
         data: {
             ...data,
