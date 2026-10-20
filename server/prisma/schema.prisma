@@ -27,6 +27,11 @@ model FoodItem {
   createdAt DateTime @default(now())  @db.Timestamptz(3)
 
   foodLogEntries FoodLogEntry[]
+  portions Portion[]
+
+  user User @relation(fields: [userId], references:[userId], onDelete:Cascade)
+
+
 }
 
 model Meal {
@@ -37,7 +42,9 @@ model Meal {
   userId String
 
   foodLogEntries FoodLogEntry[]
-  portions Portion[]
+
+  user User @relation(fields: [userId], references:[userId], onDelete:Cascade)
+
 }
 
 model FoodLogEntry  {
@@ -54,6 +61,8 @@ model FoodLogEntry  {
 
   foodItem  FoodItem? @relation(fields:[foodItemId], references:[foodItemId])
   meal Meal? @relation(fields:[mealId], references:[mealId])
+  user User @relation(fields: [userId], references:[userId], onDelete:Cascade)
+
 }
 
 model Targets{
@@ -61,6 +70,9 @@ model Targets{
   proteinTarget Float
   calorieLimit Float
   updatedAt DateTime @updatedAt  @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references:[userId], onDelete:Cascade)
+
 }
  model User{
   userId String @id @default(uuid())
@@ -70,6 +82,11 @@ model Targets{
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
   sessions Session[]
+  portions Portion[]
+  targets Targets[]
+  foodLogEntries FoodLogEntry[]
+  foodItems FoodItem[]
+  meals Meal[]
  }
 
  model Session {
@@ -84,12 +101,16 @@ model Targets{
 
  model Portion {
   portionId String @id @default(uuid())
-  foodItemId String
   weight Float
   name String
   createdAt DateTime @default(now()) @db.Timestamptz(3)
+  foodItemId String
+  userId String
+
 
   foodItem FoodItem @relation(fields:[foodItemId], references:[foodItemId], onDelete:Cascade)
+  user User @relation(fields: [userId], references:[userId], onDelete:Cascade)
+
 
  }
 

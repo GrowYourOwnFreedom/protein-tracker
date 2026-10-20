@@ -22,6 +22,7 @@ export type FoodItem = {
     type: FoodItemType;
     userId: string;
     createdAt: string;
+    portions?: Portion[];
 };
 
 export type FoodLogEntry = {
@@ -33,8 +34,8 @@ export type FoodLogEntry = {
     date: string;
     createdAt: string;
     userId: string;
-    
-    foodItemId?: string | null
+
+    foodItemId?: string | null;
     mealId?: string | null;
 };
 
@@ -51,4 +52,13 @@ export type Targets = {
     calorieLimit: number;
     userId: string;
     updatedAt: string;
+};
+
+export type Portion = {
+    portionId: string;
+    name: string;
+    weight: number;
+    createdAt: string;
+    userId: string;
+    foodItemId: string;
 };

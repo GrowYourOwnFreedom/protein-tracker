@@ -36,4 +36,10 @@ export type UpdateTargetsRequestBody = {
     calorieLimit?: number;
 };
 
+export type CreatePortionRequestBody = {
+    name: string;
+    weight: number;
+    foodItemId: string;
+};
+
 

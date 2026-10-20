@@ -3,10 +3,18 @@ import { HttpError } from "@/errors/HttpError.js";
 import type {
     CreateFoodItemRequestBody,
     FoodItem,
+    Portion,
     UpdateFoodItemRequestBody,
 } from "@/types.js";
 
-import type { FoodItem as DbFoodItem } from "@/generated/prisma/client.js";
+import type {
+    FoodItem as DbFoodItem,
+    Portion as DbPortion,
+    Prisma,
+} from "@/generated/prisma/client.js";
+import { mapPortionFromDb } from "@/helpers/storageHelpers.js";
+
+type DbFoodItemWithPortions = DbFoodItem & { portions?: DbPortion[] };
 
 type CreateFoodItemArgs = {
     userId: string;
@@ -26,14 +34,20 @@ type RemoveFoodItemByIdArgs = {
     foodItemId: string;
 };
 
-export function mapFoodItemFromDb(dbFoodItem: DbFoodItem): FoodItem {
-    return {
-        ...dbFoodItem,
-        createdAt: dbFoodItem.createdAt.toISOString(),
-    };
+export function mapFoodItemFromDb(
+    dbFoodItem: DbFoodItemWithPortions,
+): FoodItem {
+    if (dbFoodItem.portions && dbFoodItem.portions.length > 0) {
+        const portions = dbFoodItem.portions.map(mapPortionFromDb);
+        return {
+            ...dbFoodItem,
+            createdAt: dbFoodItem.createdAt.toISOString(),
+            portions,
+        };
+    }
+    const { portions, ...foodItemFields } = dbFoodItem;
+    return { ...foodItemFields, createdAt: dbFoodItem.createdAt.toISOString() };
 }
-
-const foodItemsArray: FoodItem[] = [];
 
 export async function createFoodItem({
     userId,
@@ -50,7 +64,10 @@ export async function createFoodItem({
 }
 
 export async function getStoredFoodItems(userId: string): Promise<FoodItem[]> {
-    const foodItems = await prisma.foodItem.findMany({ where: { userId } });
+    const foodItems = await prisma.foodItem.findMany({
+        where: { userId },
+        include: { portions: true },
+    });
     return foodItems.map(mapFoodItemFromDb);
 }
 

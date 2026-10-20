@@ -17,6 +17,7 @@ import { devLogger } from "@/middleware/dev.js";
 import authRouter from "@/routes/authRoutes.js";
 import cookieParser from "cookie-parser";
 import { requireAuth } from "@/middleware/requireAuth.js";
+import { portionRouter } from "@/routes/portionRoutes.js";
 
 const app = express();
 if (isDevelopment) {
@@ -50,6 +51,7 @@ app.use("/food-items", foodItemRouter);
 app.use("/food-log-entries", foodLogEntryRouter);
 app.use("/meals", mealRouter);
 app.use("/targets", targetsRouter);
+app.use("/portions",portionRouter)
 app.use(notFoundHandler);
 app.use(errorHandler);
 export { app };

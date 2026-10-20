@@ -4,7 +4,7 @@ import { prisma } from "@/db/prisma.js";
 
 
 
-const USER_ID = "dev-user";
+const USER_ID = "other-user";
 const EMAIL = process.env.INITIAL_USER_EMAIL;
 const PASSWORD = process.env.INITIAL_USER_PASSWORD;
 

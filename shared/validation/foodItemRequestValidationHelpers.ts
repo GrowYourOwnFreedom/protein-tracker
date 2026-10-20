@@ -3,6 +3,7 @@ import {
     isFoodItemType,
     isfoodItemCategoryId,
     hasOnlyAllowedKeys,
+    isNonEmptyString,
 } from "./validationHelpers.js";
 import type {
     CreateFoodItemRequestBody,
@@ -24,7 +25,7 @@ export function isCreateFoodItemRequestBody(
     ];
     return (
         hasOnlyAllowedKeys(value, allowedKeys) &&
-        typeof value.name === "string" &&
+         isNonEmptyString(value.name) &&
         typeof value.proteinPer100g === "number" &&
         typeof value.caloriesPer100g === "number" &&
         typeof value.foodItemCategoryId === "string" &&

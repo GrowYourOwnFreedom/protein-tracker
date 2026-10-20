@@ -1,4 +1,4 @@
-import type { UpdateFoodItemRequestBody } from "@/types.js";
+import type { FoodItem, Portion, UpdateFoodItemRequestBody } from "@/types.js";
 import { beforeEach, describe, expect, it } from "vitest";
 import request from "supertest";
 import { app } from "@/app.js";
@@ -7,6 +7,7 @@ import {
     getLoggedInAgent,
     resetTestDatabase,
     seedValidFoodItem,
+    seedValidPortion,
     validFoodItemBody,
 } from "@/test/test-utils.js";
 
@@ -40,7 +41,7 @@ describe("/food-items", () => {
             });
         });
 
-        it("returns expected error when passed bad body", async () => {
+        it("returns expected error when passed invalid body", async () => {
             const response = await agent
                 .post("/food-items")
                 .send({ banana: true });
@@ -49,6 +50,21 @@ describe("/food-items", () => {
             expect(response.body.success).toBe(false);
             expect(response.body.error.message).toBe("Invalid food item data");
             expect(response.body.error.statusCode).toBe(400);
+        });
+
+        it("returns 400 when passed unknown fields", async () => {
+            const response = await agent
+                .post("/food-items")
+                .send({ ...validFoodItemBody, banana: "100g" });
+
+            expect(response.status).toBe(400);
+        });
+
+        it("returns 400 when passed empty name string", async () => {
+            const response = await agent
+                .post("/food-items")
+                .send({ ...validFoodItemBody, name: "" });
+            expect(response.status).toBe(400);
         });
     });
 
@@ -79,6 +95,7 @@ describe("/food-items", () => {
                 expect.arrayContaining([expect.objectContaining(foodItem)]),
             );
         });
+
         it("only returns items for logged in user", async () => {
             await seedValidFoodItem();
             await seedValidFoodItem({ userId: "other-user" });
@@ -87,11 +104,30 @@ describe("/food-items", () => {
             expect(response.body.data).toHaveLength(1);
             expect(response.body.data[0].userId).toBe("dev-user");
         });
+
         it("returns 401 if not logged in", async () => {
             const response = await request(app).get("/food-items");
 
             expect(response.status).toBe(401);
             expect(response.body.error.message).toBe("Not logged in");
+        });
+        it("returns correct portions if they exist", async () => {
+            const { foodItemId } = await seedValidFoodItem();
+            const {portionId} = await seedValidPortion({ foodItemId });
+            const response = await agent.get("/food-items");
+
+            expect(response.status).toBe(200)
+            
+            expect(response.body.data.some((fooditem:FoodItem)=>{
+                return fooditem.foodItemId === foodItemId
+            })).toBe(true)
+
+            expect(response.body.data.find((foodItem:FoodItem)=>{
+                return foodItem.foodItemId ===foodItemId
+            }).portions.some((portion:Portion)=>{
+                return portion.portionId === portionId
+            }))
+            
         });
     });
     describe("PATCH /food-items/:foodItemId", () => {

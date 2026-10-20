@@ -3,9 +3,11 @@ import type {
     CreateFoodItemRequestBody,
     CreateFoodLogEntryRequestBody,
     CreateMealRequestBody,
+    CreatePortionRequestBody,
     FoodItem,
     FoodLogEntry,
     Meal,
+    Portion,
     Targets,
 } from "@/types.js";
 import type {
@@ -13,8 +15,9 @@ import type {
     FoodLogEntry as DbFoodLogEntry,
     Meal as DbMeal,
     Targets as DbTargets,
+    Portion as DbPortion,
 } from "@/generated/prisma/client.js";
-import  request  from "supertest";
+import request from "supertest";
 import { app } from "@/app.js";
 
 function mapFoodItemFromDb(dbFoodItem: DbFoodItem): FoodItem {
@@ -40,6 +43,12 @@ function mapMealFromDb(dbMeal: DbMeal): Meal {
 function mapTargetsFromDb(dbTargets: DbTargets): Targets {
     return { ...dbTargets, updatedAt: dbTargets.updatedAt.toISOString() };
 }
+function mapPortionFromDb(portion: DbPortion) {
+    return {
+        ...portion,
+        createdAt: portion.createdAt.toISOString(),
+    };
+}
 export const validFoodItemBody: CreateFoodItemRequestBody = {
     name: "turnip",
     foodItemCategoryId: "fresh-produce",
@@ -63,7 +72,7 @@ export async function seedValidFoodItem(
     });
     return mapFoodItemFromDb(foodItem);
 }
-export const validFoodLogEntryBodyWithoutFoodItemId = {
+export const validFoodLogEntryBody = {
     name: validFoodItemBody.name,
     weight: 100,
     calories: validFoodItemBody.caloriesPer100g,
@@ -78,7 +87,7 @@ export async function seedValidFoodLogEntry(
 ): Promise<FoodLogEntry> {
     const foodLogEntry = await prisma.foodLogEntry.create({
         data: {
-            ...validFoodLogEntryBodyWithoutFoodItemId,
+            ...validFoodLogEntryBody,
             userId: "dev-user",
             ...overrides,
         },
@@ -132,6 +141,7 @@ export const validLoginCredentials = {
 export async function resetTestDatabase() {
     await prisma.foodLogEntry.deleteMany();
     await prisma.meal.deleteMany();
+    await prisma.portion.deleteMany()
     await prisma.foodItem.deleteMany();
     await prisma.targets.deleteMany();
     await prisma.session.deleteMany();
@@ -170,12 +180,31 @@ export function getCookieValue(response: request.Response, cookieName: string) {
 }
 
 export async function getLoggedInAgent() {
-    const agent = request.agent(app)
+    const agent = request.agent(app);
 
-    await agent
-        .post("/auth/login")
-        .send(validLoginCredentials)
-        .expect(200)
+    await agent.post("/auth/login").send(validLoginCredentials);
 
-    return agent
+    return agent;
+}
+
+export const validPortionRequestBodyWithoutFoodItemId = {
+    name: "test-portion",
+    weight: 100,
+};
+
+type SeedPortionOverrides = Partial<CreatePortionRequestBody> & {
+    userId?: string;
+};
+
+export async function seedValidPortion(
+    overrides: SeedPortionOverrides = {},
+): Promise<Portion> {
+    const portion = await prisma.portion.create({
+        data: {
+            ...validPortionRequestBodyWithoutFoodItemId,
+            userId: "dev-user",
+            ...overrides,
+        },
+    });
+    return mapPortionFromDb(portion);
 }

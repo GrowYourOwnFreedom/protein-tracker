@@ -7,7 +7,7 @@ import {
     seedValidFoodItem,
     seedValidFoodLogEntry,
     seedValidMeal,
-    validFoodLogEntryBodyWithoutFoodItemId,
+    validFoodLogEntryBody,
 } from "@/test/test-utils.js";
 import type { FoodLogEntry } from "@/types.js";
 import { prisma } from "@/db/prisma.js";
@@ -19,10 +19,10 @@ describe("/food-log-entries", () => {
         agent = await getLoggedInAgent();
     });
     describe("POST /food-log-entries", () => {
-        it("returns new food log entry when passed valid body without mealId", async () => {
+        it("returns new food log entry when passed valid bodywith foodItemId but without mealId", async () => {
             const fooditem = await seedValidFoodItem();
             const body = {
-                ...validFoodLogEntryBodyWithoutFoodItemId,
+                ...validFoodLogEntryBody,
                 foodItemId: fooditem.foodItemId,
             };
             const response = await agent
@@ -46,13 +46,13 @@ describe("/food-log-entries", () => {
         it("returns new food log entry when passed valid body without foodItemId", async ()=>{
               const response = await agent
                 .post("/food-log-entries")
-                .send(validFoodLogEntryBodyWithoutFoodItemId);
+                .send(validFoodLogEntryBody);
 
             expect(response.status).toBe(201);
             expect(response.body.success).toBe(true);
             expect(response.body.message).toBe("Food log entry created");
             expect(response.body.data).toMatchObject({
-                ...validFoodLogEntryBodyWithoutFoodItemId,
+                ...validFoodLogEntryBody,
                 foodItemId:null,
                 mealId: null,
                 foodLogEntryId: expect.any(String),
@@ -68,7 +68,7 @@ describe("/food-log-entries", () => {
             const { foodItemId } = await seedValidFoodItem();
             const { mealId } = await seedValidMeal();
             const body = {
-                ...validFoodLogEntryBodyWithoutFoodItemId,
+                ...validFoodLogEntryBody,
                 foodItemId,
                 mealId,
             };
@@ -105,6 +105,10 @@ describe("/food-log-entries", () => {
                 "Invalid food log entry data",
             );
         });
+
+        it("returns 400 when passed unknown field with valid body",async ()=> {
+
+        })
     });
 
     describe("GET /food-log-entries", () => {
