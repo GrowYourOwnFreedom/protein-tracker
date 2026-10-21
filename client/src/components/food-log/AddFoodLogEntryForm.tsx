@@ -6,7 +6,6 @@ import { FieldGroup } from "@/components/ui/field";
 import buildFoodLogEntry from "@/lib/buildFoodLogEntry";
 import hasErrors from "@/lib/hasErrors";
 
-import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { FoodLogEntry, FoodItem, Meal, CreateFoodLogEntryRequestBody } from "@/types";
 import React, { useRef, useState } from "react";
 

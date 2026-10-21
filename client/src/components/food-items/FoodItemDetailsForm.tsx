@@ -8,7 +8,6 @@ import {
     UpdateFoodItemRequestBody,
 } from "@/types";
 import { Button } from "@/components/ui/button";
-import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import FoodItemNameField from "@/components/food-items/FoodItemNameField";
 import FoodItemCategorySelectField from "@/components/food-items/FoodItemCategorySelectField";
 import NutritionValueInputField from "@/components/food-items/NutritionValueInputField";
@@ -145,7 +144,6 @@ export default function FoodItemDetailsForm({
         const newFoodItemBody:
             | CreateFoodItemRequestBody
             | UpdateFoodItemRequestBody = buildFoodItem({
-            foodItem: existingFoodItem,
             name,
             calories,
             protein,

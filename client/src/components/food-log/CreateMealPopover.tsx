@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/popover";
 import buildMealObject from "@/lib/buildMealObject";
 import createNewId from "@/lib/createNewId";
-import { getCurrentUser } from "@/lib/storageCrudHelpers";
 import { CreateMealRequestBody, Meal } from "@/types";
 import { useState } from "react";
 
